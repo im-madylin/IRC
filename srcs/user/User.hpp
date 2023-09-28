@@ -12,25 +12,25 @@ class User {
 		string	_nickname;
 		string	_realName;
 
-		string 	_messageBuf;
+		string 	_messageBuffer;
 
 	public:
 		User(int fd, string host);
 		~User();
 
-		string	getMessageBuf();
+		string	getMessageBuffer();
 		int		getFd();
 		string	getHost();
 		string	getNickname();
 		string	getRealName();
 
-		void 	setMessageBuf(string messageBuf);
+		void 	setMessageBuffer(string messageBuffer);
 		void	setFd(int fd);
 		void	setHost(string host);
 		void	setNickname(string nick);
 		void	setRealName(string realName);
 
-		void	clearMessageBuf();
+		void	clearMessageBuffer();
 		void	appendMessage(const string &message);
 };
 
