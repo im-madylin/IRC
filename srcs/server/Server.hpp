@@ -29,12 +29,12 @@ using namespace std;
 class Server {
 	private:
 		int		_kq;
-		int		_port;
+		int		_port; // client 서버 접속시 필요한 Port 번호
 		int		_serverSocket;
 		string	_password;
 		string	_serverName;
 
-		struct kevent _events[KQUEUE_SIZE];
+		struct kevent _events[KQUEUE_SIZE]; // 이벤트 저장 배열
 		map<int, User *> _users;
 		map<int, Channel *> _channels;
 		struct kevent _change;
