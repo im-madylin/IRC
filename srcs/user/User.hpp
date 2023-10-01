@@ -2,6 +2,7 @@
 # define USER_HPP
 
 # include <string>
+# include <unistd.h>
 
 using namespace std;
 
@@ -11,7 +12,6 @@ class User {
 		string	_host;
 		string	_nickname;
 		string	_realName;
-
 		string 	_messageBuffer;
 
 	public:
