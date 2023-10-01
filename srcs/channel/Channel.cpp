@@ -4,6 +4,81 @@ Channel::Channel()
 {
 }
 
+Channel::Channel(std::string& name) : _name(name) {
+}
+
 Channel::~Channel()
 {
+}
+
+string  		Channel::getChannelName() {
+    return _name;
+}
+
+vector<string>  Channel::getUserList() {
+    vector<string>  list;
+
+    for(map<int, User *>::const_iterator it = _users.begin(); it != _users.end(); it++) {
+        string  name;
+        if (isOperator(it->first))
+            name += '@';
+        name += it->second->getNickname(); 
+        list.push_back(name);
+    }
+    return list;
+}
+
+void        	Channel::addUser(int fd, User *user) {
+    if (_users.empty())
+        _operator.insert(fd);
+    _users.insert(make_pair(fd, user));
+}
+
+void			Channel::delUser(int fd) {
+	map<int, User *>::iterator it;
+	
+	if (isOperator(fd))
+		delOper(fd);
+	
+
+	
+}
+
+User*			Channel::findUser(int fd) const {
+	map<int, User *>::const_iterator it;
+
+	it = _users.find(fd);
+	if (it == _users.end())
+		return NULL;
+	return it->second;
+}
+
+User*			Channel::findUser(string nickname) const {
+	map<int, User *>::const_iterator it;
+
+	for(it = _users.begin(); it != _users.end(); it++)
+		if (!it->second->getNickname().compare(nickname))
+			return it->second;
+	return it->second;
+}
+
+bool			Channel::isOperator(int fd) const {
+	if (_operator.find(fd) != _operator.end())
+		return true;
+	return false;
+}
+
+bool			Channel::isOperator(User *user) const {
+	for(set<int>::iterator it = _operator.begin(); it != _operator.end(); it++)
+		if (*it == user->getFd())
+			return true;
+	return false;
+}
+
+void			Channel::addOper(int fd) {
+	_operator.insert(fd);
+}
+
+void			Channel::delOper(int fd) {
+	_operator.erase(fd);
 }
