@@ -2,11 +2,11 @@
 
 User::User(int fd, string host): _fd(fd), _host(host)
 {
-	this->_fd = fd;
 }
 
 User::~User()
 {
+	close(_fd);
 }
 
 string User::getMessageBuffer()
