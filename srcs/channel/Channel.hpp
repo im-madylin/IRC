@@ -27,13 +27,13 @@ class Channel {
 		vector<string>	getUserList();
 
 		void		addUser(int fd, User *user);
-		void		delUser(int fd);
+		void		deleteUser(int fd);
 		User*		findUser(int fd) const;
 		User*		findUser(string nickname) const;
 		bool		isOperator(int fd) const;
 		bool		isOperator(User *user) const;
 		void		addOper(int fd);
-		void		delOper(int fd);
+		void		deleteOper(int fd);
 };
 
 #endif

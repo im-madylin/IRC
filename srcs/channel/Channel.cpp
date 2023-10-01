@@ -34,11 +34,11 @@ void        	Channel::addUser(int fd, User *user) {
     _users.insert(make_pair(fd, user));
 }
 
-void			Channel::delUser(int fd) {
+void			Channel::deleteUser(int fd) {
 	map<int, User *>::iterator it;
 
 	if (isOperator(fd))
-		delOper(fd);
+		deleteOper(fd);
 	
 	it = _users.find(fd);
 	if (it == _users.end())
@@ -81,6 +81,6 @@ void			Channel::addOper(int fd) {
 	_operator.insert(fd);
 }
 
-void			Channel::delOper(int fd) {
+void			Channel::deleteOper(int fd) {
 	_operator.erase(fd);
 }
