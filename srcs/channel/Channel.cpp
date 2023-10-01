@@ -36,12 +36,14 @@ void        	Channel::addUser(int fd, User *user) {
 
 void			Channel::delUser(int fd) {
 	map<int, User *>::iterator it;
-	
+
 	if (isOperator(fd))
 		delOper(fd);
 	
-
-	
+	it = _users.find(fd);
+	if (it == _users.end())
+		return ;
+	_users.erase(fd);
 }
 
 User*			Channel::findUser(int fd) const {
