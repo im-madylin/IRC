@@ -21,6 +21,9 @@ class Channel {
 		set<int> 			_operator;
 		string				_topic;
 		string				_mode;
+		set<int>			_banList;
+		set<int>			_inviteList;
+		string				_key;
 
 	public:
 		Channel();
@@ -31,9 +34,13 @@ class Channel {
 		vector<string>	getUserList();
 		string			getTopic();
 		string			getMode();
+		set<int>		getBanList();
+		set<int>		getInviteList();
+		string			getKey();
 
 		void			setTopic(string topic);
 		void			setMode(string mode);
+		void			setKey(string key);
 
 		void		addUser(int fd, User *user);
 		void		deleteUser(int fd);
@@ -43,8 +50,14 @@ class Channel {
 		bool		isOperator(User *user) const;
 		void		addOper(int fd);
 		void		deleteOper(int fd);
+		void		addBan(int fd);
+		void		deleteBan(int fd);
+		void		addInvite(int fd);
+		void		deleteInvite(int fd);
 		bool		isExistUser(int fd) const;
 		bool		isFull() const;
+		bool		isInvited(int fd) const;
+		bool		isInBanList(int fd) const;
 };
 
 #endif

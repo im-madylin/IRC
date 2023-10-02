@@ -38,9 +38,24 @@ string Channel::getMode()
 	return this->_mode;
 }
 
+set<int> Channel::getBanList()
+{
+	return this->_banList;
+}
+
+set<int> Channel::getInviteList()
+{
+	return this->_inviteList;
+}
+
 void Channel::setTopic(string topic)
 {
 	this->_topic = topic;
+}
+
+string Channel::getKey()
+{
+	return this->_key;
 }
 
 void Channel::setMode(string mode)
@@ -84,6 +99,11 @@ User*			Channel::findUser(string nickname) const {
 	return it->second;
 }
 
+void Channel::setKey(string key)
+{
+	this->_key = key;
+}
+
 bool			Channel::isOperator(int fd) const {
 	if (_operator.find(fd) != _operator.end())
 		return true;
@@ -116,4 +136,38 @@ bool Channel::isFull() const
 	if (_users.size() >= MAX_CHANNEL_USER)
 		return true;
 	return false;
+}
+
+bool Channel::isInvited(int fd) const
+{
+	if (_inviteList.find(fd) != _inviteList.end())
+		return true;
+	return false;
+}
+
+bool Channel::isInBanList(int fd) const
+{
+	if (_banList.find(fd) != _banList.end())
+		return true;
+	return false;
+}
+
+void Channel::addBan(int fd)
+{
+	this->_banList.insert(fd);
+}
+
+void Channel::deleteBan(int fd)
+{
+	this->_banList.erase(fd);
+}
+
+void Channel::addInvite(int fd)
+{
+	this->_inviteList.insert(fd);
+}
+
+void Channel::deleteInvite(int fd)
+{
+	this->_inviteList.erase(fd);
 }
