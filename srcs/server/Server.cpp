@@ -221,15 +221,23 @@ void Server::sendMessage(int clientSocket, string message)
 {
 	map<int, User *>::iterator it = this->_users.find(clientSocket);
 	User *user = it->second;
+	int sendSize;
 
 	if (it == this->_users.end())
 		return ;
 	if (user->getMessageBuffer().empty())
 		return ;
 
-	if (send(clientSocket, message.c_str(), message.length(), 0) == -1)
+	sendSize = send(clientSocket, message.c_str(), message.length(), 0);
+	if (sendSize == -1)
+	{
 		cerr << "send() error" << endl;
 		disconnetClient(clientSocket);
+	}
+	else
+	{
+		user->setMessageBuffer(user->getMessageBuffer().substr(sendSize));
+	}
 }
 
 void Server::handleMessage(User *user)
