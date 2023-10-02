@@ -6,10 +6,6 @@
 
 using namespace std;
 
-class Utils {
-	private:
-
-	public:
-};
+vector<string> split(string str, string delim);
 
 #endif
