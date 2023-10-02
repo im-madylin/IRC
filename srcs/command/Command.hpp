@@ -5,6 +5,8 @@
 # include <string>
 # include <map>
 
+# define NICKNAME_MAX_SIZE 9
+
 class Server;
 class User;
 class Message;

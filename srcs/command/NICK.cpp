@@ -36,7 +36,7 @@ void Command::NICK(Message &message, User *user)
 	if (nickname.size() == 0)
 		cout << "NICK: ERR_NONICKNAMEGIVEN(431)" << endl;
 	//닉네임이 9글자를 넘어가는 경우, 닉네임이 올바르지 않은 경우
-	else if (nickname.size() > 9 || validNick(nickname) == false)
+	else if (nickname.size() > NICKNAME_MAX_SIZE || validNick(nickname) == false)
 		cout << "NICK: ERR_ERRONEUSNICKNAME(432)" << endl;
 	//이미 사용중인 닉네임인 경우
 	else if (duplicateNick(nickname) == false)
