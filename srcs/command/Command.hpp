@@ -5,6 +5,8 @@
 # include <string>
 # include <map>
 
+# define NICKNAME_MAX_SIZE 9
+
 class Server;
 class User;
 class Message;
@@ -26,6 +28,10 @@ class Command {
 		Command(Server *server);
 		~Command();
 		void 	handleCommand(Message &message, User *user);
+
+		//NICK.cpp
+		bool	validNick(string nickname);
+		bool	duplicateNick(string nickname);
 };
 
 #endif
