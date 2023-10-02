@@ -28,6 +28,11 @@ vector<string> Message::getParams()
 	return this->_params;
 }
 
+size_t Message::getParamsSize()
+{
+	return this->_params.size();
+}
+
 void Message::setPrefix(string prefix)
 {
 	this->_prefix = prefix;
