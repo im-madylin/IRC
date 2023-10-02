@@ -13,5 +13,7 @@ void Command::USER(Message &message, User *user)
 	user->setHost(hostname);
 	this->_server->setServerName(servername);
 	user->setRealName(realname);
+	string welcome = ":irc.easy 001 " + username + " :Welcome to the Internet Relay Network " + username + "!" + hostname + "@" + servername + "\r\n";
+	sendToClient(user->getFd(), welcome);
 	cout << "USER: " << username << " " << hostname << " " << servername << " " << realname << endl;
 }
