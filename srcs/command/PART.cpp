@@ -28,3 +28,5 @@ void Command::PART(Message &message, User *user)
 		user->leaveChannel(*it);
 	}
 }
+
+// TODO: 같은 채널에 있는 유저들에게 broadcast
