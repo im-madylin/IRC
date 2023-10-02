@@ -35,6 +35,11 @@ string User::getRealName()
 	return this->_realName;
 }
 
+string User::getUserPrefix()
+{
+	return this->_nickname + "!" + this->_realName + "@" + this->_host;
+}
+
 void User::setMessageBuffer(string messageBuffer)
 {
 	this->_messageBuffer = messageBuffer;

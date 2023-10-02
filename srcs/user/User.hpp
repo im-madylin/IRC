@@ -28,6 +28,7 @@ class User {
 		string	getHost();
 		string	getNickname();
 		string	getRealName();
+		string	getUserPrefix();
 
 		void 	setMessageBuffer(string messageBuffer);
 		void	setFd(int fd);
