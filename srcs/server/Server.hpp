@@ -19,7 +19,7 @@
 # define MAX_CHANNEL_SIZE 10
 # define UNDEFINED -1
 # define KQUEUE_SIZE 8
-# define KQUEUE_TIMEOUT 3
+# define KQUEUE_TIMEOUT 180
 
 class User;
 class Channel;
@@ -48,7 +48,7 @@ class Server {
 		void	handleEvent(struct kevent &event);
 	
 		void	recvMessage(int clientSocket);
-		void	handleMessage(User *user);
+		void	handleCmdMessage(User *user);
 
 	public:
 		Server(string port, string password);

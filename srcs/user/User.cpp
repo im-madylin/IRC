@@ -15,6 +15,11 @@ string User::getMessageBuffer()
 	return this->_messageBuffer;
 }
 
+string User::getCommandBuffer()
+{
+	return this->_commandBuffer;
+}
+
 int User::getFd()
 {
 	return this->_fd;
@@ -45,6 +50,11 @@ void User::setMessageBuffer(string messageBuffer)
 	this->_messageBuffer = messageBuffer;
 }
 
+void User::setCommandBuffer(string commandBuffer)
+{
+	this->_commandBuffer = commandBuffer;
+}
+
 void User::setFd(int fd)
 {
 	this->_fd = fd;
@@ -70,9 +80,19 @@ void User::clearMessageBuffer()
 	this->_messageBuffer.clear();
 }
 
+void User::clearCommandBuffer()
+{
+	this->_commandBuffer.clear();
+}
+
 void User::appendMessage(const string &message)
 {
 	this->_messageBuffer.append(message);
+}
+
+void User::appendCommand(const string &command)
+{
+	this->_commandBuffer.append(command);
 }
 
 void User::joinChannel(Channel *channel)
