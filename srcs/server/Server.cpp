@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include "../user/User.hpp"
 #include "../command/Command.hpp"
+#include "../channel/Channel.hpp"
 
 Server::Server(string port, string password) 
 : _port(atoi(port.c_str())), _password(password)
@@ -29,6 +30,16 @@ string Server::getServerName() const
 string Server::getPassword() const
 {
 	return this->_password;
+}
+
+string Server::getServerPrefix() const
+{
+	return this->_serverName;
+}
+
+map<string, Channel *> Server::getChannels() const
+{
+	return this->_channels;
 }
 
 void Server::setServerName(string serverName)
@@ -189,6 +200,16 @@ void Server::sendMessage(int clientSocket, string message)
 {
 	if (send(clientSocket, message.c_str(), message.length(), 0) == -1)
 		cerr << "send() error" << endl;
+}
+
+void Server::addChannel(Channel *channel)
+{
+	_channels.insert(make_pair(channel->getChannelName(), channel));
+}
+
+Channel *Server::findChannel(string channelName)
+{
+	return nullptr;
 }
 
 void Server::handleMessage(User *user)

@@ -16,6 +16,7 @@
 
 # define SERVER_NAME "irc.easy"
 # define MAX_MESSAGE_SIZE 512
+# define MAX_CHANNEL_SIZE 10
 # define UNDEFINED -1
 # define KQUEUE_SIZE 8
 # define KQUEUE_TIMEOUT 3
@@ -36,7 +37,7 @@ class Server {
 
 		struct kevent _events[KQUEUE_SIZE]; // 이벤트 저장 배열
 		map<int, User *> _users;
-		map<int, Channel *> _channels;
+		map<string, Channel *> _channels;
 		struct kevent _change;
 		Command*			_command;
 
@@ -55,12 +56,15 @@ class Server {
 		int		getPort() const;
 		string	getServerName() const;
 		string	getPassword() const;
+		string 	getServerPrefix() const;
+		map<string, Channel *> getChannels() const;
 
 		void	setServerName(string serverName);
 
-		void	sendMessage(int clientSocket, string message);
-
 		void	run();
+		void	sendMessage(int clientSocket, string message);
+		void	addChannel(Channel *channel);
+		Channel *findChannel(string channelName); // TODO: 구현 필요
 };
 
 #endif
