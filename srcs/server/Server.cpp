@@ -256,7 +256,8 @@ void Server::handleMessage(User *user)
 		}
 
 		Message message(user->getMessageBuffer().substr(0, crlfPos));
-		user->clearMessageBuffer();
+		// user->clearMessageBuffer();
+		user->setMessageBuffer(user->getMessageBuffer().substr(crlfPos + 1));
 		// 명령어 처리
 		this->_command->handleCommand(message, user);
 	}
