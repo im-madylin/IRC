@@ -21,6 +21,14 @@ string RPL_NAMREPLY(string client, Channel &channel);
 string ERR_NOSUCHCHANNEL(string client, string channel);
 // 405
 string ERR_TOOMANYCHANNELS(string client, string channel);
+// 431
+string ERR_NONICKNAMEGIVEN();
+// 432
+string ERR_ERRONEUSNICKNAME(string nick);
+// 433
+string ERR_NICKNAMEINUSE(string nick);
+// 436
+string ERR_NICKCOLLISION(string nick);
 // 461
 string ERR_NEEDMOREPARAMS(string client, string command);
 // 471

@@ -44,6 +44,26 @@ string ERR_TOOMANYCHANNELS(string client, string channel)
 	return "405 " + client + " " + channel + " :You have joined too many channels";
 }
 
+string ERR_NONICKNAMEGIVEN()
+{
+	return "431 :No nickname given";
+}
+
+string ERR_ERRONEUSNICKNAME(string nick)
+{
+	return "432 " + nick + " :Erroneus nickname";
+}
+
+string ERR_NICKNAMEINUSE(string nick)
+{
+	return "433 " + nick + " :Nickname is already in use";
+}
+
+string ERR_NICKCOLLISION(string nick)
+{
+	return "436 " + nick + " :Nickname collision KILL";
+}
+
 // :irc.local 461 test22 JOIN :Not enough parameters.
 string ERR_NEEDMOREPARAMS(string client, string command)
 {
