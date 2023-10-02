@@ -24,3 +24,9 @@ void Command::handleCommand(Message &message, User *user)
 		(this->*_commands[command])(message, user);
 	}
 }
+
+// 임시로 만든 함수
+void Command::sendToClient(int fd, string message)
+{
+	send(fd, message.c_str(), message.length(), 0);
+}

@@ -31,6 +31,7 @@ class Command {
 		Command(Server *server);
 		~Command();
 		void 	handleCommand(Message &message, User *user);
+		void	sendToClient(int fd, string message);
 
 		//NICK.cpp
 		bool	validNick(string nickname);
