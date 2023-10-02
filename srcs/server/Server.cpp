@@ -31,6 +31,11 @@ string Server::getPassword() const
 	return this->_password;
 }
 
+map<int, User *> Server::getUsers() const
+{
+	return this->_users;
+}
+
 void Server::setServerName(string serverName)
 {
 	this->_serverName = serverName;

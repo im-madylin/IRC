@@ -56,6 +56,7 @@ class Server {
 		int		getPort() const;
 		string	getServerName() const;
 		string	getPassword() const;
+		map<int, User *>	getUsers() const;
 
 		void	setServerName(string serverName);
 
