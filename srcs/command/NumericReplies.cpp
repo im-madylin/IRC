@@ -44,21 +44,25 @@ string ERR_TOOMANYCHANNELS(string client, string channel)
 	return "405 " + client + " " + channel + " :You have joined too many channels";
 }
 
+// TODO: ERROR(431): 만 나오고 msg가 나오지 않음
 string ERR_NONICKNAMEGIVEN()
 {
 	return "431 :No nickname given";
 }
 
+// TODO: msg는 나오지만 nickname이 나오지 않음
 string ERR_ERRONEUSNICKNAME(string nick)
 {
 	return "432 " + nick + " :Erroneus nickname";
 }
 
+// TODO: msg는 나오지만 nickname이 나오지 않음
 string ERR_NICKNAMEINUSE(string nick)
 {
 	return "433 " + nick + " :Nickname is already in use";
 }
 
+// TODO: msg는 나오지만 nickname이 나오지 않음
 string ERR_NICKCOLLISION(string nick)
 {
 	return "436 " + nick + " :Nickname collision KILL";
