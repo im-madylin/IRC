@@ -43,6 +43,7 @@ class Server {
 		void	initServer();
 		void	initKqueue();
 		void	acceptConnection();
+		void	disconnetClient(int clientFd);
 		void	handleEvent(struct kevent &event);
 	
 		void	recvMessage(int clientSocket);
