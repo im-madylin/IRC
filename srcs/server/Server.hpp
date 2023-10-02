@@ -43,6 +43,7 @@ class Server {
 		void	initServer();
 		void	initKqueue();
 		void	acceptConnection();
+		void	disconnetClient(int clientFd);
 		void	handleEvent(struct kevent &event);
 	
 		void	recvMessage(int clientSocket);
@@ -55,10 +56,11 @@ class Server {
 		int		getPort() const;
 		string	getServerName() const;
 		string	getPassword() const;
+		map<int, User *>	getUsers() const;
 
 		void	setServerName(string serverName);
 
-		void	sendMessage(int clientSocket, string message);
+		void	sendMessage(int clientSocket);
 
 		void	run();
 };
