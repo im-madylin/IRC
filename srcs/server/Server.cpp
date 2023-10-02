@@ -258,13 +258,29 @@ void Server::sendMessage(int clientSocket)
 
 void Server::addChannel(Channel *channel)
 {
-	_channels.insert(make_pair(channel->getChannelName(), channel));
+	cout << "add channel : " << channel->getChannelName() << endl;
+	this->_channels.insert(make_pair(channel->getChannelName(), channel));
 }
 
 Channel *Server::findChannel(string channelName)
 {
-	(void) channelName;
-	return nullptr;
+	map<string, Channel *>::iterator it = this->_channels.find(channelName);
+	Channel *channel = it->second;
+
+	if (it == this->_channels.end())
+		return NULL;
+	return channel;
+}
+
+void Server::deleteChannel(string channelName)
+{
+	Channel *channel = findChannel(channelName);
+	if (channel == NULL)
+		return ;
+
+	cout << "delete channel : " << channelName << endl;
+	this->_channels.erase(channelName);
+	delete channel;
 }
 
 void Server::handleCmdMessage(User *user)
