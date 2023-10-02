@@ -13,7 +13,7 @@ string getSymbol(string mode)
 
 string generateReply(string prefix, string msg)
 {
-	return ":" + prefix + " " + msg;
+	return ":" + prefix + " " + msg + "\r\n";
 }
 
 // :eunbi!root@127.0.0.1 TOPIC #channel :bibibi -> 이거는 TOPIC 하고 broadcast
@@ -28,7 +28,8 @@ string RPL_TOPIC(string client, Channel &channel)
 string RPL_NAMREPLY(string client, Channel &channel)
 {
 	string names = "";
-	for (vector<string>::iterator it = channel.getUserList().begin(); it != channel.getUserList().end(); it++)
+	vector<string> userList = channel.getUserList();
+	for (vector<string>::iterator it = userList.begin(); it != userList.end(); it++)
 		names += (*it) + " ";
 	return "353 " + client + getSymbol(channel.getMode()) + channel.getChannelName() + " :" + names;
 }
@@ -40,7 +41,7 @@ string ERR_NOSUCHCHANNEL(string client, string channel)
 
 string ERR_TOOMANYCHANNELS(string client, string channel)
 {
-	return "405 " + channel + " :You have joined too many channels";
+	return "405 " + client + " " + channel + " :You have joined too many channels";
 }
 
 // :irc.local 461 test22 JOIN :Not enough parameters.
