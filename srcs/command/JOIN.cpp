@@ -8,8 +8,8 @@ void Command::JOIN(Message &message, User *user)
 {
 	string serverPrefix = this->_server->getServerPrefix();
 	// ERR_NEEDMOREPARAMS
-	if (message.getParamsSize() < 2)
-		return user->setMessageBuffer(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "JOIN")));
+	if (message.getParamsSize() < 1)
+		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "JOIN")));
 
 	string delimeter = ",";
 	vector<string> channels = split(message.getParams()[0], delimeter);
