@@ -9,5 +9,5 @@ void Command::PING(Message &message, User *user)
 	string serverName = this->_server->getServerName();
 	string msg = serverName + "PONG" + serverName + ":" + serverName + "\r\n";
 	cout << msg << endl;
-	this->_server->sendMessage(user->getFd(), msg);
+	this->_server->sendMessage(user->getFd());
 }

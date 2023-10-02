@@ -197,7 +197,7 @@ void Server::handleEvent(struct kevent &event)
 		else
 			recvMessage(event.ident);
 	} else if (event.filter == EVFILT_WRITE) {
-		sendMessage(event.ident, "test");
+		sendMessage(event.ident);
 	}
 }
 
@@ -222,7 +222,7 @@ void Server::recvMessage(int clientSocket)
 	}
 }
 
-void Server::sendMessage(int clientSocket, string message)
+void Server::sendMessage(int clientSocket)
 {
 	map<int, User *>::iterator it = this->_users.find(clientSocket);
 	User *user = it->second;
@@ -233,7 +233,7 @@ void Server::sendMessage(int clientSocket, string message)
 	if (user->getMessageBuffer().empty())
 		return ;
 
-	sendSize = send(clientSocket, message.c_str(), message.length(), 0);
+	sendSize = send(clientSocket, user->getMessageBuffer().c_str(), user->getMessageBuffer().length(), 0);
 	if (sendSize == -1)
 	{
 		cerr << "send() error" << endl;

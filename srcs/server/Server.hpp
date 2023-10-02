@@ -60,7 +60,7 @@ class Server {
 
 		void	setServerName(string serverName);
 
-		void	sendMessage(int clientSocket, string message);
+		void	sendMessage(int clientSocket);
 
 		void	run();
 };
