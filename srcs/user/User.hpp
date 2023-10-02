@@ -3,8 +3,11 @@
 
 # include <string>
 # include <unistd.h>
+# include <map>
 
 using namespace std;
+
+class Channel;
 
 class User {
 	private:
@@ -13,6 +16,8 @@ class User {
 		string	_nickname;
 		string	_realName;
 		string 	_messageBuffer;
+
+		map<string, Channel *> _joinedChannels;
 
 	public:
 		User(int fd, string host);
@@ -32,6 +37,7 @@ class User {
 
 		void	clearMessageBuffer();
 		void	appendMessage(const string &message);
+		void	joinChannel(Channel *channel);
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "User.hpp"
+#include "../channel/Channel.hpp"
 
 User::User(int fd, string host): _fd(fd), _host(host)
 {
@@ -66,5 +67,10 @@ void User::clearMessageBuffer()
 
 void User::appendMessage(const string &message)
 {
-	_messageBuffer.append(message);
+	this->_messageBuffer.append(message);
+}
+
+void User::joinChannel(Channel *channel)
+{ 
+	this->_joinedChannels.insert(make_pair(channel->getChannelName(), channel));
 }
