@@ -5,6 +5,8 @@
 # include <string>
 # include <map>
 
+# include "../Utils.hpp"
+
 class Server;
 class User;
 class Message;
@@ -22,6 +24,7 @@ class Command {
 		void	PING(Message &message, User *user);
 		void	NICK(Message &message, User *user);
 		void	USER(Message &message, User *user);
+		void	JOIN(Message &message, User *user);
 	public:
 		Command(Server *server);
 		~Command();

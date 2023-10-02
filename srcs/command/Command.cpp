@@ -2,6 +2,7 @@
 #include "../user/User.hpp"
 #include "../server/Server.hpp"
 #include "../Message.hpp"
+# include "NumericReplies.hpp"
 
 Command::Command(Server *server) : _server(server)
 {
@@ -9,6 +10,7 @@ Command::Command(Server *server) : _server(server)
 	_commands["PING"] = &Command::PING;
 	_commands["NICK"] = &Command::NICK;
 	_commands["USER"] = &Command::USER;
+	_commands["JOIN"] = &Command::JOIN;
 }
 
 Command::~Command()
