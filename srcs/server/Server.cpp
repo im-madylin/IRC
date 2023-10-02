@@ -156,11 +156,12 @@ void Server::acceptConnection()
 void Server::disconnetClient(int clientSocket)
 {
 	map<int, User *>::iterator it = this->_users.find(clientSocket);
+	User *user = it->second;
+
 	if (it == this->_users.end())
 		return ;
 	this->_users.erase(it);
 
-	User *user = it->second;
 	//채널 삭제 추가 필요
 	delete user;
 
@@ -202,6 +203,9 @@ void Server::recvMessage(int clientSocket)
 	User *user = it->second;
 	int recvSize;
 
+	if (it == this->_users.end())
+		return ;
+
 	// data의 길이가 0이면 연결이 끊긴 것으로 판단, user 삭제
 	if ((recvSize = recv(clientSocket, buf, MAX_MESSAGE_SIZE, 0)) <= 0) {
 		disconnetClient(clientSocket);
@@ -215,8 +219,17 @@ void Server::recvMessage(int clientSocket)
 
 void Server::sendMessage(int clientSocket, string message)
 {
+	map<int, User *>::iterator it = this->_users.find(clientSocket);
+	User *user = it->second;
+
+	if (it == this->_users.end())
+		return ;
+	if (user->getMessageBuffer().empty())
+		return ;
+
 	if (send(clientSocket, message.c_str(), message.length(), 0) == -1)
 		cerr << "send() error" << endl;
+		disconnetClient(clientSocket);
 }
 
 void Server::handleMessage(User *user)
