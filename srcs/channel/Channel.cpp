@@ -28,6 +28,26 @@ vector<string>  Channel::getUserList() {
     return list;
 }
 
+string Channel::getTopic()
+{
+	return this->_topic;
+}
+
+string Channel::getMode()
+{
+	return this->_mode;
+}
+
+void Channel::setTopic(string topic)
+{
+	this->_topic = topic;
+}
+
+void Channel::setMode(string mode)
+{
+	this->_mode = mode;
+}
+
 void        	Channel::addUser(int fd, User *user) {
     if (_users.empty())
         _operator.insert(fd);
@@ -83,4 +103,17 @@ void			Channel::addOper(int fd) {
 
 void			Channel::deleteOper(int fd) {
 	_operator.erase(fd);
+}
+
+bool		Channel::isExistUser(int fd) const {
+	if (_users.find(fd) == _users.end())
+		return false;
+	return true;
+}
+
+bool Channel::isFull() const
+{
+	if (_users.size() >= MAX_CHANNEL_USER)
+		return true;
+	return false;
 }

@@ -22,6 +22,7 @@ class Message {
 		string			getPrefix();
 		string			getCommand();
 		vector<string>	getParams();
+		size_t		getParamsSize();
 
 		void		setPrefix(string prefix);
 		void		setCommand(string command);

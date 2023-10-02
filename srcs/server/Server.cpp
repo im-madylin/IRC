@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include "../user/User.hpp"
 #include "../command/Command.hpp"
+#include "../channel/Channel.hpp"
 
 Server::Server(string port, string password) 
 : _port(atoi(port.c_str())), _password(password)
@@ -36,6 +37,16 @@ map<int, User *> Server::getUsers() const
 	return this->_users;
 }
 
+string Server::getServerPrefix() const
+{
+	return this->_serverName;
+}
+
+map<string, Channel *> Server::getChannels() const
+{
+	return this->_channels;
+}
+
 void Server::setServerName(string serverName)
 {
 	this->_serverName = serverName;
@@ -46,7 +57,7 @@ void Server::run()
 	initKqueue();
 	while (1)
 	{
-		struct timespec timeout = {KQUEUE_TIMEOUT, 0}; // 3초 타임아웃
+		struct timespec timeout = {KQUEUE_TIMEOUT, 0}; // 3분 타임아웃
 
 		// kqueue에 등록된 이벤트가 발생할 때까지 대기, 이벤트 수만큼 반환
 		int eventCount = kevent(this->_kq, NULL, 0, this->_events, KQUEUE_SIZE, &timeout);
@@ -217,8 +228,8 @@ void Server::recvMessage(int clientSocket)
 	} else {
 		// 메시지 버퍼에 저장
 		buf[recvSize] = '\0';
-		user->appendMessage(buf);
-		handleMessage(user);
+		user->appendCommand(buf);
+		handleCmdMessage(user);
 	}
 }
 
@@ -245,24 +256,35 @@ void Server::sendMessage(int clientSocket)
 	}
 }
 
-void Server::handleMessage(User *user)
+void Server::addChannel(Channel *channel)
+{
+	_channels.insert(make_pair(channel->getChannelName(), channel));
+}
+
+Channel *Server::findChannel(string channelName)
+{
+	(void) channelName;
+	return nullptr;
+}
+
+void Server::handleCmdMessage(User *user)
 {
 	// clrf가 나올 때까지 메시지를 처리
 	while (true) {
-		size_t crlfPos = user->getMessageBuffer().find("\r\n", 0);
+		size_t crlfPos = user->getCommandBuffer().find("\r\n", 0);
 		
 		if (crlfPos == string::npos) {
 			break;
 		}
 		
 		if (crlfPos == 0) {
-			user->setMessageBuffer(user->getMessageBuffer().substr(1));
+			user->setCommandBuffer(user->getCommandBuffer().substr(1));
 			continue;
 		}
 
-		Message message(user->getMessageBuffer().substr(0, crlfPos));
-		// user->clearMessageBuffer();
-		user->setMessageBuffer(user->getMessageBuffer().substr(crlfPos + 1));
+		Message message(user->getCommandBuffer().substr(0, crlfPos));
+		user->clearCommandBuffer();
+		// user->setCommandBuffer(user->getCommandBuffer().substr(crlfPos + 1));
 		// 명령어 처리
 		this->_command->handleCommand(message, user);
 	}

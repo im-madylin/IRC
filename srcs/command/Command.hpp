@@ -5,6 +5,8 @@
 # include <string>
 # include <map>
 
+# include "../Utils.hpp"
+
 # define NICKNAME_MAX_SIZE 9
 
 class Server;
@@ -24,10 +26,12 @@ class Command {
 		void	PING(Message &message, User *user);
 		void	NICK(Message &message, User *user);
 		void	USER(Message &message, User *user);
+		void	JOIN(Message &message, User *user);
 	public:
 		Command(Server *server);
 		~Command();
 		void 	handleCommand(Message &message, User *user);
+		void	sendToClient(int fd, string message);
 
 		//NICK.cpp
 		bool	validNick(string nickname);
