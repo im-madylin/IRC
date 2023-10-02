@@ -9,7 +9,7 @@ void Command::JOIN(Message &message, User *user)
 	string serverPrefix = this->_server->getServerPrefix();
 	// ERR_NEEDMOREPARAMS
 	if (message.getParamsSize() < 2)
-		return this->_server->sendMessage(user->getFd(), generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "JOIN")));
+		return user->setMessageBuffer(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "JOIN")));
 
 	string delimeter = ",";
 	vector<string> channels = split(message.getParams()[0], delimeter);
@@ -24,14 +24,14 @@ void Command::JOIN(Message &message, User *user)
 	{
 		if ((*it)[0] != '#') {
 			// MEMO: 필요한지..?
-			this->_server->sendMessage(user->getFd(), generateReply(serverPrefix, ERR_NOSUCHCHANNEL(user->getNickname(), *it)));
+			user->setMessageBuffer(generateReply(serverPrefix, ERR_NOSUCHCHANNEL(user->getNickname(), *it)));
 			continue ;
 		}
 		Channel *channel = this->_server->findChannel(*it);
 		if (channel == NULL) {
 			// ERR_TOOMANYCHANNELS
 			if (this->_server->getChannels().size() >= MAX_CHANNEL_SIZE)
-				return this->_server->sendMessage(user->getFd(), generateReply(serverPrefix, ERR_TOOMANYCHANNELS(user->getNickname(), *it)));
+				return user->setMessageBuffer(generateReply(serverPrefix, ERR_TOOMANYCHANNELS(user->getNickname(), *it)));
 			channel = new Channel(*it);
 			this->_server->addChannel(channel);
 			channel->addOper(user->getFd());
@@ -39,12 +39,12 @@ void Command::JOIN(Message &message, User *user)
 		// 이미 있는 유저는 무시
 		if (!channel->isExistUser(user->getFd())) {
 			if (channel->isFull()) {
-				this->_server->sendMessage(user->getFd(), generateReply(serverPrefix, ERR_CHANNELISFULL(user->getNickname(), *it)));
+				user->setMessageBuffer(generateReply(serverPrefix, ERR_CHANNELISFULL(user->getNickname(), *it)));
 				continue ;
 			}
 			// TODO: 수정 필요 invite only 
 			if (channel->getMode() == "i") {
-				this->_server->sendMessage(user->getFd(), generateReply(serverPrefix, ERR_INVITEONLYCHAN(user->getNickname(), *it)));
+				user->setMessageBuffer(generateReply(serverPrefix, ERR_INVITEONLYCHAN(user->getNickname(), *it)));
 				continue ;
 			}
 
@@ -57,9 +57,9 @@ void Command::JOIN(Message &message, User *user)
 
 			// RPL_TOPIC
 			if (channel->getTopic().length() > 0)
-				this->_server->sendMessage(user->getFd(), generateReply(serverPrefix, RPL_TOPIC(*it, *channel)));
+				user->setMessageBuffer(generateReply(serverPrefix, RPL_TOPIC(*it, *channel)));
 			// RPL_NAMREPLY
-			this->_server->sendMessage(user->getFd(), generateReply(serverPrefix, RPL_NAMREPLY(user->getNickname(), *channel)));
+			user->setMessageBuffer(generateReply(serverPrefix, RPL_NAMREPLY(user->getNickname(), *channel)));
 		}
 	}
 

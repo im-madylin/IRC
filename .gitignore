@@ -2,6 +2,9 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=c++,visualstudiocode
 
 ### C++ ###
+# excute file
+ircserv
+
 # Prerequisites
 *.d
 
