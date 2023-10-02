@@ -15,7 +15,7 @@ void Command::JOIN(Message &message, User *user)
 	vector<string> channels = split(message.getParams()[0], delimeter);
 	
 	vector<string> keys;
-	if (message.getParamsSize() > 2)
+	if (message.getParamsSize() >= 2)
 		keys = split(message.getParams()[1], delimeter);
 	while (keys.size() < channels.size())
 		keys.push_back("");
@@ -44,13 +44,27 @@ void Command::JOIN(Message &message, User *user)
 			}
 			// TODO: 수정 필요 invite only 
 			if (channel->getMode() == "i") {
-				sendToClient(user->getFd(), generateReply(serverPrefix, ERR_INVITEONLYCHAN(user->getNickname(), *it)));
-				continue ;
+				if (!channel->isInvited(user->getFd())) {
+					sendToClient(user->getFd(), generateReply(serverPrefix, ERR_INVITEONLYCHAN(user->getNickname(), *it)));
+					continue ;
+				}
 			}
 
-			// TODO: ERR_BANNEDFROMCHAN
+			// TODO: 수정 필요
+			if (channel->getMode() == "b") {
+				if (channel->isInBanList(user->getFd())) {
+					sendToClient(user->getFd(), generateReply(serverPrefix, ERR_BANNEDFROMCHAN(user->getNickname(), *it)));
+					continue ;
+				}
+			}
 
-			// TODO: ERR_BADCHANNELKEY
+			// TODO: 수정 필요
+			if (channel->getMode() == "k") {
+				if (channel->getKey() != keys[it - channels.begin()]) {
+					sendToClient(user->getFd(), generateReply(serverPrefix, ERR_BADCHANNELKEY(user->getNickname(), *it)));
+					continue ;
+				}
+			}
 
 			channel->addUser(user->getFd(), user);
 			user->joinChannel(channel);
@@ -62,6 +76,4 @@ void Command::JOIN(Message &message, User *user)
 			sendToClient(user->getFd(), generateReply(serverPrefix, RPL_NAMREPLY(user->getNickname(), *channel)));
 		}
 	}
-
-	// TODO: ERR_NOSUCHCHANNEL
 }
