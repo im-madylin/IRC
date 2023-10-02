@@ -7,6 +7,8 @@
 # include <vector>
 # include "../user/User.hpp"
 
+# define MAX_CHANNEL_USER 10
+
 class Server;
 class User;
 
@@ -17,6 +19,8 @@ class Channel {
 		string				_name;
 		map<int, User *>	_users;
 		set<int> 			_operator;
+		string				_topic;
+		string				_mode;
 
 	public:
 		Channel();
@@ -25,6 +29,11 @@ class Channel {
 
 		string			getChannelName();
 		vector<string>	getUserList();
+		string			getTopic();
+		string			getMode();
+
+		void			setTopic(string topic);
+		void			setMode(string mode);
 
 		void		addUser(int fd, User *user);
 		void		deleteUser(int fd);
@@ -34,6 +43,8 @@ class Channel {
 		bool		isOperator(User *user) const;
 		void		addOper(int fd);
 		void		deleteOper(int fd);
+		bool		isExistUser(int fd) const;
+		bool		isFull() const;
 };
 
 #endif
