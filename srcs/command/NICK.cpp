@@ -7,7 +7,7 @@
 //첫글자는 알파벳이나 밑줄로 시작
 bool Command::validNick(string nickname) 
 {
-	for (string::iterator it = nickname.begin(); it != nickname.end(); ++it)
+	for (string::iterator it = nickname.begin(); it != nickname.end(); it++)
 	{
         if (!(isalnum(*it) || *it == '_' || *it == '-'))
 			return false; 
@@ -20,11 +20,19 @@ bool Command::validNick(string nickname)
 bool Command::duplicateNick(string nickname)
 {
 	//user 전체 받아와서 중복 검사
-	// map<int, User *> users = *_server->getUsers();
-	(void)nickname;
+	map<int, User *> users = _server->getUsers();
+	
+	for (map<int, User *>::iterator it = users.begin(); it != users.end(); it++)
+	{
+		User *tmp = it->second;
+		cout << tmp->getNickname() << endl;
+		if (tmp->getNickname() == nickname)
+			return false;
+	}
 	return true;
 
 }
+
 
 void Command::NICK(Message &message, User *user)
 {
