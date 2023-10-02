@@ -2,22 +2,36 @@
 # define NUMERIC_REPLIES_HPP
 
 # include <string>
-
-# define ERR_NEEDMOREPARAMS 461
-# define ERR_NEEDMOREPARAMS_MSG "Not enough parameters"
-# define ERR_ALREADYREGISTRED 462
-# define ERR_ALREADYREGISTRED_MSG "You may not reregister"
+# include <vector>
 
 using namespace std;
 
-class NumericReplies {
-	private:
-		
-	public:
-		NumericReplies();
-		~NumericReplies();
+class Channel;
+class User;
 
-		string generateReply(int num, string prefix);
-};
+string getSymbol(string mode);
+string generateReply(string prefix, string msg);
+
+// 332
+string RPL_TOPIC(string client, Channel &channel);
+// 353
+string RPL_NAMREPLY(string client, Channel &channel);
+
+// 403
+string ERR_NOSUCHCHANNEL(string client, string channel);
+// 405
+string ERR_TOOMANYCHANNELS(string client, string channel);
+// 461
+string ERR_NEEDMOREPARAMS(string client, string command);
+// 471
+string ERR_CHANNELISFULL(string client, string channel);
+// 473
+string ERR_INVITEONLYCHAN(string client, string channel);
+// 474
+string ERR_BANNEDFROMCHAN(string client, string channel);
+// 475
+string ERR_BADCHANNELKEY(string client, string channel);
+// 476
+string ERR_BADCHANMASK(string client, string channel);
 
 # endif
