@@ -44,6 +44,7 @@ class User {
 		void	appendMessage(const string &message);
 		void	appendCommand(const string &command);
 		void	joinChannel(Channel *channel);
+		void	leaveChannel(string channelName);
 };
 
 #endif
