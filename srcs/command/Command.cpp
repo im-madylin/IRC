@@ -11,6 +11,7 @@ Command::Command(Server *server) : _server(server)
 	_commands["NICK"] = &Command::NICK;
 	_commands["USER"] = &Command::USER;
 	_commands["JOIN"] = &Command::JOIN;
+	_commands["PART"] = &Command::PART;
 }
 
 Command::~Command()
