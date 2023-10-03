@@ -62,6 +62,11 @@ string ERR_NEEDMOREPARAMS(string client, string command)
 	return "461 " + client + " " + command + " :Not enough parameters";
 }
 
+string ERR_ALREADYREGISTERED(string client)
+{
+	return "462 " + client + " " + ":You may not reregister";
+}
+
 string ERR_CHANNELISFULL(string client, string channel)
 {
 	return "471 " + client + " " + channel + " :Cannot join channel (+l)";

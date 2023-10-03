@@ -27,6 +27,8 @@ string ERR_TOOMANYCHANNELS(string client, string channel);
 string ERR_NOTONCHANNEL(string client, string channel);
 // 461
 string ERR_NEEDMOREPARAMS(string client, string command);
+// 462
+string ERR_ALREADYREGISTERED(string client);
 // 471
 string ERR_CHANNELISFULL(string client, string channel);
 // 473
