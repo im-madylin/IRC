@@ -18,6 +18,12 @@ string generateReply(string prefix, string msg)
 
 // :eunbi!root@127.0.0.1 TOPIC #channel :bibibi -> 이거는 TOPIC 하고 broadcast
 
+// :eunbi!root@127.0.0.1 TOPIC #bang :hello2
+string RPL_NOTOPIC(string client, string channel)
+{
+	return "331 " + client + " " + channel + " :No topic is set";
+}
+
 // :irc.local 332 hello #bigbang :topic
 string RPL_TOPIC(string client, Channel &channel)
 {
@@ -68,10 +74,22 @@ string ERR_NICKCOLLISION(string nick)
 	return "436 " + nick + " :Nickname collision KILL";
 }
 
+// :irc.local 442 part #bang :You're not on that channel
+string ERR_NOTONCHANNEL(string client, string channel)
+{
+	return "442 " + client + " " + channel + " :You're not on that channel";
+
+}
+
 // :irc.local 461 test22 JOIN :Not enough parameters.
 string ERR_NEEDMOREPARAMS(string client, string command)
 {
 	return "461 " + client + " " + command + " :Not enough parameters";
+}
+
+string ERR_ALREADYREGISTERED(string client)
+{
+	return "462 " + client + " " + ":You may not reregister";
 }
 
 string ERR_CHANNELISFULL(string client, string channel)
@@ -98,4 +116,9 @@ string ERR_BADCHANNELKEY(string client, string channel)
 string ERR_BADCHANMASK(string client, string channel)
 {
 	return "476 " + client + " " + channel + " :Bad Channel Mask";
+}
+
+string ERR_CHANOPRIVSNEEDED(string client, string channel)
+{
+	return "482 " + client + " " + channel + " :You're not channel operator";
 }

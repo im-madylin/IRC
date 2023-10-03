@@ -48,6 +48,7 @@ class Server {
 		void	handleEvent(struct kevent &event);
 	
 		void	recvMessage(int clientSocket);
+		size_t	findCRLF(string message);
 		void	handleCmdMessage(User *user);
 
 	public:
