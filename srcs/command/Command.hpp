@@ -30,6 +30,7 @@ class Command {
 		void	JOIN(Message &message, User *user);
 		void	TOPIC(Message &message, User *user);
 		void	PART(Message &message, User *user);
+		void	INVITE(Message &message, User *user);
 	public:
 		Command(Server *server);
 		~Command();
