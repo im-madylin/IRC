@@ -30,6 +30,12 @@ string RPL_TOPIC(string client, Channel &channel)
 	return "332 " + client + " " + channel.getChannelName() + " :" + channel.getTopic();
 }
 
+// :irc.local 341 eunbi part :#invite
+string RPL_INVITING(string client, string nickname, string channel)
+{
+	return "341 " + client + " " + nickname + " :" + channel;
+}
+
 // :irc.local 353 test1 = #channel :@eunbi hello test1
 string RPL_NAMREPLY(string client, Channel &channel)
 {
@@ -38,6 +44,11 @@ string RPL_NAMREPLY(string client, Channel &channel)
 	for (vector<string>::iterator it = userList.begin(); it != userList.end(); it++)
 		names += (*it) + " ";
 	return "353 " + client + getSymbol(channel.getMode()) + channel.getChannelName() + " :" + names;
+}
+
+string ERR_NOSUCHNICK(string client, string nickname)
+{
+	return "401 " + client + " " + nickname + " :No such nick";
 }
 
 string ERR_NOSUCHCHANNEL(string client, string channel)
@@ -56,6 +67,11 @@ string ERR_NOTONCHANNEL(string client, string channel)
 	return "442 " + client + " " + channel + " :You're not on that channel";
 }
 
+string ERR_USERONCHANNEL(string client, string user, string channel)
+{
+	return "443 " + client + " " + user + " " + channel + " :is already on channel";
+}
+
 // :irc.local 461 test22 JOIN :Not enough parameters.
 string ERR_NEEDMOREPARAMS(string client, string command)
 {
@@ -67,6 +83,7 @@ string ERR_CHANNELISFULL(string client, string channel)
 	return "471 " + client + " " + channel + " :Cannot join channel (+l)";
 }
 
+// :irc.local 473 part #invite :Cannot join channel (invite only)
 string ERR_INVITEONLYCHAN(string client, string channel)
 {
 	return "473 " + client + " " + channel + " :Cannot join channel (+i)";
