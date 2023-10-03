@@ -272,6 +272,14 @@ Channel *Server::findChannel(string channelName)
 	return channel;
 }
 
+User *Server::findUser(string username)
+{
+	for(map<int, User *>::iterator it = _users.begin(); it != _users.end(); it++)
+		if (it->second->getNickname() == username)
+			return it->second;
+	return NULL;
+}
+
 void Server::deleteChannel(string channelName)
 {
 	Channel *channel = findChannel(channelName);
