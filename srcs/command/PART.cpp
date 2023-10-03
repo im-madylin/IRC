@@ -2,7 +2,6 @@
 #include "../server/Server.hpp"
 #include "../channel/Channel.hpp"
 #include "../Message.hpp"
-#include "NumericReplies.hpp"
 
 void Command::PART(Message &message, User *user)
 {

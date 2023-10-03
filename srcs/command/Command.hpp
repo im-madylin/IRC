@@ -6,6 +6,7 @@
 # include <map>
 
 # include "../Utils.hpp"
+# include "NumericReplies.hpp"
 
 # define NICKNAME_MAX_SIZE 9
 
