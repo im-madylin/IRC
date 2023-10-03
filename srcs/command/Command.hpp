@@ -6,6 +6,7 @@
 # include <map>
 
 # include "../Utils.hpp"
+# include "NumericReplies.hpp"
 
 # define NICKNAME_MAX_SIZE 9
 
@@ -27,6 +28,7 @@ class Command {
 		void	NICK(Message &message, User *user);
 		void	USER(Message &message, User *user);
 		void	JOIN(Message &message, User *user);
+		void	TOPIC(Message &message, User *user);
 		void	PART(Message &message, User *user);
 	public:
 		Command(Server *server);
