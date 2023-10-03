@@ -233,6 +233,16 @@ void Server::recvMessage(int clientSocket)
 	}
 }
 
+size_t Server::findCRLF(string message)
+{
+	size_t crPos = message.find("\r");
+	size_t lfPos = message.find("\n");
+
+	if (lfPos == string::npos) return crPos;
+	if (crPos == string::npos) return lfPos;
+	return min(crPos, lfPos);
+}
+
 void Server::sendMessage(int clientSocket)
 {
 	map<int, User *>::iterator it = this->_users.find(clientSocket);
@@ -285,9 +295,9 @@ void Server::deleteChannel(string channelName)
 
 void Server::handleCmdMessage(User *user)
 {
-	// clrf가 나올 때까지 메시지를 처리
+	// crlf가 나올 때까지 메시지를 처리
 	while (true) {
-		size_t crlfPos = user->getCommandBuffer().find("\r\n", 0);
+		size_t crlfPos = findCRLF(user->getCommandBuffer());
 		
 		if (crlfPos == string::npos) {
 			break;
