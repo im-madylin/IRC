@@ -99,3 +99,8 @@ void User::joinChannel(Channel *channel)
 { 
 	this->_joinedChannels.insert(make_pair(channel->getChannelName(), channel));
 }
+
+void User::leaveChannel(string channelName)
+{
+	this->_joinedChannels.erase(channelName);
+}

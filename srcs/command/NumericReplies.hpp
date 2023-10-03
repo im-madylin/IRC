@@ -21,6 +21,8 @@ string RPL_NAMREPLY(string client, Channel &channel);
 string ERR_NOSUCHCHANNEL(string client, string channel);
 // 405
 string ERR_TOOMANYCHANNELS(string client, string channel);
+// 442
+string ERR_NOTONCHANNEL(string client, string channel);
 // 461
 string ERR_NEEDMOREPARAMS(string client, string command);
 // 471

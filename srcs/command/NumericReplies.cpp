@@ -44,6 +44,12 @@ string ERR_TOOMANYCHANNELS(string client, string channel)
 	return "405 " + client + " " + channel + " :You have joined too many channels";
 }
 
+// :irc.local 442 part #bang :You're not on that channel
+string ERR_NOTONCHANNEL(string client, string channel)
+{
+	return "442 " + client + " " + channel + " :You're not on that channel";
+}
+
 // :irc.local 461 test22 JOIN :Not enough parameters.
 string ERR_NEEDMOREPARAMS(string client, string command)
 {
