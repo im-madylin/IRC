@@ -16,6 +16,11 @@ string generateReply(string prefix, string msg)
 	return ":" + prefix + " " + msg + "\r\n";
 }
 
+string RPL_AWAY(string client, string nickname, string message)
+{
+	return "301 " + client + " " + nickname + " :" + message;
+}
+
 // :eunbi!root@127.0.0.1 TOPIC #channel :bibibi -> 이거는 TOPIC 하고 broadcast
 
 // :eunbi!root@127.0.0.1 TOPIC #bang :hello2
@@ -40,14 +45,39 @@ string RPL_NAMREPLY(string client, Channel &channel)
 	return "353 " + client + getSymbol(channel.getMode()) + channel.getChannelName() + " :" + names;
 }
 
+string ERR_NOSUCHNICK(string client, string nickname)
+{
+	return "401 " + client + " " + nickname + " :No such nick/channel";
+}
+
 string ERR_NOSUCHCHANNEL(string client, string channel)
 {
 	return "403 " + client + " " + channel + " :No such channel";
 }
 
+string ERR_CANNOTSENDTOCHAN(string client, string channel)
+{
+	return "404 " + client + " " + channel + " :Cannot sent to channel";
+}
+
 string ERR_TOOMANYCHANNELS(string client, string channel)
 {
 	return "405 " + client + " " + channel + " :You have joined too many channels";
+}
+
+string ERR_TOOMANYTARGETS(string client, string target)
+{
+	return "407 " + client + " " + target + " :Duplicate recipients. No message delivered";
+}
+
+string ERR_NORECIPIENT(string client, string command)
+{
+	return "411 " + client + " :No recipient given " + command;
+}
+
+string ERR_NOTEXTTOSEND(string client)
+{
+	return "412 " + client + " :No text to send";
 }
 
 // :irc.local 442 part #bang :You're not on that channel
