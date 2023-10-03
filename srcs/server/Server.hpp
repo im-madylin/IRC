@@ -68,6 +68,7 @@ class Server {
 		void	addChannel(Channel *channel);
 		Channel *findChannel(string channelName); // TODO: 구현 필요
 		void	deleteChannel(string channelName);
+		User	*findUser(string nickname);
 };
 
 #endif

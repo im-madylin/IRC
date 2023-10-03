@@ -283,9 +283,15 @@ void Server::deleteChannel(string channelName)
 	delete channel;
 }
 
+User *Server::findUser(string nickname)
+{
+	(void) nickname;
+	return nullptr;
+}
+
 void Server::handleCmdMessage(User *user)
 {
-	// clrf가 나올 때까지 메시지를 처리
+	// crlf가 나올 때까지 메시지를 처리
 	while (true) {
 		size_t crlfPos = user->getCommandBuffer().find("\r\n", 0);
 		
