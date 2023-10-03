@@ -12,6 +12,7 @@ Command::Command(Server *server) : _server(server)
 	_commands["USER"] = &Command::USER;
 	_commands["JOIN"] = &Command::JOIN;
 	_commands["PART"] = &Command::PART;
+	_commands["TOPIC"] = &Command::TOPIC;
 }
 
 Command::~Command()

@@ -27,6 +27,7 @@ class Command {
 		void	NICK(Message &message, User *user);
 		void	USER(Message &message, User *user);
 		void	JOIN(Message &message, User *user);
+		void	TOPIC(Message &message, User *user);
 		void	PART(Message &message, User *user);
 	public:
 		Command(Server *server);
