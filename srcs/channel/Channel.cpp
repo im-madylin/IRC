@@ -15,6 +15,11 @@ string  		Channel::getChannelName() {
     return _name;
 }
 
+map<int, User *>Channel::getUsers()
+{
+	return _users;
+}
+
 vector<string>  Channel::getUserList() {
     vector<string>  list;
 

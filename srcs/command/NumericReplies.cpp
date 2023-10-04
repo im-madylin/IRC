@@ -16,6 +16,11 @@ string generateReply(string prefix, string msg)
 	return ":" + prefix + " " + msg + "\r\n";
 }
 
+string RPL_AWAY(string client, string nickname, string message)
+{
+	return "301 " + client + " " + nickname + " :" + message;
+}
+
 // :eunbi!root@127.0.0.1 TOPIC #channel :bibibi -> 이거는 TOPIC 하고 broadcast
 
 // :eunbi!root@127.0.0.1 TOPIC #bang :hello2
@@ -40,14 +45,60 @@ string RPL_NAMREPLY(string client, Channel &channel)
 	return "353 " + client + getSymbol(channel.getMode()) + channel.getChannelName() + " :" + names;
 }
 
+string ERR_NOSUCHNICK(string client, string nickname)
+{
+	return "401 " + client + " " + nickname + " :No such nick/channel";
+}
+
 string ERR_NOSUCHCHANNEL(string client, string channel)
 {
 	return "403 " + client + " " + channel + " :No such channel";
 }
 
+string ERR_CANNOTSENDTOCHAN(string client, string channel)
+{
+	return "404 " + client + " " + channel + " :Cannot sent to channel";
+}
+
 string ERR_TOOMANYCHANNELS(string client, string channel)
 {
 	return "405 " + client + " " + channel + " :You have joined too many channels";
+}
+
+string ERR_TOOMANYTARGETS(string client, string target)
+{
+	return "407 " + client + " " + target + " :Duplicate recipients. No message delivered";
+}
+
+string ERR_NORECIPIENT(string client, string command)
+{
+	return "411 " + client + " :No recipient given " + command;
+}
+
+string ERR_NOTEXTTOSEND(string client)
+{
+	return "412 " + client + " :No text to send";
+}
+
+// TODO: ERROR(431): 만 나오고 msg가 나오지 않음, 닉네임이 주어지지 않았을때 사용하는 에러문구 특성상, client에 빈칸이 들어가서 안나오는 것으로 추측
+string ERR_NONICKNAMEGIVEN(string client)
+{
+	return "431 " + client + + " " + ":No nickname given";
+}
+
+string ERR_ERRONEUSNICKNAME(string client)
+{
+	return "432 " + client + " " + client + " :Erroneus nickname";
+}
+
+string ERR_NICKNAMEINUSE(string client)
+{
+	return "433 " + client + " " + client + " :Nickname is already in use";
+}
+
+string ERR_NICKCOLLISION(string client)
+{
+	return "436 " + client + " " + client + " :Nickname collision KILL";
 }
 
 string ERR_USERNOTINCHANNEL(string client, string user, string channel)
@@ -59,6 +110,7 @@ string ERR_USERNOTINCHANNEL(string client, string user, string channel)
 string ERR_NOTONCHANNEL(string client, string channel)
 {
 	return "442 " + client + " " + channel + " :You're not on that channel";
+
 }
 
 // :irc.local 461 test22 JOIN :Not enough parameters.

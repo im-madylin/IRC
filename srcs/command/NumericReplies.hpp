@@ -12,6 +12,8 @@ class User;
 string getSymbol(string mode);
 string generateReply(string prefix, string msg);
 
+// 306
+string RPL_AWAY(string client, string nickname, string message);
 // 331
 string RPL_NOTOPIC(string client, string channel);
 // 332
@@ -19,10 +21,28 @@ string RPL_TOPIC(string client, Channel &channel);
 // 353
 string RPL_NAMREPLY(string client, Channel &channel);
 
+// 401
+string ERR_NOSUCHNICK(string client, string nickname);
 // 403
 string ERR_NOSUCHCHANNEL(string client, string channel);
+// 404
+string ERR_CANNOTSENDTOCHAN(string client, string channel);
 // 405
 string ERR_TOOMANYCHANNELS(string client, string channel);
+// 407
+string ERR_TOOMANYTARGETS(string client, string target);
+// 411
+string ERR_NORECIPIENT(string client, string command);
+// 412
+string ERR_NOTEXTTOSEND(string client);
+// 431
+string ERR_NONICKNAMEGIVEN(string client);
+// 432
+string ERR_ERRONEUSNICKNAME(string client);
+// 433
+string ERR_NICKNAMEINUSE(string client);
+// 436
+string ERR_NICKCOLLISION(string client);
 // 441
 string ERR_USERNOTINCHANNEL(string client, string user, string channel);
 // 442
