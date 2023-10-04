@@ -264,12 +264,10 @@ void Server::addChannel(Channel *channel)
 
 Channel *Server::findChannel(string channelName)
 {
-	map<string, Channel *>::iterator it = this->_channels.find(channelName);
-	Channel *channel = it->second;
-
-	if (it == this->_channels.end())
-		return NULL;
-	return channel;
+	for(map<string, Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
+		if (it->second->getChannelName() == channelName)
+			return it->second;
+	return NULL;
 }
 
 User *Server::findUser(string username)
