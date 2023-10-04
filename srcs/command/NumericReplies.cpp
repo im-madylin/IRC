@@ -101,6 +101,11 @@ string ERR_NICKCOLLISION(string client)
 	return "436 " + client + " " + client + " :Nickname collision KILL";
 }
 
+string ERR_USERNOTINCHANNEL(string client, string user, string channel)
+{
+	return "441 " + client + " " + user + " " + channel + " :They aren't on that channel";
+}
+
 // :irc.local 442 part #bang :You're not on that channel
 string ERR_NOTONCHANNEL(string client, string channel)
 {
