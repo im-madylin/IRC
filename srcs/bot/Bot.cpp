@@ -6,71 +6,88 @@ Bot::Bot() {
 	struct tm *t = localtime(&timer);
 	_curDate = (t->tm_year + 1900) * 10000 + (t->tm_mon + 1) * 100 + t->tm_mday;
 
-	ifstream fLuck;
-	fLuck.open("todayLuck");
-	/*
-	if (!fLuck) {
-		cout << "file \'todayLuck\' open fail" << endl;
-	}
-	*/
-	while (getline(fLuck, str)) {
-		_luckList.push_back(str);
-	}
-	fLuck.close();
+	_birthDate = 0;
 	
-	ifstream fItem;
-	fItem.open("luckyItem");
-	/*
-	if (!fItem) {
-		cout << "file \'luckyItem\' open fail" << endl; // 더 해야되나?
-	}
-	*/
-	while (!getline(fItem, str)) {
-		_luckList.push_back(str);
-	}
-	fItem.close();
-
-	// init
-	_birthdate = 0;
+	initList();
 }
 
 Bot::~Bot() {
-	_luckList.clear();
-	vector<string>().swap(_luckList); // capacity 0?
-	_itemList.clear();
-	vector<string>().swap(_itemList); // capacity 0
+	_todayLuckList.clear();
+	vector<string>().swap(_luckyItemList); // capacity 0?
+	_luckyItemList.clear();
+	vector<string>().swap(_luckyItemList); // capacity 0
 }
 
-string Bot::inputBirthdate(string param) {
+void Bot::initList() {
+	_todayLuckList.push_back("today's luck [1]");
+	_todayLuckList.push_back("today's luck [2]");
+	_todayLuckList.push_back("today's luck [3]");
+
+	_luckyItemList.push_back("lucky item <1>");
+	_luckyItemList.push_back("lucky item <2>");
+	_luckyItemList.push_back("lucky item <3>");
+}
+
+const string Bot::getRandom(const vector<string>& list) const {
+	// 오늘 날짜와 생년월일을 결합한 값을 시드로 사용
+	srand(static_cast<unsigned>(_curDate + _birthDate));
+	return list[rand() % list.size()];
+}
+
+string Bot::inputBirthDate(string param) {
 	int		intParam;
 
 	if (param.length() != 8) {
-		return ("format must be YYYYMMDD\n");
+		return ("format must be YYYYMMDD");
 	}
 	
 	istringstream(param) >> intParam;
 	if (intParam < 0 || intParam > _curDate) {
-		return ("wrong birthdate\n");
+		return ("wrong birthdate");
 	}
-	return ("birth date has been saved\n");
+
+	_birthDate = intParam;
+	return ("birth date has been saved");
 }
 
-string Bot::showTodayLuck() const {
+const string Bot::showTodayLuck() const {
 	string reply;
 
-	if (_birthdate == 0)
-		reply = "you must input birthdate\n";
+	if (_birthDate == 0)
+		reply = "you must input birthdate";
+	else if (_todayLuckList.empty())
+		reply = "list is empty";
 	else
-		reply = "Your Today Luck : ";
+		reply = "Your Today Luck : " + getRandom(_todayLuckList);
 	return reply;
 }
 
-string Bot::showLuckyItem() const {
+const string Bot::showLuckyItem() const {
 	string reply;
 
-	if (_birthdate == 0)
-		reply = "you must input birthdate\n";
+	if (_birthDate == 0)
+		reply = "you must input birthdate";
+	else if (_luckyItemList.empty())
+		reply = "list is empy";
 	else
-		reply = "Your Lucky Item : ";
+		reply = "Your Lucky Item : " + getRandom(_luckyItemList);
 	return reply;
 }
+
+/*
+int main()
+{
+	Bot		bot;
+	string	input;
+
+	while (1)
+	{
+		cout << "birthdate : ";
+		cin >> input;
+		cout << bot.inputBirthDate(input) << endl;
+
+		cout << bot.showTodayLuck() << endl;
+		cout << bot.showLuckyItem() << endl;
+	}
+}
+*/

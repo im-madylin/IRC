@@ -4,25 +4,27 @@
 # include <iostream>
 # include <string>
 # include <vector>
-# include <fstream>
 # include <sstream> //stoi(+11) 대신 istringstream쓰려고..
-# include <ctime> // 
+# include <cstdlib> //
+
 using namespace std;
 
 class Bot {
 	private:
 		int				_curDate;
-		int				_birthdate;
-		vector<string>	_luckList;
-		vector<string>	_itemList;
+		int				_birthDate;
+		vector<string>	_todayLuckList;
+		vector<string> 	_luckyItemList;
 
 	public:
 		Bot(); // list 초기화
 		~Bot(); // list 삭제
 
-		string	inputBirthdate(string param); // 생년월일 입력받음
-		string	showTodayLuck() const;
-		string	showLuckyItem() const;
+		void			initList();
+		string			inputBirthDate(string param); // 생년월일 입력받음
+		const string	getRandom(const vector<string>& list) const;
+		const string	showTodayLuck() const;
+		const string	showLuckyItem() const;
 };
 
 #endif
