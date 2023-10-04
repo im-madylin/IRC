@@ -23,6 +23,8 @@ string RPL_NAMREPLY(string client, Channel &channel);
 string ERR_NOSUCHCHANNEL(string client, string channel);
 // 405
 string ERR_TOOMANYCHANNELS(string client, string channel);
+// 441
+string ERR_USERNOTINCHANNEL(string client, string user, string channel);
 // 442
 string ERR_NOTONCHANNEL(string client, string channel);
 // 461
@@ -37,7 +39,7 @@ string ERR_INVITEONLYCHAN(string client, string channel);
 string ERR_BANNEDFROMCHAN(string client, string channel);
 // 475
 string ERR_BADCHANNELKEY(string client, string channel);
-// 476
+// 476 -> 현재 사용하지 않는 듯 *아마도
 string ERR_BADCHANMASK(string client, string channel);
 // 482
 string ERR_CHANOPRIVSNEEDED(string client, string channel);
