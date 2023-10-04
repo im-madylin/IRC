@@ -116,7 +116,6 @@ string ERR_USERNOTINCHANNEL(string client, string user, string channel)
 string ERR_NOTONCHANNEL(string client, string channel)
 {
 	return "442 " + client + " " + channel + " :You're not on that channel";
-
 }
 
 string ERR_USERONCHANNEL(string client, string user, string channel)
