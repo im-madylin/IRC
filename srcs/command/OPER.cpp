@@ -3,6 +3,7 @@
 #include "../user/User.hpp"
 #include "../server/Server.hpp"
 #include "NumericReplies.hpp"
+#include "../channel/Channel.hpp"
 
 void Command::OPER(Message &message, User *user)
 {
@@ -12,18 +13,35 @@ void Command::OPER(Message &message, User *user)
     if (message.getParamsSize() < 2)
         return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "OPER")));
     
-    string user = message.getParams()[0];
-    string password = message.getParams()[1];
+    string param_user = message.getParams()[0];
+    string param_password = message.getParams()[1];
 
     //ERR_PASSWDMISMATCH
-    if (password != this->_server->getPassword())
+    if (param_password != this->_server->getPassword())
         return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_PASSWDMISMATCH(user->getNickname())));
     
     //TODO: ERR_NOOOPERHOST
 
 
-    //TODO: 운영자 권한 설정 및 MODE o 처리하기
+    //운영자 권한 설정
+    //TODO: 현재는 User *user를 operator로 등록함, param으로 들어오는 user를 등록해야할지, User *user를 등록해야할지는 논의 필요
     
+    map<string, Channel *> channels = this->_server->getChannels();
+
+    std::map<std::string, Channel*>::iterator it;
+    for (it = channels.begin(); it != channels.end(); it++) {
+        Channel* channel = it->second;
+
+        User *tmp = channel->findUser(user->getFd());
+        if (tmp != NULL && tmp->getNickname() == user->getNickname())
+        {
+            channel->addOper(user->getFd());
+            break ;
+        }
+    }
+
+    //TODO: mode o 처리 
+
     return sendToClient(user->getFd(), generateReply(serverPrefix, RPL_YOUREOPER(user->getNickname())));
 }
 
