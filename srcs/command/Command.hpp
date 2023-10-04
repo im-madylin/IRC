@@ -6,6 +6,7 @@
 # include <map>
 
 # include "../Utils.hpp"
+# include "../channel/Channel.hpp"
 # include "NumericReplies.hpp"
 
 # define NICKNAME_MAX_SIZE 9
@@ -31,12 +32,13 @@ class Command {
 		void	TOPIC(Message &message, User *user);
 		void	PART(Message &message, User *user);
 		void	PRIVMSG(Message &message, User *user);
+		void	NOTICE(Message &message, User *user);
 	public:
 		Command(Server *server);
 		~Command();
 		void 	handleCommand(Message &message, User *user);
 		void	sendToClient(int fd, string message);
-
+		void	broadcast(int ignoreFd, Channel *channel, string message);
 		//NICK.cpp
 		bool	validNick(string nickname);
 		bool	duplicateNick(string nickname);
