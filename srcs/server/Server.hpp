@@ -48,6 +48,7 @@ class Server {
 		void	handleEvent(struct kevent &event);
 	
 		void	recvMessage(int clientSocket);
+		size_t	findCRLF(string message);
 		void	handleCmdMessage(User *user);
 
 	public:
@@ -67,6 +68,7 @@ class Server {
 		void	sendMessage(int clientSocket);
 		void	addChannel(Channel *channel);
 		Channel *findChannel(string channelName); // TODO: 구현 필요
+		User	*findUser(string username);
 		void	deleteChannel(string channelName);
 		User	*findUser(string nickname);
 };

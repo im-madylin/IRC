@@ -31,6 +31,7 @@ class Channel {
 		~Channel();
 
 		string			getChannelName();
+		map<int, User *>getUsers();
 		vector<string>	getUserList();
 		string			getTopic();
 		string			getMode();

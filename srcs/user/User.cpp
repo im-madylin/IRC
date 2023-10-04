@@ -1,7 +1,7 @@
 #include "User.hpp"
 #include "../channel/Channel.hpp"
 
-User::User(int fd, string host): _fd(fd), _host(host)
+User::User(int fd, string host): _fd(fd), _host(host), _isRegistered(false)
 {
 }
 
@@ -45,6 +45,11 @@ string User::getUserPrefix()
 	return this->_nickname + "!" + this->_realName + "@" + this->_host;
 }
 
+bool User::getIsRegistered()
+{
+	return this->_isRegistered;
+}
+
 void User::setMessageBuffer(string messageBuffer)
 {
 	this->_messageBuffer = messageBuffer;
@@ -73,6 +78,11 @@ void User::setNickname(string nick)
 void User::setRealName(string realName)
 {
 	this->_realName = realName;
+}
+
+void User::setRegistered()
+{
+	this->_isRegistered = true;
 }
 
 void User::clearMessageBuffer()
