@@ -38,9 +38,6 @@ void Command::JOIN(Message &message, User *user)
 			user->joinChannel(channel);
 
 			this->broadcast(channel, generateReply(userPrefix, " JOIN :" + *it));
-			// RPL_TOPIC
-			if (channel->getTopic().length() > 0)
-				sendToClient(user->getFd(), generateReply(serverPrefix, RPL_TOPIC(*it, *channel)));
 			// RPL_NAMREPLY
 			sendToClient(user->getFd(), generateReply(serverPrefix, RPL_NAMREPLY(user->getNickname(), *channel)));
 			continue ;
