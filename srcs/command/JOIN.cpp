@@ -35,6 +35,7 @@ void Command::JOIN(Message &message, User *user)
 			channel = new Channel(*it);
 			this->_server->addChannel(channel);
 			channel->addOper(user->getFd());
+			channel->addUser(user->getFd(), user);
 			user->joinChannel(channel);
 
 			this->broadcast(channel, generateReply(userPrefix, " JOIN :" + *it));
