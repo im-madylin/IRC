@@ -42,7 +42,7 @@ void Command::NICK(Message &message, User *user)
 
 	//닉네임이 입력되지 않은 경우
 	if (nickname.size() == 0)
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NONICKNAMEGIVEN()));
+		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NONICKNAMEGIVEN(nickname)));
 	//닉네임이 9글자를 넘어가는 경우, 닉네임이 올바르지 않은 경우
 	else if (nickname.size() > NICKNAME_MAX_SIZE || validNick(nickname) == false)
 		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_ERRONEUSNICKNAME(nickname)));

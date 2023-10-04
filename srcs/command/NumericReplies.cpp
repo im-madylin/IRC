@@ -50,28 +50,25 @@ string ERR_TOOMANYCHANNELS(string client, string channel)
 	return "405 " + client + " " + channel + " :You have joined too many channels";
 }
 
-// TODO: ERROR(431): 만 나오고 msg가 나오지 않음
-string ERR_NONICKNAMEGIVEN()
+// TODO: ERROR(431): 만 나오고 msg가 나오지 않음, 닉네임이 주어지지 않았을때 사용하는 에러문구 특성상, client에 빈칸이 들어가서 안나오는 것으로 추측
+string ERR_NONICKNAMEGIVEN(string client)
 {
-	return "431 :No nickname given";
+	return "431 " + client + + " " + ":No nickname given";
 }
 
-// TODO: msg는 나오지만 nickname이 나오지 않음
-string ERR_ERRONEUSNICKNAME(string nick)
+string ERR_ERRONEUSNICKNAME(string client)
 {
-	return "432 " + nick + " :Erroneus nickname";
+	return "432 " + client + " " + client + " :Erroneus nickname";
 }
 
-// TODO: msg는 나오지만 nickname이 나오지 않음
-string ERR_NICKNAMEINUSE(string nick)
+string ERR_NICKNAMEINUSE(string client)
 {
-	return "433 " + nick + " :Nickname is already in use";
+	return "433 " + client + " " + client + " :Nickname is already in use";
 }
 
-// TODO: msg는 나오지만 nickname이 나오지 않음
-string ERR_NICKCOLLISION(string nick)
+string ERR_NICKCOLLISION(string client)
 {
-	return "436 " + nick + " :Nickname collision KILL";
+	return "436 " + client + " " + client + " :Nickname collision KILL";
 }
 
 // :irc.local 442 part #bang :You're not on that channel
