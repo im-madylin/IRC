@@ -18,7 +18,8 @@ string RPL_NOTOPIC(string client, string channel);
 string RPL_TOPIC(string client, Channel &channel);
 // 353
 string RPL_NAMREPLY(string client, Channel &channel);
-
+// 381
+string RPL_YOUREOPER(string client);
 // 403
 string ERR_NOSUCHCHANNEL(string client, string channel);
 // 405
@@ -37,6 +38,8 @@ string ERR_NOTONCHANNEL(string client, string channel);
 string ERR_NEEDMOREPARAMS(string client, string command);
 // 462
 string ERR_ALREADYREGISTERED(string client);
+// 464
+string ERR_PASSWDMISMATCH(string client);
 // 471
 string ERR_CHANNELISFULL(string client, string channel);
 // 473
@@ -49,5 +52,7 @@ string ERR_BADCHANNELKEY(string client, string channel);
 string ERR_BADCHANMASK(string client, string channel);
 // 482
 string ERR_CHANOPRIVSNEEDED(string client, string channel);
+// 491
+string ERR_NOOPERHOST(string client);
 
 # endif
