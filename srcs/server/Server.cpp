@@ -274,12 +274,18 @@ void Server::addChannel(Channel *channel)
 
 Channel *Server::findChannel(string channelName)
 {
-	map<string, Channel *>::iterator it = this->_channels.find(channelName);
-	Channel *channel = it->second;
+	for(map<string, Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
+		if (it->second->getChannelName() == channelName)
+			return it->second;
+	return NULL;
+}
 
-	if (it == this->_channels.end())
-		return NULL;
-	return channel;
+User *Server::findUser(string username)
+{
+	for(map<int, User *>::iterator it = _users.begin(); it != _users.end(); it++)
+		if (it->second->getNickname() == username)
+			return it->second;
+	return NULL;
 }
 
 void Server::deleteChannel(string channelName)
@@ -291,6 +297,12 @@ void Server::deleteChannel(string channelName)
 	cout << "delete channel : " << channelName << endl;
 	this->_channels.erase(channelName);
 	delete channel;
+}
+
+User *Server::findUser(string nickname)
+{
+	(void) nickname;
+	return nullptr;
 }
 
 void Server::handleCmdMessage(User *user)

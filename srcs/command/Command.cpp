@@ -12,6 +12,10 @@ Command::Command(Server *server) : _server(server)
 	_commands["JOIN"] = &Command::JOIN;
 	_commands["PART"] = &Command::PART;
 	_commands["TOPIC"] = &Command::TOPIC;
+	_commands["PRIVMSG"] = &Command::PRIVMSG;
+	_commands["NOTICE"] = &Command::NOTICE;
+	_commands["KICK"] = &Command::KICK;
+	_commands["INVITE"] = &Command::INVITE;
 	_commands["OPER"] = &Command::OPER;
 }
 
@@ -31,4 +35,14 @@ void Command::handleCommand(Message &message, User *user)
 void Command::sendToClient(int fd, string message)
 {
 	send(fd, message.c_str(), message.length(), 0);
+}
+
+void Command::broadcast(int ignoreFd, Channel *channel, string message)
+{
+	map<int, User *> user = channel->getUsers();
+	for(map<int, User *>::iterator it = user.begin(); it != user.end(); it++) {
+		if (it->first == ignoreFd)
+			continue;
+		sendToClient(it->first, message);
+	}
 }
