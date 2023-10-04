@@ -6,8 +6,13 @@
 void Command::PING(Message &message, User *user)
 {
 	(void) message;
+	string serverPrefix = this->_server->getServerPrefix();
 	string serverName = this->_server->getServerName();
-	string msg = serverName + "PONG" + serverName + ":" + serverName + "\r\n";
-	cout << msg << endl;
-	this->_server->sendMessage(user->getFd());
+	string msg = "PING " + serverName + "\r\n";
+
+	sendToClient(user->getFd(), msg);
 }
+
+
+//ERR_NOORIGIN (409)
+//ERR_NOSUCHSERVER(402)
