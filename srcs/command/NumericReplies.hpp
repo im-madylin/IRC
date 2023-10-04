@@ -35,6 +35,14 @@ string ERR_TOOMANYTARGETS(string client, string target);
 string ERR_NORECIPIENT(string client, string command);
 // 412
 string ERR_NOTEXTTOSEND(string client);
+// 431
+string ERR_NONICKNAMEGIVEN(string client);
+// 432
+string ERR_ERRONEUSNICKNAME(string client);
+// 433
+string ERR_NICKNAMEINUSE(string client);
+// 436
+string ERR_NICKCOLLISION(string client);
 // 442
 string ERR_NOTONCHANNEL(string client, string channel);
 // 461

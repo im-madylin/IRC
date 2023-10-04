@@ -80,10 +80,32 @@ string ERR_NOTEXTTOSEND(string client)
 	return "412 " + client + " :No text to send";
 }
 
+// TODO: ERROR(431): 만 나오고 msg가 나오지 않음, 닉네임이 주어지지 않았을때 사용하는 에러문구 특성상, client에 빈칸이 들어가서 안나오는 것으로 추측
+string ERR_NONICKNAMEGIVEN(string client)
+{
+	return "431 " + client + + " " + ":No nickname given";
+}
+
+string ERR_ERRONEUSNICKNAME(string client)
+{
+	return "432 " + client + " " + client + " :Erroneus nickname";
+}
+
+string ERR_NICKNAMEINUSE(string client)
+{
+	return "433 " + client + " " + client + " :Nickname is already in use";
+}
+
+string ERR_NICKCOLLISION(string client)
+{
+	return "436 " + client + " " + client + " :Nickname collision KILL";
+}
+
 // :irc.local 442 part #bang :You're not on that channel
 string ERR_NOTONCHANNEL(string client, string channel)
 {
 	return "442 " + client + " " + channel + " :You're not on that channel";
+
 }
 
 // :irc.local 461 test22 JOIN :Not enough parameters.
