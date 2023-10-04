@@ -34,6 +34,7 @@ class Command {
 		void	PRIVMSG(Message &message, User *user);
 		void	NOTICE(Message &message, User *user);
 		void	KICK(Message &message, User *user);
+		void	INVITE(Message &message, User *user);
 	public:
 		Command(Server *server);
 		~Command();

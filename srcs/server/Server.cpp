@@ -299,6 +299,12 @@ void Server::deleteChannel(string channelName)
 	delete channel;
 }
 
+User *Server::findUser(string nickname)
+{
+	(void) nickname;
+	return nullptr;
+}
+
 void Server::handleCmdMessage(User *user)
 {
 	// crlf가 나올 때까지 메시지를 처리

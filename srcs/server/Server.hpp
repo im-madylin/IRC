@@ -70,6 +70,7 @@ class Server {
 		Channel *findChannel(string channelName); // TODO: 구현 필요
 		User	*findUser(string username);
 		void	deleteChannel(string channelName);
+		User	*findUser(string nickname);
 };
 
 #endif

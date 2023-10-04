@@ -15,6 +15,7 @@ Command::Command(Server *server) : _server(server)
 	_commands["PRIVMSG"] = &Command::PRIVMSG;
 	_commands["NOTICE"] = &Command::NOTICE;
 	_commands["KICK"] = &Command::KICK;
+	_commands["INVITE"] = &Command::INVITE;
 }
 
 Command::~Command()
