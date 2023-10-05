@@ -22,7 +22,8 @@ string RPL_TOPIC(string client, Channel &channel);
 string RPL_INVITING(string client, string nickname, string channel);
 // 353
 string RPL_NAMREPLY(string client, Channel &channel);
-
+// 381
+string RPL_YOUREOPER(string client);
 // 401
 string ERR_NOSUCHNICK(string client, string nickname);
 // 403
@@ -55,6 +56,8 @@ string ERR_USERONCHANNEL(string client, string user, string channel);
 string ERR_NEEDMOREPARAMS(string client, string command);
 // 462
 string ERR_ALREADYREGISTERED(string client);
+// 464
+string ERR_PASSWDMISMATCH(string client);
 // 471
 string ERR_CHANNELISFULL(string client, string channel);
 // 473
@@ -67,5 +70,7 @@ string ERR_BADCHANNELKEY(string client, string channel);
 string ERR_BADCHANMASK(string client, string channel);
 // 482
 string ERR_CHANOPRIVSNEEDED(string client, string channel);
+// 491
+string ERR_NOOPERHOST(string client);
 
 # endif

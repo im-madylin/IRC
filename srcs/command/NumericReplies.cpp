@@ -48,6 +48,11 @@ string RPL_NAMREPLY(string client, Channel &channel)
 	return "353 " + client + getSymbol(channel.getMode()) + channel.getChannelName() + " :" + names;
 }
 
+string RPL_YOUREOPER(string client)
+{
+	return "381 " + client + " " + ":You are now an IRC operator" ;
+}
+
 string ERR_NOSUCHNICK(string client, string nickname)
 {
 	return "401 " + client + " " + nickname + " :No such nick/channel";
@@ -131,6 +136,11 @@ string ERR_ALREADYREGISTERED(string client)
 	return "462 " + client + " " + ":You may not reregister";
 }
 
+string ERR_PASSWDMISMATCH(string client)
+{
+	return "464 " + client + " " + ":Password incorrect";
+}
+
 string ERR_CHANNELISFULL(string client, string channel)
 {
 	return "471 " + client + " " + channel + " :Cannot join channel (+l)";
@@ -161,4 +171,9 @@ string ERR_BADCHANMASK(string client, string channel)
 string ERR_CHANOPRIVSNEEDED(string client, string channel)
 {
 	return "482 " + client + " " + channel + " :You're not channel operator";
+}
+
+string ERR_NOOPERHOST(string client)
+{
+	return "491 " + client + " " + ":No O-lines for your host";
 }
