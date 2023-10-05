@@ -67,10 +67,9 @@ class Server {
 		void	run();
 		void	sendMessage(int clientSocket);
 		void	addChannel(Channel *channel);
-		Channel *findChannel(string channelName); // TODO: 구현 필요
+		Channel *findChannel(string channelName);
 		User	*findUser(string username);
 		void	deleteChannel(string channelName);
-		User	*findUser(string nickname);
 };
 
 #endif

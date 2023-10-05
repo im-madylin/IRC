@@ -10,6 +10,7 @@
 void Command::KICK(Message &message, User *user)
 {
 	string serverPrefix = this->_server->getServerPrefix();
+	string userPrefix = user->getUserPrefix();
 	string clientName = user->getNickname();
 	string channelName = message.getParams()[0];
 	string targetName = message.getParams()[1];
@@ -33,5 +34,7 @@ void Command::KICK(Message &message, User *user)
 	
 	channel->deleteUser(target->getFd());
 	target->leaveChannel(channelName);
-	// broadcast
+	
+	string broadcastMessage = " KICK " + channelName + " " + targetName + " :";
+	this->broadcast(channel, generateReply(userPrefix, broadcastMessage));
 }

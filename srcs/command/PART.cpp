@@ -6,6 +6,8 @@
 void Command::PART(Message &message, User *user)
 {
 	string serverPrefix = this->_server->getServerPrefix();
+	string userPrefix = user->getUserPrefix();
+
 	if (message.getParamsSize() < 1)
 		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "PART")));
 	
@@ -22,10 +24,9 @@ void Command::PART(Message &message, User *user)
 			sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NOTONCHANNEL(user->getNickname(), *it)));
 			continue ;
 		}
-		
+
+		this->broadcast(channel, generateReply(userPrefix, " PART " + *it));
 		channel->deleteUser(user->getFd());
 		user->leaveChannel(*it);
 	}
 }
-
-// TODO: 같은 채널에 있는 유저들에게 broadcast

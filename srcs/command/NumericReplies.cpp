@@ -21,9 +21,6 @@ string RPL_AWAY(string client, string nickname, string message)
 	return "301 " + client + " " + nickname + " :" + message;
 }
 
-// :eunbi!root@127.0.0.1 TOPIC #channel :bibibi -> 이거는 TOPIC 하고 broadcast
-
-// :eunbi!root@127.0.0.1 TOPIC #bang :hello2
 string RPL_NOTOPIC(string client, string channel)
 {
 	return "331 " + client + " " + channel + " :No topic is set";
