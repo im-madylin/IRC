@@ -17,6 +17,7 @@ Command::Command(Server *server) : _server(server)
 	_commands["KICK"] = &Command::KICK;
 	_commands["INVITE"] = &Command::INVITE;
 	_commands["OPER"] = &Command::OPER;
+	_commands["QUIT"] = &Command::QUIT;
 }
 
 Command::~Command()
