@@ -24,6 +24,8 @@ string RPL_INVITING(string client, string nickname, string channel);
 string RPL_WHOREPLY(string client, string chname, string servname, User &user);
 // 353
 string RPL_NAMREPLY(string client, Channel &channel);
+// 372
+string RPL_MOTD(string client, string msg);
 // 381
 string RPL_YOUREOPER(string client);
 // 401

@@ -53,6 +53,11 @@ string RPL_NAMREPLY(string client, Channel &channel)
 	return "353 " + client + getSymbol(channel.getModeString()) + channel.getChannelName() + " :" + names;
 }
 
+string RPL_MOTD(string client, string msg)
+{
+	return "372 " + client + " " + ":" + msg;
+}
+
 string RPL_YOUREOPER(string client)
 {
 	return "381 " + client + " " + ":You are now an IRC operator" ;

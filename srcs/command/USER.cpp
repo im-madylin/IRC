@@ -26,5 +26,6 @@ void Command::USER(Message &message, User *user)
 	string welcome = ":" + serverPrefix + " 001 " + username + " :Welcome to the Internet Relay Network ~" + user->getNickname() + "!" + username + "@" + user->getHost() + "\r\n";
 	// user->appendCommand(welcome);
 	sendToClient(user->getFd(), welcome);
+	welcomMessage(user);
 	cout << "USER: " << username << " " << user->getHost() << " " << realname << endl;
 }
