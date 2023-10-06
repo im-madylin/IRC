@@ -8,10 +8,10 @@ void Command::QUIT(Message &message, User *user)
 {
     string serverPrefix = this->_server->getServerPrefix();
 
-    string msg = ":" + serverPrefix + " 001 " + user->getNickname() + " :QUIT ";
-	
-    if (message.getParamsSize() <= 1 && message.getParams()[0] == "")
-        sendToClient(user->getFd(), msg + "GoodBye " + "\r\n");
+    string msg = ":" + user->getNickname() + "!" + user->getNickname() + serverPrefix + " QUIT ";
+		
+    if (message.getParamsSize() < 1)
+        user->appendMessage(msg + "GoodBye" + "\r\n");
     else
     {
         string str = "";
