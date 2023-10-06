@@ -2,6 +2,7 @@
 # define SERVER_HPP
 
 # include <sys/socket.h>
+# include <sys/types.h>
 # include <netinet/in.h>
 # include <arpa/inet.h>
 # include <sys/event.h>
@@ -38,7 +39,7 @@ class Server {
 		struct kevent _events[KQUEUE_SIZE]; // 이벤트 저장 배열
 		map<int, User *> _users;
 		map<string, Channel *> _channels;
-		struct kevent _change;
+		vector<struct kevent> _changes;
 		Command*			_command;
 
 		void	initServer();
@@ -50,6 +51,8 @@ class Server {
 		void	recvMessage(int clientSocket);
 		size_t	findCRLF(string message);
 		void	handleCmdMessage(User *user);
+
+		void 	updateKevent(uintptr_t ident, int16_t filter, uint16_t flags, uint32_t fflags, intptr_t data, void *udata);
 
 	public:
 		Server(string port, string password);

@@ -42,22 +42,26 @@ void Command::NICK(Message &message, User *user)
 
 	//닉네임이 입력되지 않은 경우
 	if (nickname.size() == 0)
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NONICKNAMEGIVEN(nickname)));
+		return user->appendMessage(generateReply(serverPrefix, ERR_NONICKNAMEGIVEN(nickname)));
+		// return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NONICKNAMEGIVEN(nickname)));
 	//닉네임이 9글자를 넘어가는 경우, 닉네임이 올바르지 않은 경우
 	else if (nickname.size() > NICKNAME_MAX_SIZE || validNick(nickname) == false)
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_ERRONEUSNICKNAME(nickname)));
+		return user->appendMessage(generateReply(serverPrefix, ERR_ERRONEUSNICKNAME(nickname)));
+		// return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_ERRONEUSNICKNAME(nickname)));
 	// TODO: 연속으로 같은 닉네임(hi)을 입력했을 경우, 첫번째는 오류와 함께 You're now known as hi 라고 출력
 	// 두번째는 오류과 함께 You're now known as hi_ 라고 출력 (언더바가 생겨난 모습)
 	//이미 사용중인 닉네임인 경우
 	else if (duplicateNick(nickname) == false)
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NICKNAMEINUSE(nickname)));
+		return user->appendMessage(generateReply(serverPrefix, ERR_NICKNAMEINUSE(nickname)));
+		// return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NICKNAMEINUSE(nickname)));
 	//정상적인 경우
 	else
 	{
 		user->setNickname(nickname);
 		string result = "You’re now known as " + user->getNickname() + "\r\n";
 		// TODO: 결과 msg가 뜨지 않음
-		sendToClient(user->getFd(), result);
+		// sendToClient(user->getFd(), result);
+		user->appendMessage(result);
 	}
 }
 

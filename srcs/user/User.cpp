@@ -35,6 +35,11 @@ string User::getNickname()
 	return this->_nickname;
 }
 
+string User::getUsername()
+{
+	return this->_username;
+}
+
 string User::getRealName()
 {
 	return this->_realName;
@@ -75,6 +80,11 @@ void User::setNickname(string nick)
 	this->_nickname = nick;
 }
 
+void User::setUsername(string username)
+{
+	this->_username = username;
+}
+
 void User::setRealName(string realName)
 {
 	this->_realName = realName;
@@ -113,4 +123,11 @@ void User::joinChannel(Channel *channel)
 void User::leaveChannel(string channelName)
 {
 	this->_joinedChannels.erase(channelName);
+}
+
+bool User::isInChannel(string channelName)
+{
+	if (this->_joinedChannels.find(channelName) != this->_joinedChannels.end())
+		return true;
+	return false;
 }
