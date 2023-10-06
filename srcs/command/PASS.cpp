@@ -19,9 +19,9 @@ void Command::PASS(Message &message, User *user)
 	//TODO: 수정 필요
 	//server password와 비교
 	if (password == this->_server->getPassword())
-		cout << "correct password" << endl;
+		user->setAuth();
 	else
-		cout << "password error" << endl;
+		cout << "PASS: password error" << endl;
 }
 
 //파라미터의 수가 부족할 때 ERR_NEEDMOREPARAMS(461)

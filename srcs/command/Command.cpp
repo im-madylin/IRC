@@ -27,8 +27,17 @@ Command::~Command()
 void Command::handleCommand(Message &message, User *user)
 {
 	string command = message.getCommand();
-	if (_commands.find(command) != _commands.end()) {
-		(this->*_commands[command])(message, user);
+
+	if (user->getAuth() == true || command == "PASS")
+	{
+		cout << "here!" << endl;
+		if (_commands.find(command) != _commands.end()) {
+			(this->*_commands[command])(message, user);
+		}
+	}
+	else
+	{
+		cout << "You must get Auth" << endl;
 	}
 }
 
