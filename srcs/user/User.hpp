@@ -20,7 +20,6 @@ class User {
 		string 	_commandBuffer;
 		bool	_isRegistered;
 		map<string, Channel *> _joinedChannels;
-
 	public:
 		User(int fd, string host);
 		~User();
@@ -34,7 +33,8 @@ class User {
 		string	getRealName();
 		string	getUserPrefix();
 		bool	getIsRegistered();
-
+		map<string, Channel *>	getJoinedChanels();
+		
 		void 	setMessageBuffer(string messageBuffer);
 		void 	setCommandBuffer(string commandBuffer);
 		void	setFd(int fd);

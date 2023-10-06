@@ -55,6 +55,11 @@ bool User::getIsRegistered()
 	return this->_isRegistered;
 }
 
+map<string, Channel *>	User::getJoinedChanels()
+{
+	return this->_joinedChannels;
+}
+
 void User::setMessageBuffer(string messageBuffer)
 {
 	this->_messageBuffer = messageBuffer;
