@@ -1,7 +1,7 @@
 #include "User.hpp"
 #include "../channel/Channel.hpp"
 
-User::User(int fd, string host): _fd(fd), _host(host), _isRegistered(false)
+User::User(int fd, string host): _fd(fd), _host(host), _isRegistered(false), _auth(false)
 {
 }
 
@@ -58,6 +58,11 @@ bool User::getIsRegistered()
 map<string, Channel *>	User::getJoinedChanels()
 {
 	return this->_joinedChannels;
+  
+bool User::getAuth()
+{
+	return this->_auth;
+
 }
 
 void User::setMessageBuffer(string messageBuffer)
@@ -98,6 +103,11 @@ void User::setRealName(string realName)
 void User::setRegistered()
 {
 	this->_isRegistered = true;
+}
+
+void User::setAuth()
+{
+	this->_auth = true;
 }
 
 void User::clearMessageBuffer()
