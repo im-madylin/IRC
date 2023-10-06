@@ -30,7 +30,6 @@ void Command::handleCommand(Message &message, User *user)
 
 	if (user->getAuth() == true || command == "PASS")
 	{
-		cout << "here!" << endl;
 		if (_commands.find(command) != _commands.end()) {
 			(this->*_commands[command])(message, user);
 		}
