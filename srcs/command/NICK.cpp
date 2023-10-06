@@ -33,7 +33,6 @@ bool Command::duplicateNick(string nickname)
 
 }
 
-
 void Command::NICK(Message &message, User *user)
 {
 	string serverPrefix = this->_server->getServerPrefix();
@@ -42,7 +41,7 @@ void Command::NICK(Message &message, User *user)
 	if (message.getParamsSize() < 1)
 	{	
 		return user->appendMessage(generateReply(serverPrefix, ERR_NONICKNAMEGIVEN(user->getNickname())));
-	}	// return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NONICKNAMEGIVEN(nickname)));
+	}
 
 
 	string nickname = message.getParams()[0];
