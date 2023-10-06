@@ -16,9 +16,9 @@ string generateReply(string prefix, string msg)
 	return ":" + prefix + " " + msg + "\r\n";
 }
 
-string RPL_AWAY(string client, string nickname, string message)
+string RPL_ENDOFWHO(string client, string name)
 {
-	return "301 " + client + " " + nickname + " :" + message;
+	return "315 " + client + " " + name + " :End of /WHO list";
 }
 
 string RPL_NOTOPIC(string client, string channel)
@@ -36,6 +36,11 @@ string RPL_TOPIC(string client, Channel &channel)
 string RPL_INVITING(string client, string nickname, string channel)
 {
 	return "341 " + client + " " + nickname + " :" + channel;
+}
+
+string RPL_WHOREPLY(string client, string chname, string servname, User &user)
+{
+	return "352 " + client + " " + chname + " " + user.getUsername() + " " + user.getHost() + " " + servname + " " + user.getNickname() + " " + user.getRealName();
 }
 
 // :irc.local 353 test1 = #channel :@eunbi hello test1
