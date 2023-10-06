@@ -16,9 +16,9 @@ string generateReply(string prefix, string msg)
 	return ":" + prefix + " " + msg + "\r\n";
 }
 
-string RPL_AWAY(string client, string nickname, string message)
+string RPL_ENDOFWHO(string client, string name)
 {
-	return "301 " + client + " " + nickname + " :" + message;
+	return "315 " + client + " " + name + " :End of /WHO list";
 }
 
 string RPL_NOTOPIC(string client, string channel)
@@ -38,6 +38,11 @@ string RPL_INVITING(string client, string nickname, string channel)
 	return "341 " + client + " " + nickname + " :" + channel;
 }
 
+string RPL_WHOREPLY(string client, string chname, string servname, User &user)
+{
+	return "352 " + client + " " + chname + " " + user.getUsername() + " " + user.getHost() + " " + servname + " " + user.getNickname() + " " + user.getRealName();
+}
+
 // :irc.local 353 test1 = #channel :@eunbi hello test1
 string RPL_NAMREPLY(string client, Channel &channel)
 {
@@ -46,6 +51,11 @@ string RPL_NAMREPLY(string client, Channel &channel)
 	for (vector<string>::iterator it = userList.begin(); it != userList.end(); it++)
 		names += (*it) + " ";
 	return "353 " + client + getSymbol(channel.getModeString()) + channel.getChannelName() + " :" + names;
+}
+
+string RPL_YOUREOPER(string client)
+{
+	return "381 " + client + " " + ":You are now an IRC operator" ;
 }
 
 string ERR_NOSUCHNICK(string client, string nickname)
@@ -86,7 +96,7 @@ string ERR_NOTEXTTOSEND(string client)
 // TODO: ERROR(431): 만 나오고 msg가 나오지 않음, 닉네임이 주어지지 않았을때 사용하는 에러문구 특성상, client에 빈칸이 들어가서 안나오는 것으로 추측
 string ERR_NONICKNAMEGIVEN(string client)
 {
-	return "431 " + client + + " " + ":No nickname given";
+	return "431 " + client + " :No nickname given";
 }
 
 string ERR_ERRONEUSNICKNAME(string client)
@@ -129,6 +139,11 @@ string ERR_NEEDMOREPARAMS(string client, string command)
 string ERR_ALREADYREGISTERED(string client)
 {
 	return "462 " + client + " " + ":You may not reregister";
+}
+
+string ERR_PASSWDMISMATCH(string client)
+{
+	return "464 " + client + " " + ":Password incorrect";
 }
 
 string ERR_KEYSET(string client, string channel)

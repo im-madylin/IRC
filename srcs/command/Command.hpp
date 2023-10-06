@@ -42,6 +42,9 @@ class Command {
 		void	NOTICE(Message &message, User *user);
 		void	KICK(Message &message, User *user);
 		void	INVITE(Message &message, User *user);
+		void	OPER(Message &message, User *user);
+		void	QUIT(Message &message, User *user);
+		void	WHO(Message &message, User *user);
 		void	MODE(Message &message, User *user);
 
 		// MODE.cpp

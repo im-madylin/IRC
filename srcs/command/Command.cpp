@@ -16,6 +16,9 @@ Command::Command(Server *server) : _server(server)
 	_commands["NOTICE"] = &Command::NOTICE;
 	_commands["KICK"] = &Command::KICK;
 	_commands["INVITE"] = &Command::INVITE;
+	_commands["OPER"] = &Command::OPER;
+	_commands["QUIT"] = &Command::QUIT;
+	_commands["WHO"] = &Command::WHO;
 	_commands["MODE"] = &Command::MODE;
 }
 
@@ -26,8 +29,16 @@ Command::~Command()
 void Command::handleCommand(Message &message, User *user)
 {
 	string command = message.getCommand();
-	if (_commands.find(command) != _commands.end()) {
-		(this->*_commands[command])(message, user);
+
+	if (user->getAuth() == true || command == "PASS")
+	{
+		if (_commands.find(command) != _commands.end()) {
+			(this->*_commands[command])(message, user);
+		}
+	}
+	else
+	{
+		cout << "You must get Auth" << endl;
 	}
 }
 

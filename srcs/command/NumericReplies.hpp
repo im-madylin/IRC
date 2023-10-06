@@ -12,17 +12,20 @@ class User;
 string getSymbol(string mode);
 string generateReply(string prefix, string msg);
 
-// 306
-string RPL_AWAY(string client, string nickname, string message);
+// 315
+string RPL_ENDOFWHO(string client, string name);
 // 331
 string RPL_NOTOPIC(string client, string channel);
 // 332
 string RPL_TOPIC(string client, Channel &channel);
 // 341
 string RPL_INVITING(string client, string nickname, string channel);
+// 352
+string RPL_WHOREPLY(string client, string chname, string servname, User &user);
 // 353
 string RPL_NAMREPLY(string client, Channel &channel);
-
+// 381
+string RPL_YOUREOPER(string client);
 // 401
 string ERR_NOSUCHNICK(string client, string nickname);
 // 403
@@ -55,6 +58,8 @@ string ERR_USERONCHANNEL(string client, string user, string channel);
 string ERR_NEEDMOREPARAMS(string client, string command);
 // 462
 string ERR_ALREADYREGISTERED(string client);
+// 464
+string ERR_PASSWDMISMATCH(string client);
 // 467
 string ERR_KEYSET(string client, string channel);
 // 471
@@ -73,6 +78,8 @@ string ERR_BADCHANMASK(string client, string channel);
 string ERR_NOCHANMODES(string client, string channel);
 // 482
 string ERR_CHANOPRIVSNEEDED(string client, string channel);
+// 491
+string ERR_NOOPERHOST(string client);
 
 // 696
 // "<client> <target chan/user> <mode char> <parameter> :<description>"
