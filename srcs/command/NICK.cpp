@@ -60,8 +60,8 @@ void Command::NICK(Message &message, User *user)
 	{
 		string preNickname = user->getNickname();
 		user->setNickname(nickname);
-		// // TODO: 결과 msg가 뜨지 않음
-		string msg = ":" + preNickname + "!"+nickname+"@127.0.0.1 " + "NICK " + nickname + "\r\n";
+		string msg = ":" + preNickname + "!" + nickname + serverPrefix + " NICK " + nickname + "\r\n";
+		
 		user->appendMessage(msg);
 	}
 }
