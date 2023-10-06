@@ -46,6 +46,8 @@ class Command {
 		void	WHO(Message &message, User *user);
 		void	MODE(Message &message, User *user);
 
+		void	welcomMessage(User *user);
+
 		// MODE.cpp
 		void	addKeyMode(Channel *channel, string key);
 		void	addLimitMode(Channel *channel, int limit);

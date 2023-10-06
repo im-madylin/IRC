@@ -47,7 +47,7 @@ string User::getRealName()
 
 string User::getUserPrefix()
 {
-	return this->_nickname + "!" + this->_realName + "@" + this->_host;
+	return this->_nickname + "!" + this->_username + "@" + this->_host;
 }
 
 bool User::getIsRegistered()

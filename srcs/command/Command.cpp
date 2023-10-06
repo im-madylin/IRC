@@ -66,3 +66,16 @@ void Command::broadcast(Channel *channel, string message)
 		it->second->appendMessage(message);
 	}
 }
+
+void Command::welcomMessage(User *user)
+{
+	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "Welcome to the")));
+	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "  _              _____                    ")));
+	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "(_)            |  ___|                   ")));
+	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "  _  _ __   ___ | |__    __ _  ___  _   _ ")));
+	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "| || '__| / __||  __|  / _` |/ __|| | | |")));
+	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "| || |   | (__ | |___ | (_| |\\__ \\| |_| |")));
+	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "|_||_|    \\___|\\____/  \\__,_||___/ \\__, |")));
+	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "                                    __/ |")));
+	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "                                   |___/ ")));
+}
