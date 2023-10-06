@@ -5,6 +5,10 @@ Channel::Channel()
 }
 
 Channel::Channel(std::string& name) : _name(name) {
+	this->_topic = "";
+	this->_key = "";
+	this->_limit = MAX_CHANNEL_USER;
+	addMode(CHANNEL_MODE_S);
 }
 
 Channel::~Channel()
@@ -38,9 +42,9 @@ string Channel::getTopic()
 	return this->_topic;
 }
 
-string Channel::getMode()
+set<ChannelMode> Channel::getModes()
 {
-	return this->_mode;
+	return this->_modes;
 }
 
 set<int> Channel::getBanList()
@@ -63,9 +67,33 @@ string Channel::getKey()
 	return this->_key;
 }
 
-void Channel::setMode(string mode)
+string Channel::getModeString()
 {
-	this->_mode = mode;
+	string mode = "+";
+	for (set<ChannelMode>::iterator it = this->_modes.begin(); it != this->_modes.end(); it++) {
+		switch (*it) {
+			case CHANNEL_MODE_I:
+				mode += "i";
+			case CHANNEL_MODE_T:
+				mode += "t";
+			case CHANNEL_MODE_K:
+				mode += "k";
+			case CHANNEL_MODE_O:
+				mode += "o";
+			case CHANNEL_MODE_L:
+				mode += "l";
+			case CHANNEL_MODE_B:
+				mode += "b";
+			default:
+				break;
+		}
+	}
+	return mode;
+}
+
+size_t Channel::getLimit()
+{
+	return this->_limit;
 }
 
 void        	Channel::addUser(int fd, User *user) {
@@ -109,6 +137,11 @@ void Channel::setKey(string key)
 	this->_key = key;
 }
 
+void Channel::setLimit(int limit)
+{
+	this->_limit = limit;
+}
+
 bool			Channel::isOperator(int fd) const {
 	if (_operator.find(fd) != _operator.end())
 		return true;
@@ -138,9 +171,28 @@ bool		Channel::isExistUser(int fd) const {
 
 bool Channel::isFull() const
 {
-	if (_users.size() >= MAX_CHANNEL_USER)
+	if (_users.size() >= this->_limit)
 		return true;
 	return false;
+}
+
+bool Channel::hasMode(ChannelMode mode) const
+{
+	if (_modes.find(mode) != _modes.end())
+		return true;
+	return false;
+}
+
+void Channel::addMode(ChannelMode mode)
+{
+	this->_modes.insert(mode);
+}
+
+void Channel::deleteMode(ChannelMode mode)
+{
+	if (_modes.find(mode) == _modes.end())
+		return ;
+	_modes.erase(mode);
 }
 
 bool Channel::isInvited(int fd) const

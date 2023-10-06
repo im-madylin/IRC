@@ -55,8 +55,12 @@ string ERR_USERONCHANNEL(string client, string user, string channel);
 string ERR_NEEDMOREPARAMS(string client, string command);
 // 462
 string ERR_ALREADYREGISTERED(string client);
+// 467
+string ERR_KEYSET(string client, string channel);
 // 471
 string ERR_CHANNELISFULL(string client, string channel);
+// 472
+string ERR_UNKNOWNMODE(string client, char mode, string channel);
 // 473
 string ERR_INVITEONLYCHAN(string client, string channel);
 // 474
@@ -65,7 +69,16 @@ string ERR_BANNEDFROMCHAN(string client, string channel);
 string ERR_BADCHANNELKEY(string client, string channel);
 // 476
 string ERR_BADCHANMASK(string client, string channel);
+// 477
+string ERR_NOCHANMODES(string client, string channel);
 // 482
 string ERR_CHANOPRIVSNEEDED(string client, string channel);
+
+// 696
+// "<client> <target chan/user> <mode char> <parameter> :<description>"
+// *.freenode.net 696 eunbi #banana k * :You must specify a parameter for the key mode. Syntax: <key>.
+// *.freenode.net 696 eunbi #banana o * :You must specify a parameter for the op mode. Syntax: <nick>.
+// *.freenode.net 696 bbb #banana l * :You must specify a parameter for the limit mode. Syntax: <limit>.
+string ERR_INVALIDMODEPARAM(string client, string channel, char mode, string parameter, string description);
 
 # endif

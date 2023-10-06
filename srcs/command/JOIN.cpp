@@ -46,12 +46,16 @@ void Command::JOIN(Message &message, User *user)
 		// 이미 있는 유저는 무시
 		if (channel->isExistUser(user->getFd()))
 			continue ;
-		if (channel->isFull()) {
-			sendToClient(user->getFd(), generateReply(serverPrefix, ERR_CHANNELISFULL(user->getNickname(), *it)));
-			continue ;
+		
+		if (channel->hasMode(CHANNEL_MODE_L)) {
+			if (channel->isFull()) {
+				sendToClient(user->getFd(), generateReply(serverPrefix, ERR_CHANNELISFULL(user->getNickname(), *it)));
+				continue ;
+			}
 		}
+		
 		// TODO: 수정 필요 invite only 
-		if (channel->getMode() == "i") {
+		if (channel->hasMode(CHANNEL_MODE_I)) {
 			if (!channel->isInvited(user->getFd())) {
 				sendToClient(user->getFd(), generateReply(serverPrefix, ERR_INVITEONLYCHAN(user->getNickname(), *it)));
 				continue ;
@@ -59,7 +63,7 @@ void Command::JOIN(Message &message, User *user)
 		}
 
 		// TODO: 수정 필요
-		if (channel->getMode() == "b") {
+		if (channel->hasMode(CHANNEL_MODE_B)) {
 			if (channel->isInBanList(user->getFd())) {
 				sendToClient(user->getFd(), generateReply(serverPrefix, ERR_BANNEDFROMCHAN(user->getNickname(), *it)));
 				continue ;
@@ -67,7 +71,7 @@ void Command::JOIN(Message &message, User *user)
 		}
 
 		// TODO: 수정 필요
-		if (channel->getMode() == "k") {
+		if (channel->hasMode(CHANNEL_MODE_K)) {
 			if (channel->getKey() != keys[it - channels.begin()]) {
 				sendToClient(user->getFd(), generateReply(serverPrefix, ERR_BADCHANNELKEY(user->getNickname(), *it)));
 				continue ;
