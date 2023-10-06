@@ -20,6 +20,5 @@ void Command::QUIT(Message &message, User *user)
         sendToClient(user->getFd(), msg + message.getParams()[0] + "\r\n");
     }
 
-    //TODO: disconnect가 자동으로 되지만 되기까지 시간이 느림
-    
+    this->_server->disconnetClient(user->getFd());    
 }

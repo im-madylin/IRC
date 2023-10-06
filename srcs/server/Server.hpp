@@ -44,7 +44,6 @@ class Server {
 		void	initServer();
 		void	initKqueue();
 		void	acceptConnection();
-		void	disconnetClient(int clientFd);
 		void	handleEvent(struct kevent &event);
 	
 		void	recvMessage(int clientSocket);
@@ -70,6 +69,8 @@ class Server {
 		Channel *findChannel(string channelName);
 		User	*findUser(string username);
 		void	deleteChannel(string channelName);
+		void	disconnetClient(int clientFd);
+		
 };
 
 #endif
