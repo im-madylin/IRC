@@ -58,7 +58,8 @@ bool User::getIsRegistered()
 map<string, Channel *>	User::getJoinedChanels()
 {
 	return this->_joinedChannels;
-  
+}
+
 bool User::getAuth()
 {
 	return this->_auth;

@@ -10,6 +10,13 @@
 # include "NumericReplies.hpp"
 
 # define NICKNAME_MAX_SIZE 9
+# define CHANNEL_MODE_I_STR "i"
+# define CHANNEL_MODE_T_STR "t"
+# define CHANNEL_MODE_K_STR "k"
+# define CHANNEL_MODE_O_STR "o"
+# define CHANNEL_MODE_L_STR "l"
+# define CHANNEL_MODE_B_STR "b"
+# define CHANNEL_MODE_S_STR "s"
 
 class Server;
 class User;
@@ -38,6 +45,17 @@ class Command {
 		void	OPER(Message &message, User *user);
 		void	QUIT(Message &message, User *user);
 		void	WHO(Message &message, User *user);
+		void	MODE(Message &message, User *user);
+
+		// MODE.cpp
+		void	addKeyMode(Channel *channel, string key);
+		void	addLimitMode(Channel *channel, int limit);
+		void	addOperatorMode(Channel *channel, string nickname);
+
+		void	deleteKeyMode(Channel *channel, string key);
+		void	deleteLimitMode(Channel *channel);
+		void	deleteOperatorMode(Channel *channel, string nickname);
+	
 	public:
 		Command(Server *server);
 		~Command();

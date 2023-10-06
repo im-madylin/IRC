@@ -26,7 +26,7 @@ void Command::INVITE(Message &message, User *user)
 		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_USERONCHANNEL(clientName, targetName, channelName)));
 	
 	// invite-only 채녈인 경우는 operator만 가능
-	if (channel->getMode() == "i" && channel->isOperator(user) == false)
+	if (channel->hasMode(CHANNEL_MODE_I) && channel->isOperator(user) == false)
 		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_CHANOPRIVSNEEDED(clientName, targetName)));
 	
 	channel->addInvite(target->getFd());

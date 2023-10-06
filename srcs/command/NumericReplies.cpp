@@ -50,7 +50,7 @@ string RPL_NAMREPLY(string client, Channel &channel)
 	vector<string> userList = channel.getUserList();
 	for (vector<string>::iterator it = userList.begin(); it != userList.end(); it++)
 		names += (*it) + " ";
-	return "353 " + client + getSymbol(channel.getMode()) + channel.getChannelName() + " :" + names;
+	return "353 " + client + getSymbol(channel.getModeString()) + channel.getChannelName() + " :" + names;
 }
 
 string RPL_YOUREOPER(string client)
@@ -146,9 +146,19 @@ string ERR_PASSWDMISMATCH(string client)
 	return "464 " + client + " " + ":Password incorrect";
 }
 
+string ERR_KEYSET(string client, string channel)
+{
+	return "467 " + client + " " + channel + " :Channel key already set";
+}
+
 string ERR_CHANNELISFULL(string client, string channel)
 {
 	return "471 " + client + " " + channel + " :Cannot join channel (+l)";
+}
+
+string ERR_UNKNOWNMODE(string client, char mode, string channel)
+{
+	return "472 " + client + " " + mode + " :is unknown mode char to me for " + channel;
 }
 
 // :irc.local 473 part #invite :Cannot join channel (invite only)
@@ -173,12 +183,17 @@ string ERR_BADCHANMASK(string client, string channel)
 	return "476 " + client + " " + channel + " :Bad Channel Mask";
 }
 
+string ERR_NOCHANMODES(string client, string channel)
+{
+	return "477 " + client + " " + channel + " :Channel doesn't support modes";
+}
+
 string ERR_CHANOPRIVSNEEDED(string client, string channel)
 {
 	return "482 " + client + " " + channel + " :You're not channel operator";
 }
 
-string ERR_NOOPERHOST(string client)
+string ERR_INVALIDMODEPARAM(string client, string channel, char mode, string parameter, string description)
 {
-	return "491 " + client + " " + ":No O-lines for your host";
+	return "696 " + client + " " + channel + " " + mode + " " + parameter + " :" + description;
 }
