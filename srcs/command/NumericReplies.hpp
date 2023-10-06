@@ -12,14 +12,16 @@ class User;
 string getSymbol(string mode);
 string generateReply(string prefix, string msg);
 
-// 306
-string RPL_AWAY(string client, string nickname, string message);
+// 315
+string RPL_ENDOFWHO(string client, string name);
 // 331
 string RPL_NOTOPIC(string client, string channel);
 // 332
 string RPL_TOPIC(string client, Channel &channel);
 // 341
 string RPL_INVITING(string client, string nickname, string channel);
+// 352
+string RPL_WHOREPLY(string client, string chname, string servname, User &user);
 // 353
 string RPL_NAMREPLY(string client, Channel &channel);
 // 381
