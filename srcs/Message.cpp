@@ -1,4 +1,5 @@
 #include "Message.hpp"
+#include <iostream>
 
 Message::Message()
 {
@@ -67,7 +68,8 @@ void Message::parseMessage(const string &message)
     while (pos != std::string::npos) {
         start = pos + 1;
         if (message[start] == ':') {
-            params.push_back(message.substr(start + 1));
+            if (message.substr(start + 1).length() > 0)
+                params.push_back(message.substr(start + 1));
             break;
         }
         pos = message.find(' ', start);

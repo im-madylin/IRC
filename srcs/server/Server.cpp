@@ -60,12 +60,14 @@ void Server::run()
 		struct timespec timeout = {KQUEUE_TIMEOUT, 0}; // 3분 타임아웃
 
 		// kqueue에 등록된 이벤트가 발생할 때까지 대기, 이벤트 수만큼 반환
-		int eventCount = kevent(this->_kq, NULL, 0, this->_events, KQUEUE_SIZE, &timeout);
+		int eventCount = kevent(this->_kq, &this->_changes[0], this->_changes.size(), this->_events, KQUEUE_SIZE, &timeout);
 		if (eventCount == -1)
 		{
 			cerr << "kevent() error" << endl;
 			exit(1);
 		}
+
+		this->_changes.clear();
 
 		// 발생한 이벤트 처리
 		for (int i = 0; i < eventCount; i++)
@@ -102,7 +104,7 @@ void Server::initServer()
 	fcntl(this->_serverSocket, F_SETFL, O_NONBLOCK);
 
 	// 해당 주소와 server로 들어오는 클라이언트의 연결을 수락할 수 있도록 함
-	if (::bind(this->_serverSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == -1)
+	if (bind(this->_serverSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0)
 	{
 		cerr << "bind() error" << endl;
 		exit(1);
@@ -126,13 +128,22 @@ void Server::initKqueue()
 	}
 
 	// 이벤트 설정 -> 읽기 이벤트 감지, 이벤트 추가, 이벤트 활성화
-	EV_SET(&this->_change, this->_serverSocket, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL);
+	// EV_SET(&this->_change, this->_serverSocket, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL);
+	updateKevent(this->_serverSocket, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL);
 	// kqueue에 이벤트 등록	
-	if (kevent(this->_kq, &this->_change, 1, NULL, 0, NULL) == -1)
+	if (kevent(this->_kq, &this->_changes[0], 1, NULL, 0, NULL) == -1)
 	{
 		cerr << "kevent() error" << endl;
 		exit(1);
 	}
+}
+
+void Server::updateKevent(uintptr_t ident, int16_t filter, uint16_t flags, uint32_t fflags, intptr_t data, void *udata)
+{
+	struct kevent change;
+
+	EV_SET(&change, ident, filter, flags, fflags, data, udata);
+	this->_changes.push_back(change);
 }
 
 // client 연결 수락 및 소켓 생성
@@ -155,13 +166,10 @@ void Server::acceptConnection()
 	fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 
 	// kqueue에 등록하여 client 소켓을 감시
-	EV_SET(&this->_change, clientSocket, EVFILT_READ, EV_ADD, 0, 0, NULL);
 	// EV_SET(&this->_change, clientSocket, EVFILT_WRITE, EV_ADD | EV_ENABLE, 0, 0, NULL);
-	if (kevent(this->_kq, &this->_change, 1, NULL, 0, NULL) == -1)
-	{
-		cerr << "kevent() error" << endl;
-		exit(1);
-	}
+	// EV_SET(&this->_change, clientSocket, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL);
+	updateKevent(clientSocket, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL);
+	updateKevent(clientSocket, EVFILT_WRITE, EV_ADD | EV_ENABLE, 0, 0, NULL);
 	cout << "new connection from " << clientSocket << endl;
 
 	// user 객체 생성 및 서버에 저장
@@ -230,6 +238,10 @@ void Server::recvMessage(int clientSocket)
 		buf[recvSize] = '\0';
 		user->appendCommand(buf);
 		handleCmdMessage(user);
+		if (!user->getMessageBuffer().empty()) {
+			updateKevent(clientSocket, EVFILT_READ, EV_DISABLE, 0, 0, NULL);
+			updateKevent(clientSocket, EVFILT_WRITE, EV_ADD | EV_ENABLE, 0, 0, NULL);
+		}
 	}
 }
 
@@ -264,6 +276,8 @@ void Server::sendMessage(int clientSocket)
 	{
 		user->setMessageBuffer(user->getMessageBuffer().substr(sendSize));
 	}
+	updateKevent(clientSocket, EVFILT_WRITE, EV_DISABLE, 0, 0, NULL);
+	updateKevent(clientSocket, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL);
 }
 
 void Server::addChannel(Channel *channel)
@@ -315,8 +329,8 @@ void Server::handleCmdMessage(User *user)
 		}
 
 		Message message(user->getCommandBuffer().substr(0, crlfPos));
-		user->clearCommandBuffer();
-		// user->setCommandBuffer(user->getCommandBuffer().substr(crlfPos + 1));
+		// user->clearCommandBuffer();
+		user->setCommandBuffer(user->getCommandBuffer().substr(crlfPos + 1));
 		// 명령어 처리
 		this->_command->handleCommand(message, user);
 	}

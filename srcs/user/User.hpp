@@ -14,6 +14,7 @@ class User {
 		int		_fd;
 		string	_host;
 		string	_nickname;
+		string	_username;
 		string	_realName;
 		string 	_messageBuffer;
 		string 	_commandBuffer;
@@ -29,6 +30,7 @@ class User {
 		int		getFd();
 		string	getHost();
 		string	getNickname();
+		string	getUsername();
 		string	getRealName();
 		string	getUserPrefix();
 		bool	getIsRegistered();
@@ -38,6 +40,7 @@ class User {
 		void	setFd(int fd);
 		void	setHost(string host);
 		void	setNickname(string nick);
+		void	setUsername(string username);
 		void	setRealName(string realName);
 		void	setRegistered();
 
@@ -47,6 +50,7 @@ class User {
 		void	appendCommand(const string &command);
 		void	joinChannel(Channel *channel);
 		void	leaveChannel(string channelName);
+		bool	isInChannel(string channelName);
 };
 
 #endif

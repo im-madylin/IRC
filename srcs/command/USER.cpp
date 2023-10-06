@@ -3,27 +3,29 @@
 #include "../user/User.hpp"
 #include "../server/Server.hpp"
 
+// <nickname>!<username>@<host>
 void Command::USER(Message &message, User *user)
 {
 	string	serverPrefix = this->_server->getServerPrefix();
 	if (message.getParams().size() < 4)
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "USER")));
+		return user->appendCommand(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "USER")));
+		// return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "USER")));
 	
 	string username = message.getParams()[0];
-	string hostname = message.getParams()[1];
-	string servername = message.getParams()[2];
 	string realname = message.getParams()[3];
 	
 	if (user->getIsRegistered())
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_ALREADYREGISTERED(user->getNickname())));
+		return user->appendCommand(generateReply(serverPrefix, ERR_ALREADYREGISTERED(user->getNickname())));
+		// return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_ALREADYREGISTERED(user->getNickname())));
 	if (message.getParams().size() < 4)
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "USER")));
+		return user->appendCommand(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "USER")));
+		// return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "USER")));
 	
-	user->setNickname(username);
-	user->setHost(hostname);
+	user->setUsername(username);
 	user->setRealName(realname);
 	user->setRegistered();
-	string welcome = ":" + serverPrefix + " 001 " + username + " :Welcome to the Internet Relay Network ~" + username + "!" + hostname + "@" + servername + "\r\n";
+	string welcome = ":" + serverPrefix + " 001 " + username + " :Welcome to the Internet Relay Network ~" + user->getNickname() + "!" + username + "@" + user->getHost() + "\r\n";
+	// user->appendCommand(welcome);
 	sendToClient(user->getFd(), welcome);
-	cout << "USER: " << username << " " << hostname << " " << servername << " " << realname << endl;
+	cout << "USER: " << username << " " << user->getHost() << " " << realname << endl;
 }
