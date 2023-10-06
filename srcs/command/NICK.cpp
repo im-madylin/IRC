@@ -38,14 +38,18 @@ void Command::NICK(Message &message, User *user)
 {
 	string serverPrefix = this->_server->getServerPrefix();
 
+	cout << "size: " << message.getParamsSize() << endl;
+	//닉네임이 입력되지 않은 경우
+	if (message.getParamsSize() < 1)
+	{	
+		return user->appendMessage(generateReply(serverPrefix, ERR_NONICKNAMEGIVEN(user->getNickname())));
+	}	// return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NONICKNAMEGIVEN(nickname)));
+
+
 	string nickname = message.getParams()[0];
 
-	//닉네임이 입력되지 않은 경우
-	if (nickname.size() == 0)
-		return user->appendMessage(generateReply(serverPrefix, ERR_NONICKNAMEGIVEN(nickname)));
-		// return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NONICKNAMEGIVEN(nickname)));
 	//닉네임이 9글자를 넘어가는 경우, 닉네임이 올바르지 않은 경우
-	else if (nickname.size() > NICKNAME_MAX_SIZE || validNick(nickname) == false)
+	if (nickname.size() > NICKNAME_MAX_SIZE || validNick(nickname) == false)
 		return user->appendMessage(generateReply(serverPrefix, ERR_ERRONEUSNICKNAME(nickname)));
 		// return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_ERRONEUSNICKNAME(nickname)));
 	// TODO: 연속으로 같은 닉네임(hi)을 입력했을 경우, 첫번째는 오류와 함께 You're now known as hi 라고 출력

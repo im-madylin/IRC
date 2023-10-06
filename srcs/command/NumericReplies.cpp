@@ -91,7 +91,7 @@ string ERR_NOTEXTTOSEND(string client)
 // TODO: ERROR(431): 만 나오고 msg가 나오지 않음, 닉네임이 주어지지 않았을때 사용하는 에러문구 특성상, client에 빈칸이 들어가서 안나오는 것으로 추측
 string ERR_NONICKNAMEGIVEN(string client)
 {
-	return "431 " + client + + " " + ":No nickname given";
+	return "431 " + client + " :No nickname given";
 }
 
 string ERR_ERRONEUSNICKNAME(string client)
