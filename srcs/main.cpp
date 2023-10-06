@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 
 	long port = atol(argv[1]);
 
-    if (!(port >= 0 && port <= 65535))
+    if (!(port >= 1024 && port <= 49151))
 	{
 		cout << "Error: Invalid port number range" << endl;
 		return 1; 
