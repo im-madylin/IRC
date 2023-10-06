@@ -37,6 +37,7 @@ class Command {
 		void	INVITE(Message &message, User *user);
 		void	OPER(Message &message, User *user);
 		void	QUIT(Message &message, User *user);
+		void	WHO(Message &message, User *user);
 	public:
 		Command(Server *server);
 		~Command();

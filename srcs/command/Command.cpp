@@ -18,6 +18,7 @@ Command::Command(Server *server) : _server(server)
 	_commands["INVITE"] = &Command::INVITE;
 	_commands["OPER"] = &Command::OPER;
 	_commands["QUIT"] = &Command::QUIT;
+	_commands["WHO"] = &Command::WHO;
 }
 
 Command::~Command()
