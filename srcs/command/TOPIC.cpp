@@ -8,13 +8,14 @@ void Command::TOPIC(Message &message, User *user)
 	string serverPrefix = this->_server->getServerPrefix();
 	string userPrefix = user->getUserPrefix();
 	string clientName = user->getNickname();
-	string channelName = message.getParams()[0];
-	string topic = message.getParams()[1];
-	string broadcastMessage = " TOPIC " + channelName + " :" + topic;
+	
 	// ERR_NEEDMOREPARAMS
 	if (message.getParamsSize() < 1)
 		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NEEDMOREPARAMS(clientName, "TOPIC")));
-	
+	string channelName = message.getParams()[0];
+	string topic = message.getParams()[1];
+	string broadcastMessage = " TOPIC " + channelName + " :" + topic;
+
 	Channel *channel = this->_server->findChannel(channelName);
 	if (channel == NULL)
 		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NOSUCHCHANNEL(clientName, channelName)));

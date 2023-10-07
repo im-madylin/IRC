@@ -12,11 +12,12 @@ void Command::KICK(Message &message, User *user)
 	string serverPrefix = this->_server->getServerPrefix();
 	string userPrefix = user->getUserPrefix();
 	string clientName = user->getNickname();
-	string channelName = message.getParams()[0];
-	string targetName = message.getParams()[1];
+	
 	// ERR_NEEDMOREPARAMS
 	if (message.getParamsSize() < 2)
 		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NEEDMOREPARAMS(clientName, "KICK")));
+	string channelName = message.getParams()[0];
+	string targetName = message.getParams()[1];
 	
 	Channel *channel = this->_server->findChannel(channelName);
 	if (!channel)
