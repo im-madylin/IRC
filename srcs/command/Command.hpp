@@ -17,6 +17,7 @@
 # define CHANNEL_MODE_L_STR "l"
 # define CHANNEL_MODE_B_STR "b"
 # define CHANNEL_MODE_S_STR "s"
+# define CHANNEL_MODE_N_STR "n"
 
 class Server;
 class User;
@@ -53,10 +54,11 @@ class Command {
 		void	addLimitMode(Channel *channel, int limit);
 		void	addOperatorMode(Channel *channel, string nickname);
 
-		void	deleteKeyMode(Channel *channel, string key);
+		bool	deleteKeyMode(Channel *channel, string key);
 		void	deleteLimitMode(Channel *channel);
 		void	deleteOperatorMode(Channel *channel, string nickname);
-	
+
+		bool 	containsOnlyPlusMinus(string mode);
 	public:
 		Command(Server *server);
 		~Command();
