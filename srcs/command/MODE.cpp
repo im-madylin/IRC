@@ -10,25 +10,26 @@ void Command::MODE(Message &message, User *user)
 	string	serverPrefix = this->_server->getServerPrefix();
 	string	userPrefix = user->getUserPrefix();
 	string	clientName = user->getNickname();
-	string	channelName = message.getParams()[0];
-	string	mode = message.getParams()[1];
+
 	if (message.getParamsSize() < 1)
 		return user->appendMessage(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(clientName, "MODE")));
+
+	string	channelName = message.getParams()[0];
 	Channel *channel = this->_server->findChannel(channelName);
 	if (!user->isInChannel(channelName))
 		return user->appendMessage(generateReply(serverPrefix, ERR_NOSUCHCHANNEL(clientName, channelName)));
 	if (!channel)
 		return user->appendMessage(generateReply(serverPrefix, ERR_NOSUCHCHANNEL(clientName, channelName)));
-	// TODO: 반환값 수정 필요
 	if (message.getParamsSize() == 1) 
 		return user->appendMessage(generateReply(serverPrefix, RPL_CHANNELMODEIS(clientName, channelName, channel->getModeString())));
 	if (!channel->isOperator(user))
 		return user->appendMessage(generateReply(serverPrefix, ERR_CHANOPRIVSNEEDED(clientName, channelName)));
 	
+	string	mode = message.getParams()[1];
 	bool isPlus = true;
 	size_t paramIndex = 2;
 	string applyMode = "";
-	string middle = "";
+	string middle = " ";
 	for (size_t i = 0; i < mode.size(); i++)
 	{
 		if (mode[i] == '+')
@@ -69,12 +70,12 @@ void Command::MODE(Message &message, User *user)
 				continue ;
 			}
 			if (isPlus) {
-				// TODO: 존재하지 않는 유저인 경우 처리
-				addOperatorMode(channel, message.getParams()[paramIndex]);
+				if (!addOperatorMode(channel, user, message.getParams()[paramIndex]))
+					continue ;
 			}
 			else {
-				// TODO: 존재하지 않는 유저인 경우 처리, op가 아닌 경우 무시
-				deleteOperatorMode(channel, message.getParams()[paramIndex]);
+				if (!deleteOperatorMode(channel, user, message.getParams()[paramIndex]))
+					continue ;
 			} 
 			middle += message.getParams()[paramIndex] + " ";
 			paramIndex++;
@@ -91,12 +92,6 @@ void Command::MODE(Message &message, User *user)
 			}
 			else
 				deleteLimitMode(channel);
-		}
-		else if (mode[i] == 'b') {
-			if (isPlus)
-				channel->addMode(CHANNEL_MODE_B);
-			else
-				channel->deleteMode(CHANNEL_MODE_B);
 		}
 		else if (mode[i] == 's') {
 			if (isPlus)
@@ -118,10 +113,8 @@ void Command::MODE(Message &message, User *user)
 	}
 	if (containsOnlyPlusMinus(applyMode))
 		return ;
-	// TODO: 수정 필요
-	string trailing = "";
-
-	broadcast(channel, generateReply(userPrefix, "MODE " + channelName + " " +  + " :" + applyMode));
+	string params = " " + applyMode + middle;
+	broadcast(channel, generateReply(userPrefix, MODE_REPLY(channelName, params)));
 }
 
 void Command::addKeyMode(Channel *channel, string key)
@@ -139,24 +132,32 @@ bool Command::deleteKeyMode(Channel *channel, string key)
 	return true;
 }
 
-void Command::addOperatorMode(Channel *channel, string targetName)
+bool Command::addOperatorMode(Channel *channel, User *user, string targetName)
 {
+	if (!this->_server->findUser(targetName)) {
+		user->appendMessage(generateReply(this->_server->getServerPrefix(), ERR_NOSUCHNICK(user->getNickname(), targetName)));
+		return false;
+	}
 	User *target = channel->findUser(targetName);
-	//TODO: 아예 무시되도록 처리
-	if (target == NULL || channel->isOperator(target))
-		return ;
+	if (!target || channel->isOperator(target))
+		return false;
 	channel->addMode(CHANNEL_MODE_O);
 	channel->addOper(target->getFd());
+	return true;
 }
 
-void Command::deleteOperatorMode(Channel *channel, string targetName)
+bool Command::deleteOperatorMode(Channel *channel, User *user, string targetName)
 {
 	User *target = channel->findUser(targetName);
-	//TODO: 아예 무시되도록 처리
-	if (target == NULL || channel->isOperator(target))
-		return ;
+	if (!this->_server->findUser(targetName)) {
+		user->appendMessage(generateReply(this->_server->getServerPrefix(), ERR_NOSUCHNICK(user->getNickname(), targetName)));
+		return false;
+	}
+	if (!target || !channel->isOperator(target))
+		return false;
 	channel->deleteMode(CHANNEL_MODE_O);
 	channel->deleteOper(target->getFd());
+	return true;
 }
 
 void Command::addLimitMode(Channel *channel, int limit)
