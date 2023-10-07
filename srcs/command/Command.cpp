@@ -53,7 +53,6 @@ void Command::broadcast(int ignoreFd, Channel *channel, string message)
 	for(map<int, User *>::iterator it = user.begin(); it != user.end(); it++) {
 		if (it->first == ignoreFd)
 			continue;
-		// sendToClient(it->first, message);
 		it->second->appendMessage(message);
 	}
 }
@@ -62,7 +61,6 @@ void Command::broadcast(Channel *channel, string message)
 {
 	map<int, User *> user = channel->getUsers();
 	for(map<int, User *>::iterator it = user.begin(); it != user.end(); it++) {
-		// sendToClient(it->first, message);
 		it->second->appendMessage(message);
 	}
 }

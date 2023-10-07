@@ -9,19 +9,17 @@ void Command::PART(Message &message, User *user)
 	string userPrefix = user->getUserPrefix();
 
 	if (message.getParamsSize() < 1)
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "PART")));
+		return user->appendMessage(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "PART")));
 	
 	vector<string> channels = split(message.getParams()[0], ",");
 	for (vector<string>::iterator it = channels.begin(); it != channels.end(); it++) {
 		Channel *channel = this->_server->findChannel(*it);
 		
 		if (channel == NULL) {
-			sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NOSUCHCHANNEL(user->getNickname(), *it)));
+			user->appendMessage(generateReply(serverPrefix, ERR_NOSUCHCHANNEL(user->getNickname(), *it)));
 			continue ;
-		}
-		
 		if (!channel->isExistUser(user->getFd())) {
-			sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NOTONCHANNEL(user->getNickname(), *it)));
+			user->appendMessage(generateReply(serverPrefix, ERR_NOTONCHANNEL(user->getNickname(), *it)));
 			continue ;
 		}
 

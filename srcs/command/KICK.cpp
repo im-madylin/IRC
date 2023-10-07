@@ -13,25 +13,24 @@ void Command::KICK(Message &message, User *user)
 	string userPrefix = user->getUserPrefix();
 	string clientName = user->getNickname();
 	
-	// ERR_NEEDMOREPARAMS
 	if (message.getParamsSize() < 2)
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NEEDMOREPARAMS(clientName, "KICK")));
+		return user->appendMessage(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(clientName, "KICK")));
 	string channelName = message.getParams()[0];
 	string targetName = message.getParams()[1];
 	
 	Channel *channel = this->_server->findChannel(channelName);
 	if (!channel)
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NOSUCHCHANNEL(clientName, channelName)));
+		return user->appendMessage(generateReply(serverPrefix, ERR_NOSUCHCHANNEL(clientName, channelName)));
 
 	User *target = channel->findUser(targetName);
 	if (!target)
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_USERNOTINCHANNEL(clientName, targetName, channelName)));
+		return user->appendMessage(generateReply(serverPrefix, ERR_USERNOTINCHANNEL(clientName, targetName, channelName)));
 	
 	if (!channel->findUser(clientName))
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NOTONCHANNEL(clientName, channelName)));
+		return user->appendMessage(generateReply(serverPrefix, ERR_NOTONCHANNEL(clientName, channelName)));
 
 	if (!channel->isOperator(user))
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_CHANOPRIVSNEEDED(clientName, channelName)));
+		return user->appendMessage(generateReply(serverPrefix, ERR_CHANOPRIVSNEEDED(clientName, channelName)));
 	
 	channel->deleteUser(target->getFd());
 	target->leaveChannel(channelName);
