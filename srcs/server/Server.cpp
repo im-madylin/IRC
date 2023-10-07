@@ -238,10 +238,6 @@ void Server::recvMessage(int clientSocket)
 		buf[recvSize] = '\0';
 		user->appendCommand(buf);
 		handleCmdMessage(user);
-		if (!user->getMessageBuffer().empty()) {
-			updateKevent(clientSocket, EVFILT_READ, EV_DISABLE, 0, 0, NULL);
-			updateKevent(clientSocket, EVFILT_WRITE, EV_ADD | EV_ENABLE, 0, 0, NULL);
-		}
 	}
 }
 
@@ -276,8 +272,6 @@ void Server::sendMessage(int clientSocket)
 	{
 		user->setMessageBuffer(user->getMessageBuffer().substr(sendSize));
 	}
-	updateKevent(clientSocket, EVFILT_WRITE, EV_DISABLE, 0, 0, NULL);
-	updateKevent(clientSocket, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL);
 }
 
 void Server::addChannel(Channel *channel)
