@@ -13,7 +13,7 @@ class Bot {
 	private:
 		int				_curDate;
 		int				_birthDate;
-		vector<string>	_todayLuckList;
+		vector<string>	_todayLuckColor;
 		vector<string> 	_luckyItemList;
 
 	public:
@@ -23,7 +23,6 @@ class Bot {
 		void			initList();
 		string			inputBirthDate(string param); // 생년월일 입력받음
 		const string	getRandom(const vector<string>& list) const;
-		const string	showTodayLuck() const;
 		const string	showLuckyItem() const;
 };
 

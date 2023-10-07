@@ -9,9 +9,9 @@ void Command::NOTICE(Message &message, User *user)
 	string	userPrefix = user->getUserPrefix();
 
 	if (message.getParamsSize() == 0)
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NORECIPIENT(user->getNickname(), "NOTICE")));
+		return user->appendMessage(generateReply(serverPrefix, ERR_NORECIPIENT(user->getNickname(), "NOTICE")));
 	if (message.getParamsSize() == 1 || message.getParams()[1].length() == 0)
-		return sendToClient(user->getFd(), generateReply(serverPrefix, ERR_NOTEXTTOSEND(user->getNickname())));
+		return user->appendMessage(generateReply(serverPrefix, ERR_NOTEXTTOSEND(user->getNickname())));
 
 	vector<string>	recipients = split(message.getParams()[0], ",");
 	for(vector<string>::const_iterator it = recipients.begin(); it != recipients.end(); it++) {
@@ -26,7 +26,7 @@ void Command::NOTICE(Message &message, User *user)
             if (recipient == NULL)
                 continue;
             else
-                sendToClient(recipient->getFd(),":" + serverPrefix + " NOTICE " + *it + " :" + message.getParams()[1]);
+				recipient->appendMessage(":" + serverPrefix + " NOTICE " + *it + " :" + message.getParams()[1]);
         }
     }
 }
