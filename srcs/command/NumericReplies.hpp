@@ -14,6 +14,8 @@ string generateReply(string prefix, string msg);
 
 // 315
 string RPL_ENDOFWHO(string client, string name);
+// 324
+string RPL_CHANNELMODEIS(string client, string channel, string mode);
 // 331
 string RPL_NOTOPIC(string client, string channel);
 // 332
@@ -24,6 +26,8 @@ string RPL_INVITING(string client, string nickname, string channel);
 string RPL_WHOREPLY(string client, string chname, string servname, User &user);
 // 353
 string RPL_NAMREPLY(string client, Channel &channel);
+// 366
+string RPL_ENDOFNAMES(string client, string channel);
 // 372
 string RPL_MOTD(string client, string msg);
 // 381

@@ -21,6 +21,11 @@ string RPL_ENDOFWHO(string client, string name)
 	return "315 " + client + " " + name + " :End of /WHO list";
 }
 
+string RPL_CHANNELMODEIS(string client, string channel, string mode)
+{
+	return "324 " + client + " " + channel + " :" + mode;
+}
+
 string RPL_NOTOPIC(string client, string channel)
 {
 	return "331 " + client + " " + channel + " :No topic is set";
@@ -51,6 +56,11 @@ string RPL_NAMREPLY(string client, Channel &channel)
 	for (vector<string>::iterator it = userList.begin(); it != userList.end(); it++)
 		names += (*it) + " ";
 	return "353 " + client + getSymbol(channel.getModeString()) + channel.getChannelName() + " :" + names;
+}
+
+string RPL_ENDOFNAMES(string client, string channel)
+{
+	return "366 " + client + " " + channel + " :End of /NAMES list";
 }
 
 string RPL_MOTD(string client, string msg)
