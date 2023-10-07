@@ -6,6 +6,7 @@
 # include <map>
 # include <vector>
 # include "../user/User.hpp"
+# include "../bot/Bot.hpp"
 
 # define MAX_CHANNEL_USER 10
 
@@ -36,6 +37,7 @@ class Channel {
 		set<int>			_inviteList;
 		string				_key;
 		size_t				_limit;
+		Bot					_bot;
 
 	public:
 		Channel();
@@ -76,6 +78,7 @@ class Channel {
 		void		deleteMode(ChannelMode mode);
 		bool		isInvited(int fd) const;
 		bool		isInBanList(int fd) const;
+		string		executeBot(string date);
 };
 
 #endif

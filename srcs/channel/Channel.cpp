@@ -232,3 +232,14 @@ void Channel::deleteInvite(int fd)
 {
 	this->_inviteList.erase(fd);
 }
+
+string Channel::executeBot(string date)
+{
+	if (date.length() == 0)
+		return "Please input your birthday format YYYYMMDD";
+
+	string ret = _bot.inputBirthDate(date);
+	if (ret.length() != 0)
+		return ret;
+	return _bot.showLuckyItem();
+}
