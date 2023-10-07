@@ -7,16 +7,8 @@ void	Command::WHO(Message &message, User *user)
 {
 	string	serverPrefix = _server->getServerPrefix();
 
-	if (message.getParamsSize() == 0 || message.getParams()[0] == "0" || message.getParams()[0] == "*") {
-		map<int, User *> users = _server->getUsers();
-		map<string, Channel *> channels = _server->getChannels();
-		for(map<int, User *>::iterator it = users.begin(); it != users.end(); it++) {
-			// User *targetUser = it->second;
-			//visible 리스트 -> getMode() != "l"
-			//rpl whoreply
-		}
-		return	sendToClient(user->getFd(), generateReply(serverPrefix, RPL_ENDOFWHO(user->getNickname(), "*")));
-	}
+	if (message.getParamsSize() == 0 || message.getParams()[0].length() == 0)
+		return user->appendMessage(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "WHO")));
 
 	bool	operatorListFlag = false;
 	if (message.getParamsSize() == 2 && message.getParams()[1] == "o")
@@ -28,7 +20,7 @@ void	Command::WHO(Message &message, User *user)
 		for(map<int, User *>::iterator it = users.begin(); it != users.end(); it++) {
 			if (operatorListFlag && !targetChannel->isOperator(it->first))
 				continue;
-			sendToClient(user->getFd(), generateReply(serverPrefix, RPL_WHOREPLY(user->getNickname(), targetChannel->getChannelName(), serverPrefix, *it->second)));
+			user->appendMessage(generateReply(serverPrefix, RPL_WHOREPLY(user->getNickname(), targetChannel->getChannelName(), serverPrefix, *it->second)));
 		}
 	}
 	else {
@@ -37,10 +29,10 @@ void	Command::WHO(Message &message, User *user)
 			User *targetUser = it->second;
 			if (targetUser->getNickname() == name || targetUser->getUsername() == name || targetUser->getRealName() == name) {
 				string channelname = it->second->getJoinedChanels().begin()->first;
-				sendToClient(user->getFd(), generateReply(serverPrefix, RPL_WHOREPLY(user->getNickname(), channelname, serverPrefix, *targetUser)));
+				user->appendMessage(generateReply(serverPrefix, RPL_WHOREPLY(user->getNickname(), channelname, serverPrefix, *targetUser)));
 				break;
 			}
 		}
 	}
-	sendToClient(user->getFd(), generateReply(serverPrefix, RPL_ENDOFWHO(user->getNickname(), name)));
+	user->appendMessage(generateReply(serverPrefix, RPL_ENDOFWHO(user->getNickname(), name)));
 }
