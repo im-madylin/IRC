@@ -47,11 +47,6 @@ set<ChannelMode> Channel::getModes()
 	return this->_modes;
 }
 
-set<int> Channel::getBanList()
-{
-	return this->_banList;
-}
-
 set<int> Channel::getInviteList()
 {
 	return this->_inviteList;
@@ -70,6 +65,7 @@ string Channel::getKey()
 string Channel::getModeString()
 {
 	string mode = "+";
+	string params = "";
 	for (set<ChannelMode>::iterator it = this->_modes.begin(); it != this->_modes.end(); it++) {
 		switch (*it) {
 			case CHANNEL_MODE_I:
@@ -77,13 +73,19 @@ string Channel::getModeString()
 			case CHANNEL_MODE_T:
 				mode += "t"; break ;
 			case CHANNEL_MODE_K:
-				mode += "k"; break ;
+			{
+				mode += "k";
+				params += this->_key + " ";
+				break ;
+			}
 			case CHANNEL_MODE_O:
 				break ;
 			case CHANNEL_MODE_L:
-				mode += "l"; break ;
-			case CHANNEL_MODE_B:
+			{
+				mode += "l";
+				params += toString(this->_limit) + " ";
 				break ;
+			}
 			case CHANNEL_MODE_S:
 				mode += "s"; break ;
 			case CHANNEL_MODE_N:
@@ -92,7 +94,7 @@ string Channel::getModeString()
 				break;
 		}
 	}
-	return mode;
+	return " " + mode + " " + params;
 }
 
 size_t Channel::getLimit()
@@ -204,23 +206,6 @@ bool Channel::isInvited(int fd) const
 	if (_inviteList.find(fd) != _inviteList.end())
 		return true;
 	return false;
-}
-
-bool Channel::isInBanList(int fd) const
-{
-	if (_banList.find(fd) != _banList.end())
-		return true;
-	return false;
-}
-
-void Channel::addBan(int fd)
-{
-	this->_banList.insert(fd);
-}
-
-void Channel::deleteBan(int fd)
-{
-	this->_banList.erase(fd);
 }
 
 void Channel::addInvite(int fd)
