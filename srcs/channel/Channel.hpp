@@ -22,6 +22,7 @@ enum ChannelMode {
 	CHANNEL_MODE_L,
 	CHANNEL_MODE_B,
 	CHANNEL_MODE_S,
+	CHANNEL_MODE_N,
 };
 
 class Channel {

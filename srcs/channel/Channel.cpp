@@ -73,17 +73,21 @@ string Channel::getModeString()
 	for (set<ChannelMode>::iterator it = this->_modes.begin(); it != this->_modes.end(); it++) {
 		switch (*it) {
 			case CHANNEL_MODE_I:
-				mode += "i";
+				break ;
 			case CHANNEL_MODE_T:
-				mode += "t";
+				mode += "t"; break ;
 			case CHANNEL_MODE_K:
-				mode += "k";
+				mode += "k"; break ;
 			case CHANNEL_MODE_O:
-				mode += "o";
+				break ;
 			case CHANNEL_MODE_L:
-				mode += "l";
+				mode += "l"; break ;
 			case CHANNEL_MODE_B:
-				mode += "b";
+				break ;
+			case CHANNEL_MODE_S:
+				mode += "s"; break ;
+			case CHANNEL_MODE_N:
+				mode += "n"; break ;
 			default:
 				break;
 		}
