@@ -52,11 +52,11 @@ class Command {
 		// MODE.cpp
 		void	addKeyMode(Channel *channel, string key);
 		void	addLimitMode(Channel *channel, int limit);
-		void	addOperatorMode(Channel *channel, string nickname);
+		bool	addOperatorMode(Channel *channel, User *user, string nickname);
 
 		bool	deleteKeyMode(Channel *channel, string key);
 		void	deleteLimitMode(Channel *channel);
-		void	deleteOperatorMode(Channel *channel, string nickname);
+		bool	deleteOperatorMode(Channel *channel, User *user, string nickname);
 
 		bool 	containsOnlyPlusMinus(string mode);
 	public:

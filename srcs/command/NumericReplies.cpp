@@ -30,7 +30,7 @@ string RPL_CHANNELMODEIS(string client, string channel, string mode)
 		trailing = mode.substr(trailingPos + 1);
 		middle = mode.substr(0, trailingPos);
 	}
-	return "324 " + client + " " + channel + " " + middle + ":" + trailing;
+	return "324 " + client + " " + channel + middle + " :" + trailing;
 }
 
 string RPL_NOTOPIC(string client, string channel)
@@ -231,5 +231,5 @@ string MODE_REPLY(string channel, string parameter)
 		trailing = parameter.substr(trailingPos + 1);
 		middle = parameter.substr(0, trailingPos);
 	}
-	return "MODE " + channel + " " + middle + ":" + trailing;
+	return "MODE " + channel + middle + " :" + trailing;
 }
