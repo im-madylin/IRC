@@ -5,8 +5,10 @@
 # include <set>
 # include <map>
 # include <vector>
+
 # include "../user/User.hpp"
 # include "../bot/Bot.hpp"
+# include "../Utils.hpp"
 
 # define MAX_CHANNEL_USER 10
 
@@ -21,9 +23,8 @@ enum ChannelMode {
 	CHANNEL_MODE_K,
 	CHANNEL_MODE_O,
 	CHANNEL_MODE_L,
-	CHANNEL_MODE_B,
-	CHANNEL_MODE_S,
-	CHANNEL_MODE_N,
+	CHANNEL_MODE_S, // Secret Channel Mode
+	CHANNEL_MODE_N, // No External Messages Mode
 };
 
 class Channel {
@@ -33,7 +34,6 @@ class Channel {
 		set<int> 			_operator;
 		string				_topic;
 		set<ChannelMode>	_modes;
-		set<int>			_banList;
 		set<int>			_inviteList;
 		string				_key;
 		size_t				_limit;
@@ -49,7 +49,6 @@ class Channel {
 		vector<string>	getUserList();
 		string			getTopic();
 		set<ChannelMode> getModes();
-		set<int>		getBanList();
 		set<int>		getInviteList();
 		string			getKey();
 		string			getModeString();
@@ -67,8 +66,6 @@ class Channel {
 		bool		isOperator(User *user) const;
 		void		addOper(int fd);
 		void		deleteOper(int fd);
-		void		addBan(int fd);
-		void		deleteBan(int fd);
 		void		addInvite(int fd);
 		void		deleteInvite(int fd);
 		bool		isExistUser(int fd) const;
@@ -77,7 +74,6 @@ class Channel {
 		void		addMode(ChannelMode mode);
 		void		deleteMode(ChannelMode mode);
 		bool		isInvited(int fd) const;
-		bool		isInBanList(int fd) const;
 		string		executeBot(string date);
 };
 

@@ -4,12 +4,14 @@
 # include <string>
 # include <vector>
 
+# include "../Utils.hpp"
+
 using namespace std;
 
 class Channel;
 class User;
 
-string getSymbol(string mode);
+string getSymbol(Channel &channel);
 string generateReply(string prefix, string msg);
 
 // 315
@@ -93,5 +95,8 @@ string ERR_NOOPERHOST(string client);
 // *.freenode.net 696 eunbi #banana o * :You must specify a parameter for the op mode. Syntax: <nick>.
 // *.freenode.net 696 bbb #banana l * :You must specify a parameter for the limit mode. Syntax: <limit>.
 string ERR_INVALIDMODEPARAM(string client, string channel, char mode, string parameter, string description);
+
+// mode reply
+string MODE_REPLY(string channel, string parameter);
 
 # endif

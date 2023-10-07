@@ -2,12 +2,10 @@
 #include "../user/User.hpp"
 #include "../channel/Channel.hpp"
 
-string getSymbol(string mode)
+string getSymbol(Channel &channel)
 {
-	if (mode == "+s")
+	if (channel.hasMode(CHANNEL_MODE_S))
 		return " @ ";
-	else if (mode == "+p")
-		return " * ";
 	return " = ";
 }
 
@@ -23,7 +21,16 @@ string RPL_ENDOFWHO(string client, string name)
 
 string RPL_CHANNELMODEIS(string client, string channel, string mode)
 {
-	return "324 " + client + " " + channel + " :" + mode;
+	string trailing = "";
+	string middle = "";
+	size_t pos = mode.rfind(" ");
+	if (pos != string::npos)
+	{
+		size_t trailingPos = mode.rfind(" ", pos - 1);
+		trailing = mode.substr(trailingPos + 1);
+		middle = mode.substr(0, trailingPos);
+	}
+	return "324 " + client + " " + channel + middle + " :" + trailing;
 }
 
 string RPL_NOTOPIC(string client, string channel)
@@ -55,7 +62,7 @@ string RPL_NAMREPLY(string client, Channel &channel)
 	vector<string> userList = channel.getUserList();
 	for (vector<string>::iterator it = userList.begin(); it != userList.end(); it++)
 		names += (*it) + " ";
-	return "353 " + client + getSymbol(channel.getModeString()) + channel.getChannelName() + " :" + names;
+	return "353 " + client + getSymbol(channel) + channel.getChannelName() + " :" + names;
 }
 
 string RPL_ENDOFNAMES(string client, string channel)
@@ -211,4 +218,18 @@ string ERR_CHANOPRIVSNEEDED(string client, string channel)
 string ERR_INVALIDMODEPARAM(string client, string channel, char mode, string parameter, string description)
 {
 	return "696 " + client + " " + channel + " " + mode + " " + parameter + " :" + description;
+}
+
+string MODE_REPLY(string channel, string parameter)
+{
+	string trailing = "";
+	string middle = "";
+	size_t pos = parameter.rfind(" ");
+	if (pos != string::npos)
+	{
+		size_t trailingPos = parameter.rfind(" ", pos - 1);
+		trailing = parameter.substr(trailingPos + 1);
+		middle = parameter.substr(0, trailingPos);
+	}
+	return "MODE " + channel + middle + " :" + trailing;
 }

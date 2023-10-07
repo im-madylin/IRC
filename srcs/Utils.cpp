@@ -17,3 +17,10 @@ vector<string> split(string str, string delim)
 	}
 	return result;
 }
+
+string toString(size_t num)
+{
+	std::stringstream ss;
+    ss << num;
+    return ss.str();
+}

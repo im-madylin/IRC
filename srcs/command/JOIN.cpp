@@ -67,13 +67,6 @@ void Command::JOIN(Message &message, User *user)
 				}
 			}
 
-			if (channel->hasMode(CHANNEL_MODE_B)) {
-				if (channel->isInBanList(user->getFd())) {
-					user->appendMessage(generateReply(serverPrefix, ERR_BANNEDFROMCHAN(clientName, *it)));
-					continue ;
-				}
-			}
-
 			channel->addUser(user->getFd(), user);
 			user->joinChannel(channel);
 
