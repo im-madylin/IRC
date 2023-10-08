@@ -29,20 +29,24 @@ void Server::initServer() {
 
 	memset(&serverAddr, 0, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_port = htons(this->_port);
-	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	serverAddr.sin_port = htons(this->_port); // 호스트 바이트 순서로 표현된 숫자를 네트워크 바이트 순서로 변환
+	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY); // 모든 IP 주소로부터의 연결을 허용, 네트워크 바이트 순서로 32비트 정수를 변환
 	
-	// 소켓 옵션 설정, SO_REUSEADDR: 커널이 소켓을 사용하는 중에도 포트를 사용할 수 있게 해줌
+	// 소켓 옵션 설정
+	// SOL_SOCKET: 소켓 옵션 레벨, 일반 소켓 옵션
+	// SO_REUSEADDR: 커널이 소켓을 사용하는 중에도 포트를 사용할 수 있게 해줌
 	int optval = 1;
 	if (setsockopt(this->_serverSocket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) == -1) {
 		close(this->_serverSocket);
 		errorExit("setsockopt failed");
 	}
 
+	// 파일 관련 작업을 수행
 	// non-blocking 모드로 변경
 	fcntl(this->_serverSocket, F_SETFL, O_NONBLOCK);
 
 	// 해당 주소와 server로 들어오는 클라이언트의 연결을 수락할 수 있도록 함
+	// 바인딩할 주소 정보
 	if (bind(this->_serverSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == -1) {
 		close(this->_serverSocket);
 		errorExit("bind failed");
@@ -101,11 +105,11 @@ void Server::acceptConnection() {
 	socklen_t clientAddrSize = sizeof(clientAddr);
 	User *user;
 
-	// 클라이언트 소켓 생성 및 연결
+	// 클라이언트 연결 수락 및 소켓 생성
 	memset(&clientAddr, 0, sizeof(clientAddr));
 	int clientSocket = accept(this->_serverSocket, (struct sockaddr *)&clientAddr, &clientAddrSize);
 	if (clientSocket == -1) {
-		cerr << "accept() error" << endl;
+		cerr << "Error: accept failed" << endl;
 		return ;
 	}
 	// non-blocking 모드로 변경
@@ -117,6 +121,8 @@ void Server::acceptConnection() {
 	cout << "new connection from : " << clientSocket << endl;
 
 	// user 객체 생성 및 서버에 저장
+	// inet_ntoa: 네트워크 바이트 순서의 32비트 정수를 IP 주소 문자열로 변환	
+	// sin_addr: 32비트 IP 주소
 	user = new User(clientSocket, inet_ntoa(clientAddr.sin_addr));
 	addUser(user);
 }
@@ -169,6 +175,7 @@ void Server::handleCmdMessage(User *user) {
 			continue;
 		}
 
+		// crlf 위치까지의 문자열을 Message 객체로 생성 (message 안에서 파싱)
 		Message message(user->getCommandBuffer().substr(0, crlfPos));
 		user->setCommandBuffer(user->getCommandBuffer().substr(crlfPos + 1));
 		this->_command->handleCommand(message, user);
@@ -219,6 +226,8 @@ void Server::run() {
 	while (1) {
 
 		// kqueue에 등록된 이벤트가 발생할 때까지 대기, 이벤트 수만큼 반환
+		// changes : 이벤트를 설정하거나 변경하기 위한 kevent 구조체 배열
+		// events : 발생한 이벤트를 저장할 kevent 구조체 배열
 		int eventCount = kevent(this->_kq, &this->_changes[0], this->_changes.size(), this->_events, KQUEUE_SIZE, NULL);
 		if (eventCount == -1) 		{
 			deleteAllUser();
@@ -245,6 +254,8 @@ void Server::sendMessage(int clientSocket) {
 	if (user->getMessageBuffer().empty())
 		return ;
 
+	// 소켓으로 메세지 전송
+	// fcntl로 소켓을 논블로킹으로 설정했기 때문에 send가 블로킹되지 않음
 	sendSize = send(clientSocket, user->getMessageBuffer().c_str(), user->getMessageBuffer().length(), 0);
 	if (sendSize == -1) {
 		cerr << "Error: send failed" << endl;
