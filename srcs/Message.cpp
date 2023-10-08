@@ -7,22 +7,21 @@ Message::Message(const string &message) {
 	parseMessage(message);
 }
 
-Message::~Message() {
-}
+Message::~Message() {}
 
-string Message::getPrefix() {
+string Message::getPrefix() const {
 	return this->_prefix;
 }
 
-string Message::getCommand() {
+string Message::getCommand() const {
 	return this->_command;
 }
 
-vector<string> Message::getParams() {
+vector<string> Message::getParams() const {
 	return this->_params;
 }
 
-size_t Message::getParamsSize() {
+size_t Message::getParamsSize() const {
 	return this->_params.size();
 }
 

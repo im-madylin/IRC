@@ -12,23 +12,23 @@ class Message {
 	private:
 		string			_prefix;
 		string			_command;
-		vector<string> 	_params;
+		vector<string>	_params;
 
 	public:
 		Message();
 		Message(const string &message);
 		~Message();
 
-		string			getPrefix();
-		string			getCommand();
-		vector<string>	getParams();
-		size_t		getParamsSize();
+		string			getPrefix() const;
+		string			getCommand() const;
+		vector<string>	getParams() const;
+		size_t			getParamsSize() const;
 
-		void		setPrefix(string prefix);
-		void		setCommand(string command);
-		void		setParams(vector<string> params);
+		void			setPrefix(string prefix);
+		void			setCommand(string command);
+		void			setParams(vector<string> params);
 
-		void	parseMessage(const string &message);
+		void			parseMessage(const string &message);
 };
 
 #endif

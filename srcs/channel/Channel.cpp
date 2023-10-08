@@ -11,11 +11,11 @@ Channel::Channel(std::string& name) : _name(name) {
 
 Channel::~Channel() {}
 
-string Channel::getChannelName() {
+string Channel::getChannelName() const {
 	return this->_name;
 }
 
-map<int, User *>Channel::getUsers() {
+map<int, User *>Channel::getUsers() const {
 	return this->_users;
 }
 
@@ -32,15 +32,15 @@ vector<string> Channel::getUserList() {
 	return list;
 }
 
-string Channel::getTopic() {
+string Channel::getTopic() const {
 	return this->_topic;
 }
 
-set<ChannelMode> Channel::getModes() {
+set<ChannelMode> Channel::getModes() const {
 	return this->_modes;
 }
 
-set<int> Channel::getInviteList() {
+set<int> Channel::getInviteList() const {
 	return this->_inviteList;
 }
 
@@ -48,7 +48,7 @@ void Channel::setTopic(string topic) {
 	this->_topic = topic;
 }
 
-string Channel::getKey() {
+string Channel::getKey() const {
 	return this->_key;
 }
 
@@ -61,16 +61,14 @@ string Channel::getModeString() {
 				break ;
 			case CHANNEL_MODE_T:
 				mode += "t"; break ;
-			case CHANNEL_MODE_K:
-			{
+			case CHANNEL_MODE_K: {
 				mode += "k";
 				params += this->_key + " ";
 				break ;
 			}
 			case CHANNEL_MODE_O:
 				break ;
-			case CHANNEL_MODE_L:
-			{
+			case CHANNEL_MODE_L: {
 				mode += "l";
 				params += toString(this->_limit) + " ";
 				break ;
@@ -86,7 +84,7 @@ string Channel::getModeString() {
 	return " " + mode + " " + params;
 }
 
-size_t Channel::getLimit() {
+size_t Channel::getLimit() const {
 	return this->_limit;
 }
 
