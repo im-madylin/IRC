@@ -3,7 +3,7 @@
 #include "../command/Command.hpp"
 #include "../channel/Channel.hpp"
 
-/* ------------------------------ CANONICAL FORM ------------------------------- */
+/* ---------------------------------- PRIVATE ---------------------------------- */
 
 Server::Server(string port, string password) : _port(atoi(port.c_str())), _password(password) {
 	this->_serverName = SERVER_NAME;
@@ -15,8 +15,6 @@ Server::~Server() {
 	this->_users.clear();
 	this->_channels.clear();
 }
-
-/* ---------------------------------- PRIVATE ---------------------------------- */
 
 void Server::initServer() {
 	struct sockaddr_in serverAddr;

@@ -1,6 +1,6 @@
 #include "Command.hpp"
 
-/* ------------------------------ CANONICAL FORM ------------------------------- */
+/* ----------------------------------- PUBLIC ---------------------------------- */
 
 Command::Command(Server *server) : _server(server) {
 	this->_commands["PASS"] = &Command::PASS;
@@ -20,8 +20,6 @@ Command::Command(Server *server) : _server(server) {
 }
 
 Command::~Command() {}
-
-/* ----------------------------------- PUBLIC ---------------------------------- */
 
 void Command::handleCommand(Message &message, User *user) {
 	string command = message.getCommand();

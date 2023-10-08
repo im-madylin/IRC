@@ -1,6 +1,6 @@
 #include "Channel.hpp"
 
-/* ------------------------------ CANONICAL FORM ------------------------------- */
+/* ----------------------------------- PUBLIC ---------------------------------- */
 
 Channel::Channel() {}
 
@@ -12,8 +12,6 @@ Channel::Channel(std::string& name) : _name(name) {
 }
 
 Channel::~Channel() {}
-
-/* ----------------------------------- PUBLIC ---------------------------------- */
 
 string Channel::getChannelName() const {
 	return this->_name;

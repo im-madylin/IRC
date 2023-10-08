@@ -1,6 +1,6 @@
 #include "Bot.hpp"
 
-/* ------------------------------ CANONICAL FORM ------------------------------- */
+/* ----------------------------------- PUBLIC ---------------------------------- */
 
 Bot::Bot() : _birthDate(0) {
 	string str;
@@ -16,8 +16,6 @@ Bot::~Bot() {
 	this->_luckyItemList.clear();
 	vector<string>().swap(this->_luckyItemList); // capacity 0
 }
-
-/* ----------------------------------- PUBLIC ---------------------------------- */
 
 const string Bot::getRandom(const vector<string>& list) const {
 	// 오늘 날짜와 생년월일을 결합한 값을 시드로 사용
