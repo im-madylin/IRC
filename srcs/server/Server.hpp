@@ -44,12 +44,12 @@ class Server {
 
 		void					initServer();
 		void					initKqueue();
-		void					acceptConnection();
-		void					handleEvent(struct kevent &event);
-		void					recvMessage(int clientSocket);
-		size_t					findCRLF(string message);
-		void					handleCmdMessage(User *user);
 		void					updateKevent(uintptr_t ident, int16_t filter, uint16_t flags, uint32_t fflags, intptr_t data, void *udata);
+		void					handleEvent(struct kevent &event);
+		void					acceptConnection();
+		void					recvMessage(int clientSocket);
+		void					handleCmdMessage(User *user);
+		size_t					findCRLF(string message);
 
 	public:
 		Server(string port, string password);
@@ -66,12 +66,11 @@ class Server {
 
 		void					run();
 		void					sendMessage(int clientSocket);
+		void					disconnetClient(int clientFd);
 		void					addChannel(Channel *channel);
 		Channel					*findChannel(string channelName);
-		User					*findUser(string username);
 		void					deleteChannel(string channelName);
-		void					disconnetClient(int clientFd);
-		
+		User					*findUser(string username);
 };
 
 #endif

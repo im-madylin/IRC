@@ -66,14 +66,14 @@ class Channel {
 		bool				isOperator(User *user) const;
 		void				addOper(int fd);
 		void				deleteOper(int fd);
-		void				addInvite(int fd);
-		void				deleteInvite(int fd);
 		bool				isExistUser(int fd) const;
 		bool				isFull() const;
 		bool				hasMode(ChannelMode mode) const;
 		void				addMode(ChannelMode mode);
 		void				deleteMode(ChannelMode mode);
 		bool				isInvited(int fd) const;
+		void				addInvite(int fd);
+		void				deleteInvite(int fd);
 		string				executeBot(string date);
 };
 

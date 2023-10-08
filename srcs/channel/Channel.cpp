@@ -1,5 +1,7 @@
 #include "Channel.hpp"
 
+/* ------------------------------ CANONICAL FORM ------------------------------- */
+
 Channel::Channel() {}
 
 Channel::Channel(std::string& name) : _name(name) {
@@ -10,6 +12,8 @@ Channel::Channel(std::string& name) : _name(name) {
 }
 
 Channel::~Channel() {}
+
+/* ----------------------------------- PUBLIC ---------------------------------- */
 
 string Channel::getChannelName() const {
 	return this->_name;
@@ -42,10 +46,6 @@ set<ChannelMode> Channel::getModes() const {
 
 set<int> Channel::getInviteList() const {
 	return this->_inviteList;
-}
-
-void Channel::setTopic(string topic) {
-	this->_topic = topic;
 }
 
 string Channel::getKey() const {
@@ -88,6 +88,18 @@ size_t Channel::getLimit() const {
 	return this->_limit;
 }
 
+void Channel::setTopic(string topic) {
+	this->_topic = topic;
+}
+
+void Channel::setKey(string key) {
+	this->_key = key;
+}
+
+void Channel::setLimit(int limit) {
+	this->_limit = limit;
+}
+
 void Channel::addUser(int fd, User *user) {
 	if (this->_users.empty())
 		this->_operator.insert(fd);
@@ -122,14 +134,6 @@ User* Channel::findUser(string nickname) const {
 		if (!it->second->getNickname().compare(nickname))
 			return it->second;
 	return it->second;
-}
-
-void Channel::setKey(string key) {
-	this->_key = key;
-}
-
-void Channel::setLimit(int limit) {
-	this->_limit = limit;
 }
 
 bool Channel::isOperator(int fd) const {

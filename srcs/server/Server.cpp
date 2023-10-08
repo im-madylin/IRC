@@ -3,6 +3,8 @@
 #include "../command/Command.hpp"
 #include "../channel/Channel.hpp"
 
+/* ------------------------------ CANONICAL FORM ------------------------------- */
+
 Server::Server(string port, string password) : _port(atoi(port.c_str())), _password(password) {
 	this->_serverName = SERVER_NAME;
 	this->_command = new Command(this);
@@ -14,53 +16,7 @@ Server::~Server() {
 	this->_channels.clear();
 }
 
-int Server::getPort() const {
-	return this->_port;
-}
-
-string Server::getServerName() const {
-	return this->_serverName;
-}
-
-string Server::getPassword() const {
-	return this->_password;
-}
-
-map<int, User *> Server::getUsers() const {
-	return this->_users;
-}
-
-string Server::getServerPrefix() const {
-	return this->_serverName;
-}
-
-map<string, Channel *> Server::getChannels() const {
-	return this->_channels;
-}
-
-void Server::setServerName(string serverName) {
-	this->_serverName = serverName;
-}
-
-void Server::run() {
-	initKqueue();
-	while (1) {
-		struct timespec timeout = {KQUEUE_TIMEOUT, 0}; // 3분 타임아웃
-
-		// kqueue에 등록된 이벤트가 발생할 때까지 대기, 이벤트 수만큼 반환
-		int eventCount = kevent(this->_kq, &this->_changes[0], this->_changes.size(), this->_events, KQUEUE_SIZE, &timeout);
-		if (eventCount == -1) 		{
-			cerr << "kevent() error" << endl;
-			exit(1);
-		}
-
-		this->_changes.clear();
-
-		// 발생한 이벤트 처리
-		for (int i = 0; i < eventCount; i++)
-			handleEvent(_events[i]);
-	}
-}
+/* ---------------------------------- PRIVATE ---------------------------------- */
 
 void Server::initServer() {
 	struct sockaddr_in serverAddr;
@@ -124,6 +80,29 @@ void Server::updateKevent(uintptr_t ident, int16_t filter, uint16_t flags, uint3
 	this->_changes.push_back(change);
 }
 
+void Server::handleEvent(struct kevent &event) {
+	// 이벤트 유형 구분
+	if (event.flags & EV_ERROR) { // 에러 이벤트 체크
+		if (event.ident == (const uintptr_t)this->_serverSocket) {
+			cerr << "server socket event error" << endl;
+			exit(1);
+		}
+		else {
+			cerr << "client socket event error" << endl;
+			disconnetClient(event.ident);
+		}
+	}
+	else if (event.filter == EVFILT_READ) {
+		// server 소켓이면 연결 요청 수락, client 소켓이면 메시지 수신
+		if (event.ident == (const uintptr_t)this->_serverSocket)
+			acceptConnection();
+		else
+			recvMessage(event.ident);
+	} else if (event.filter == EVFILT_WRITE) {
+		sendMessage(event.ident);
+	}
+}
+
 // client 연결 수락 및 소켓 생성
 void Server::acceptConnection() {
 	// client 소켓 정보 저장할 구조체
@@ -153,44 +132,6 @@ void Server::acceptConnection() {
 	this->_users.insert(make_pair(clientSocket, user));
 }
 
-void Server::disconnetClient(int clientSocket) {
-	map<int, User *>::iterator it = this->_users.find(clientSocket);
-	User *user = it->second;
-
-	if (it == this->_users.end())
-		return ;
-	this->_users.erase(it);
-
-	//채널 삭제 추가 필요
-	delete user;
-
-	// close(clientSocket);
-	cout << "client disconnected : " << clientSocket << endl;
-}
-
-void Server::handleEvent(struct kevent &event) {
-	// 이벤트 유형 구분
-	if (event.flags & EV_ERROR) { // 에러 이벤트 체크
-		if (event.ident == (const uintptr_t)this->_serverSocket) {
-			cerr << "server socket event error" << endl;
-			exit(1);
-		}
-		else {
-			cerr << "client socket event error" << endl;
-			disconnetClient(event.ident);
-		}
-	}
-	else if (event.filter == EVFILT_READ) {
-		// server 소켓이면 연결 요청 수락, client 소켓이면 메시지 수신
-		if (event.ident == (const uintptr_t)this->_serverSocket)
-			acceptConnection();
-		else
-			recvMessage(event.ident);
-	} else if (event.filter == EVFILT_WRITE) {
-		sendMessage(event.ident);
-	}
-}
-
 void Server::recvMessage(int clientSocket) {
 	char buf[MAX_MESSAGE_SIZE + 1];
 	map<int, User *>::iterator it = this->_users.find(clientSocket);
@@ -209,64 +150,6 @@ void Server::recvMessage(int clientSocket) {
 		user->appendCommand(buf);
 		handleCmdMessage(user);
 	}
-}
-
-size_t Server::findCRLF(string message) {
-	size_t crPos = message.find("\r");
-	size_t lfPos = message.find("\n");
-
-	if (lfPos == string::npos) return crPos;
-	if (crPos == string::npos) return lfPos;
-	return min(crPos, lfPos);
-}
-
-void Server::sendMessage(int clientSocket) {
-	map<int, User *>::iterator it = this->_users.find(clientSocket);
-	User *user = it->second;
-	int sendSize;
-
-	if (it == this->_users.end())
-		return ;
-	if (user->getMessageBuffer().empty())
-		return ;
-
-	sendSize = send(clientSocket, user->getMessageBuffer().c_str(), user->getMessageBuffer().length(), 0);
-	if (sendSize == -1) {
-		cerr << "send() error" << endl;
-		disconnetClient(clientSocket);
-	}
-	else {
-		user->setMessageBuffer(user->getMessageBuffer().substr(sendSize));
-	}
-}
-
-void Server::addChannel(Channel *channel) {
-	cout << "add channel : " << channel->getChannelName() << endl;
-	this->_channels.insert(make_pair(channel->getChannelName(), channel));
-}
-
-Channel *Server::findChannel(string channelName) {
-	for(map<string, Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
-		if (it->second->getChannelName() == channelName)
-			return it->second;
-	return NULL;
-}
-
-User *Server::findUser(string username) {
-	for(map<int, User *>::iterator it = this->_users.begin(); it != this->_users.end(); it++)
-		if (it->second->getNickname() == username)
-			return it->second;
-	return NULL;
-}
-
-void Server::deleteChannel(string channelName) {
-	Channel *channel = findChannel(channelName);
-	if (channel == NULL)
-		return ;
-
-	cout << "delete channel : " << channelName << endl;
-	this->_channels.erase(channelName);
-	delete channel;
 }
 
 void Server::handleCmdMessage(User *user) {
@@ -289,4 +172,127 @@ void Server::handleCmdMessage(User *user) {
 		// 명령어 처리
 		this->_command->handleCommand(message, user);
 	}
+}
+
+size_t Server::findCRLF(string message) {
+	size_t crPos = message.find("\r");
+	size_t lfPos = message.find("\n");
+
+	if (lfPos == string::npos) return crPos;
+	if (crPos == string::npos) return lfPos;
+	return min(crPos, lfPos);
+}
+
+/* ----------------------------------- PUBLIC ---------------------------------- */
+
+int Server::getPort() const {
+	return this->_port;
+}
+
+string Server::getServerName() const {
+	return this->_serverName;
+}
+
+string Server::getPassword() const {
+	return this->_password;
+}
+
+map<int, User *> Server::getUsers() const {
+	return this->_users;
+}
+
+string Server::getServerPrefix() const {
+	return this->_serverName;
+}
+
+map<string, Channel *> Server::getChannels() const {
+	return this->_channels;
+}
+
+void Server::setServerName(string serverName) {
+	this->_serverName = serverName;
+}
+
+void Server::run() {
+	initKqueue();
+	while (1) {
+		struct timespec timeout = {KQUEUE_TIMEOUT, 0}; // 3분 타임아웃
+
+		// kqueue에 등록된 이벤트가 발생할 때까지 대기, 이벤트 수만큼 반환
+		int eventCount = kevent(this->_kq, &this->_changes[0], this->_changes.size(), this->_events, KQUEUE_SIZE, &timeout);
+		if (eventCount == -1) 		{
+			cerr << "kevent() error" << endl;
+			exit(1);
+		}
+
+		this->_changes.clear();
+
+		// 발생한 이벤트 처리
+		for (int i = 0; i < eventCount; i++)
+			handleEvent(_events[i]);
+	}
+}
+
+void Server::sendMessage(int clientSocket) {
+	map<int, User *>::iterator it = this->_users.find(clientSocket);
+	User *user = it->second;
+	int sendSize;
+
+	if (it == this->_users.end())
+		return ;
+	if (user->getMessageBuffer().empty())
+		return ;
+
+	sendSize = send(clientSocket, user->getMessageBuffer().c_str(), user->getMessageBuffer().length(), 0);
+	if (sendSize == -1) {
+		cerr << "send() error" << endl;
+		disconnetClient(clientSocket);
+	}
+	else {
+		user->setMessageBuffer(user->getMessageBuffer().substr(sendSize));
+	}
+}
+
+void Server::disconnetClient(int clientSocket) {
+	map<int, User *>::iterator it = this->_users.find(clientSocket);
+	User *user = it->second;
+
+	if (it == this->_users.end())
+		return ;
+	this->_users.erase(it);
+
+	//채널 삭제 추가 필요
+	delete user;
+
+	// close(clientSocket);
+	cout << "client disconnected : " << clientSocket << endl;
+}
+
+void Server::addChannel(Channel *channel) {
+	cout << "add channel : " << channel->getChannelName() << endl;
+	this->_channels.insert(make_pair(channel->getChannelName(), channel));
+}
+
+Channel *Server::findChannel(string channelName) {
+	for(map<string, Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
+		if (it->second->getChannelName() == channelName)
+			return it->second;
+	return NULL;
+}
+
+void Server::deleteChannel(string channelName) {
+	Channel *channel = findChannel(channelName);
+	if (channel == NULL)
+		return ;
+
+	cout << "delete channel : " << channelName << endl;
+	this->_channels.erase(channelName);
+	delete channel;
+}
+
+User *Server::findUser(string username) {
+	for(map<int, User *>::iterator it = this->_users.begin(); it != this->_users.end(); it++)
+		if (it->second->getNickname() == username)
+			return it->second;
+	return NULL;
 }

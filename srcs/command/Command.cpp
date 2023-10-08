@@ -1,5 +1,7 @@
 #include "Command.hpp"
 
+/* ------------------------------ CANONICAL FORM ------------------------------- */
+
 Command::Command(Server *server) : _server(server) {
 	this->_commands["PASS"] = &Command::PASS;
 	this->_commands["PING"] = &Command::PING;
@@ -18,6 +20,8 @@ Command::Command(Server *server) : _server(server) {
 }
 
 Command::~Command() {}
+
+/* ----------------------------------- PUBLIC ---------------------------------- */
 
 void Command::handleCommand(Message &message, User *user) {
 	string command = message.getCommand();
@@ -51,6 +55,8 @@ void Command::broadcast(Channel *channel, string message) {
 		it->second->appendMessage(message);
 	}
 }
+
+/* ---------------------------------- PRIVATE ---------------------------------- */
 
 void Command::welcomMessage(User *user) {
 	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "Welcome to the")));

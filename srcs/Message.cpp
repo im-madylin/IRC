@@ -1,6 +1,8 @@
 #include "Message.hpp"
 #include <iostream>
 
+/* ------------------------------ CANONICAL FORM ------------------------------- */
+
 Message::Message() {}
 
 Message::Message(const string &message) {
@@ -8,6 +10,8 @@ Message::Message(const string &message) {
 }
 
 Message::~Message() {}
+
+/* ----------------------------------- PUBLIC ---------------------------------- */
 
 string Message::getPrefix() const {
 	return this->_prefix;

@@ -1,5 +1,7 @@
 #include "Bot.hpp"
 
+/* ------------------------------ CANONICAL FORM ------------------------------- */
+
 Bot::Bot() : _birthDate(0) {
 	string str;
 	time_t timer = time(NULL);
@@ -13,6 +15,14 @@ Bot::~Bot() {
 	vector<string>().swap(this->_luckyItemList); // capacity 0?
 	this->_luckyItemList.clear();
 	vector<string>().swap(this->_luckyItemList); // capacity 0
+}
+
+/* ----------------------------------- PUBLIC ---------------------------------- */
+
+const string Bot::getRandom(const vector<string>& list) const {
+	// 오늘 날짜와 생년월일을 결합한 값을 시드로 사용
+	srand(static_cast<unsigned>(this->_curDate + this->_birthDate));
+	return list[rand() % list.size()];
 }
 
 void Bot::initList() {
@@ -31,12 +41,6 @@ void Bot::initList() {
 	this->_luckyItemList.push_back("SOCKS");
 	this->_luckyItemList.push_back("SHIRT");
 	this->_luckyItemList.push_back("PEN");
-}
-
-const string Bot::getRandom(const vector<string>& list) const {
-	// 오늘 날짜와 생년월일을 결합한 값을 시드로 사용
-	srand(static_cast<unsigned>(this->_curDate + this->_birthDate));
-	return list[rand() % list.size()];
 }
 
 string Bot::inputBirthDate(string param) {
