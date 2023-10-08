@@ -35,7 +35,7 @@ class User {
 		string	getRealName();
 		string	getUserPrefix();
 		bool	getIsRegistered();
-		map<string, Channel *>	getJoinedChanels();
+		map<string, Channel *>	getJoinedChannels();
 		bool	getAuth();
 		void 	setMessageBuffer(string messageBuffer);
 		void 	setCommandBuffer(string commandBuffer);

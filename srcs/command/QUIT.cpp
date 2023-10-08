@@ -16,5 +16,5 @@ void Command::QUIT(Message &message, User *user) {
 		user->appendMessage(msg + str + "\r\n");
 	}
 
-	this->_server->disconnetClient(user->getFd());
+	this->_server->disconnectClient(user->getFd());
 }

@@ -24,7 +24,7 @@ void	Command::WHO(Message &message, User *user) {
 		for(map<int, User *>::iterator it = users.begin(); it != users.end(); it++) {
 			User *targetUser = it->second;
 			if (targetUser->getNickname() == name || targetUser->getUsername() == name || targetUser->getRealName() == name) {
-				string channelname = it->second->getJoinedChanels().begin()->first;
+				string channelname = it->second->getJoinedChannels().begin()->first;
 				user->appendMessage(generateReply(serverPrefix, RPL_WHOREPLY(user->getNickname(), channelname, serverPrefix, *targetUser)));
 				break;
 			}
