@@ -39,6 +39,9 @@ void Message::setParams(vector<string> params) {
 	this->_params = params;
 }
 
+// message = [ ":" prefix SPACE ] command [ params ] crlf
+// params     =  *14( SPACE middle ) [ SPACE ":" trailing ]
+//            =/ 14( SPACE middle ) [ SPACE [ ":" ] trailing ]
 void Message::parseMessage(const string &message) {
 	std::string prefix;
 	std::string command;
