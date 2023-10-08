@@ -30,50 +30,47 @@ using namespace std;
 
 class Server {
 	private:
-		int		_kq;
-		int		_port; // client 서버 접속시 필요한 Port 번호
-		int		_serverSocket;
-		string	_password;
-		string	_serverName;
+		int						_kq;
+		int						_port; // client 서버 접속시 필요한 Port 번호
+		int						_serverSocket;
+		string					_password;
+		string					_serverName;
 
-		struct kevent _events[KQUEUE_SIZE]; // 이벤트 저장 배열
-		map<int, User *> _users;
-		map<string, Channel *> _channels;
-		vector<struct kevent> _changes;
-		Command*			_command;
+		struct kevent			_events[KQUEUE_SIZE]; // 이벤트 저장 배열
+		map<int, User *>		_users;
+		map<string, Channel *>	_channels;
+		vector<struct kevent>	_changes;
+		Command*				_command;
 
-		void	initServer();
-		void	initKqueue();
-		void	acceptConnection();
-		void	handleEvent(struct kevent &event);
-	
-		void	recvMessage(int clientSocket);
-		size_t	findCRLF(string message);
-		void	handleCmdMessage(User *user);
-
-		void 	updateKevent(uintptr_t ident, int16_t filter, uint16_t flags, uint32_t fflags, intptr_t data, void *udata);
+		void					initServer();
+		void					initKqueue();
+		void					updateKevent(uintptr_t ident, int16_t filter, uint16_t flags, uint32_t fflags, intptr_t data, void *udata);
+		void					handleEvent(struct kevent &event);
+		void					acceptConnection();
+		void					recvMessage(int clientSocket);
+		void					handleCmdMessage(User *user);
+		size_t					findCRLF(string message);
 
 	public:
 		Server(string port, string password);
 		~Server();
 
-		int		getPort() const;
-		string	getServerName() const;
-		string	getPassword() const;
-		map<int, User *>	getUsers() const;
-		string 	getServerPrefix() const;
-		map<string, Channel *> getChannels() const;
+		int						getPort() const;
+		string					getServerName() const;
+		string					getPassword() const;
+		map<int, User *>		getUsers() const;
+		string					getServerPrefix() const;
+		map<string, Channel *>	getChannels() const;
 
-		void	setServerName(string serverName);
+		void					setServerName(string serverName);
 
-		void	run();
-		void	sendMessage(int clientSocket);
-		void	addChannel(Channel *channel);
-		Channel *findChannel(string channelName);
-		User	*findUser(string username);
-		void	deleteChannel(string channelName);
-		void	disconnetClient(int clientFd);
-		
+		void					run();
+		void					sendMessage(int clientSocket);
+		void					disconnetClient(int clientFd);
+		void					addChannel(Channel *channel);
+		Channel					*findChannel(string channelName);
+		void					deleteChannel(string channelName);
+		User					*findUser(string username);
 };
 
 #endif

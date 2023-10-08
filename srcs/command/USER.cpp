@@ -1,12 +1,8 @@
 #include "Command.hpp"
-#include "../Message.hpp"
-#include "../user/User.hpp"
-#include "../server/Server.hpp"
 
 // <nickname>!<username>@<host>
-void Command::USER(Message &message, User *user)
-{
-	string	serverPrefix = this->_server->getServerPrefix();
+void Command::USER(Message &message, User *user) {
+	string serverPrefix = this->_server->getServerPrefix();
 	
 	if (message.getParams().size() < 4)
 		return user->appendMessage(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "USER")));

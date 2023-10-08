@@ -1,14 +1,10 @@
 #include "Command.hpp"
-#include "../server/Server.hpp"
-#include "../channel/Channel.hpp"
-#include "../Message.hpp"
 
 // :irc.local 401 eunbi go :No such nick
 // :eunbi!root@127.0.0.1 KICK #go test :
 // :irc.local 441 peach test #go :They are not on that channel
 // :irc.local 442 test #go :You're not on that channel!
-void Command::KICK(Message &message, User *user)
-{
+void Command::KICK(Message &message, User *user) {
 	string serverPrefix = this->_server->getServerPrefix();
 	string userPrefix = user->getUserPrefix();
 	string clientName = user->getNickname();

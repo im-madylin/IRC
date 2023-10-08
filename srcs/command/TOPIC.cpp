@@ -1,10 +1,6 @@
 #include "Command.hpp"
-#include "../server/Server.hpp"
-#include "../channel/Channel.hpp"
-#include "../Message.hpp"
 
-void Command::TOPIC(Message &message, User *user)
-{
+void Command::TOPIC(Message &message, User *user) {
 	string serverPrefix = this->_server->getServerPrefix();
 	string userPrefix = user->getUserPrefix();
 	string clientName = user->getNickname();

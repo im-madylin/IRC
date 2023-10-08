@@ -44,37 +44,37 @@ class Channel {
 		Channel(std::string& name);
 		~Channel();
 
-		string			getChannelName();
-		map<int, User *>getUsers();
-		vector<string>	getUserList();
-		string			getTopic();
-		set<ChannelMode> getModes();
-		set<int>		getInviteList();
-		string			getKey();
-		string			getModeString();
-		size_t			getLimit();
+		string				getChannelName() const;
+		map<int, User *>	getUsers() const;
+		vector<string>		getUserList();
+		string				getTopic() const;
+		set<ChannelMode>	getModes() const;
+		set<int>			getInviteList() const;
+		string				getKey() const;
+		string				getModeString();
+		size_t				getLimit() const;
 
-		void			setTopic(string topic);
-		void			setKey(string key);
-		void			setLimit(int limit);
+		void				setTopic(string topic);
+		void				setKey(string key);
+		void				setLimit(int limit);
 
-		void		addUser(int fd, User *user);
-		void		deleteUser(int fd);
-		User*		findUser(int fd) const;
-		User*		findUser(string nickname) const;
-		bool		isOperator(int fd) const;
-		bool		isOperator(User *user) const;
-		void		addOper(int fd);
-		void		deleteOper(int fd);
-		void		addInvite(int fd);
-		void		deleteInvite(int fd);
-		bool		isExistUser(int fd) const;
-		bool		isFull() const;
-		bool		hasMode(ChannelMode mode) const;
-		void		addMode(ChannelMode mode);
-		void		deleteMode(ChannelMode mode);
-		bool		isInvited(int fd) const;
-		string		executeBot(string date);
+		void				addUser(int fd, User *user);
+		void				deleteUser(int fd);
+		User*				findUser(int fd) const;
+		User*				findUser(string nickname) const;
+		bool				isOperator(int fd) const;
+		bool				isOperator(User *user) const;
+		void				addOper(int fd);
+		void				deleteOper(int fd);
+		bool				isExistUser(int fd) const;
+		bool				isFull() const;
+		bool				hasMode(ChannelMode mode) const;
+		void				addMode(ChannelMode mode);
+		void				deleteMode(ChannelMode mode);
+		bool				isInvited(int fd) const;
+		void				addInvite(int fd);
+		void				deleteInvite(int fd);
+		string				executeBot(string date);
 };
 
 #endif

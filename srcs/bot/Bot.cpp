@@ -1,47 +1,48 @@
 #include "Bot.hpp"
 
-Bot::Bot() {
+/* ----------------------------------- PUBLIC ---------------------------------- */
+
+Bot::Bot() : _birthDate(0) {
 	string str;
 	time_t timer = time(NULL);
 	struct tm *t = localtime(&timer);
-	_curDate = (t->tm_year + 1900) * 10000 + (t->tm_mon + 1) * 100 + t->tm_mday;
-	_birthDate = 0;
+	this->_curDate = (t->tm_year + 1900) * 10000 + (t->tm_mon + 1) * 100 + t->tm_mday;
 	initList();
 }
 
 Bot::~Bot() {
-	_todayLuckColor.clear();
-	vector<string>().swap(_luckyItemList); // capacity 0?
-	_luckyItemList.clear();
-	vector<string>().swap(_luckyItemList); // capacity 0
-}
-
-void Bot::initList() {
-	_todayLuckColor.push_back("RED");
-	_todayLuckColor.push_back("ORANGE");
-	_todayLuckColor.push_back("YELLOW");
-	_todayLuckColor.push_back("GREEN");
-	_todayLuckColor.push_back("BLUE");
-	_todayLuckColor.push_back("PURPLE");
-	_todayLuckColor.push_back("WHITE");
-	_todayLuckColor.push_back("BLACK");
-
-	_luckyItemList.push_back("WALLET");
-	_luckyItemList.push_back("CANDY");
-	_luckyItemList.push_back("NECKLACE");
-	_luckyItemList.push_back("SOCKS");
-	_luckyItemList.push_back("SHIRT");
-	_luckyItemList.push_back("PEN");
+	this->_todayLuckColor.clear();
+	vector<string>().swap(this->_luckyItemList); // capacity 0?
+	this->_luckyItemList.clear();
+	vector<string>().swap(this->_luckyItemList); // capacity 0
 }
 
 const string Bot::getRandom(const vector<string>& list) const {
 	// 오늘 날짜와 생년월일을 결합한 값을 시드로 사용
-	srand(static_cast<unsigned>(_curDate + _birthDate));
+	srand(static_cast<unsigned>(this->_curDate + this->_birthDate));
 	return list[rand() % list.size()];
 }
 
+void Bot::initList() {
+	this->_todayLuckColor.push_back("RED");
+	this->_todayLuckColor.push_back("ORANGE");
+	this->_todayLuckColor.push_back("YELLOW");
+	this->_todayLuckColor.push_back("GREEN");
+	this->_todayLuckColor.push_back("BLUE");
+	this->_todayLuckColor.push_back("PURPLE");
+	this->_todayLuckColor.push_back("WHITE");
+	this->_todayLuckColor.push_back("BLACK");
+
+	this->_luckyItemList.push_back("WALLET");
+	this->_luckyItemList.push_back("CANDY");
+	this->_luckyItemList.push_back("NECKLACE");
+	this->_luckyItemList.push_back("SOCKS");
+	this->_luckyItemList.push_back("SHIRT");
+	this->_luckyItemList.push_back("PEN");
+}
+
 string Bot::inputBirthDate(string param) {
-	int		intParam;
+	int intParam;
 
 	if (param.length() != 8)
 		return "ERROR : Format must be YYYYMMDD";
@@ -51,15 +52,15 @@ string Bot::inputBirthDate(string param) {
 			return "ERROR : Format must be YYYYMMDD";
 
 	istringstream(param) >> intParam;
-	if (intParam < 0 || intParam > _curDate)
+	if (intParam < 0 || intParam > this->_curDate)
 		return "ERROR : Wrong birthdate";
 
-	_birthDate = intParam;
+	this->_birthDate = intParam;
 	return "";
 }
 
 const string Bot::showLuckyItem() const {
-	if (_birthDate == 0)
+	if (this->_birthDate == 0)
 		return "ERROR : You must input birthdate";
-	return " *****  YOUR LUCKY ITEM : " + getRandom(_todayLuckColor) + " " + getRandom(_luckyItemList) + " ***** ";
+	return " *****  YOUR LUCKY ITEM : " + getRandom(this->_todayLuckColor) + " " + getRandom(this->_luckyItemList) + " ***** ";
 }

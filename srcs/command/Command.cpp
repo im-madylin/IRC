@@ -1,54 +1,44 @@
 #include "Command.hpp"
-#include "../user/User.hpp"
-#include "../server/Server.hpp"
-#include "../Message.hpp"
 
-Command::Command(Server *server) : _server(server)
-{
-	_commands["PASS"] = &Command::PASS;
-	_commands["PING"] = &Command::PING;
-	_commands["NICK"] = &Command::NICK;
-	_commands["USER"] = &Command::USER;
-	_commands["JOIN"] = &Command::JOIN;
-	_commands["PART"] = &Command::PART;
-	_commands["TOPIC"] = &Command::TOPIC;
-	_commands["PRIVMSG"] = &Command::PRIVMSG;
-	_commands["NOTICE"] = &Command::NOTICE;
-	_commands["KICK"] = &Command::KICK;
-	_commands["INVITE"] = &Command::INVITE;
-	_commands["QUIT"] = &Command::QUIT;
-	_commands["WHO"] = &Command::WHO;
-	_commands["MODE"] = &Command::MODE;
+/* ----------------------------------- PUBLIC ---------------------------------- */
+
+Command::Command(Server *server) : _server(server) {
+	this->_commands["PASS"] = &Command::PASS;
+	this->_commands["PING"] = &Command::PING;
+	this->_commands["NICK"] = &Command::NICK;
+	this->_commands["USER"] = &Command::USER;
+	this->_commands["JOIN"] = &Command::JOIN;
+	this->_commands["PART"] = &Command::PART;
+	this->_commands["TOPIC"] = &Command::TOPIC;
+	this->_commands["PRIVMSG"] = &Command::PRIVMSG;
+	this->_commands["NOTICE"] = &Command::NOTICE;
+	this->_commands["KICK"] = &Command::KICK;
+	this->_commands["INVITE"] = &Command::INVITE;
+	this->_commands["QUIT"] = &Command::QUIT;
+	this->_commands["WHO"] = &Command::WHO;
+	this->_commands["MODE"] = &Command::MODE;
 }
 
-Command::~Command()
-{
-}
+Command::~Command() {}
 
-void Command::handleCommand(Message &message, User *user)
-{
+void Command::handleCommand(Message &message, User *user) {
 	string command = message.getCommand();
 
-	if (user->getAuth() == true || command == "PASS")
-	{
-		if (_commands.find(command) != _commands.end()) {
+	if (user->getAuth() == true || command == "PASS") {
+		if (this->_commands.find(command) != this->_commands.end()) {
 			(this->*_commands[command])(message, user);
 		}
 	}
 	else
-	{
 		cout << "You must get Auth" << endl;
-	}
 }
 
 // 임시로 만든 함수
-void Command::sendToClient(int fd, string message)
-{
+void Command::sendToClient(int fd, string message) {
 	send(fd, message.c_str(), message.length(), 0);
 }
 
-void Command::broadcast(int ignoreFd, Channel *channel, string message)
-{
+void Command::broadcast(int ignoreFd, Channel *channel, string message) {
 	map<int, User *> user = channel->getUsers();
 	for(map<int, User *>::iterator it = user.begin(); it != user.end(); it++) {
 		if (it->first == ignoreFd)
@@ -57,16 +47,16 @@ void Command::broadcast(int ignoreFd, Channel *channel, string message)
 	}
 }
 
-void Command::broadcast(Channel *channel, string message)
-{
+void Command::broadcast(Channel *channel, string message) {
 	map<int, User *> user = channel->getUsers();
 	for(map<int, User *>::iterator it = user.begin(); it != user.end(); it++) {
 		it->second->appendMessage(message);
 	}
 }
 
-void Command::welcomMessage(User *user)
-{
+/* ---------------------------------- PRIVATE ---------------------------------- */
+
+void Command::welcomMessage(User *user) {
 	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "Welcome to the")));
 	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "  _              _____                    ")));
 	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "(_)            |  ___|                   ")));

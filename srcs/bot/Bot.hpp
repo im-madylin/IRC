@@ -20,9 +20,10 @@ class Bot {
 		Bot(); // list 초기화
 		~Bot(); // list 삭제
 
+		const string	getRandom(const vector<string>& list) const;
+		
 		void			initList();
 		string			inputBirthDate(string param); // 생년월일 입력받음
-		const string	getRandom(const vector<string>& list) const;
 		const string	showLuckyItem() const;
 };
 

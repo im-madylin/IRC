@@ -1,21 +1,17 @@
 # include "Command.hpp"
-# include "../Message.hpp"
-# include "../user/User.hpp"
-# include "../server/Server.hpp"
 
-void	Command::WHO(Message &message, User *user)
-{
-	string	serverPrefix = _server->getServerPrefix();
+void	Command::WHO(Message &message, User *user) {
+	string serverPrefix = this->_server->getServerPrefix();
 
 	if (message.getParamsSize() == 0 || message.getParams()[0].length() == 0)
 		return user->appendMessage(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "WHO")));
 
-	bool	operatorListFlag = false;
+	bool operatorListFlag = false;
 	if (message.getParamsSize() == 2 && message.getParams()[1] == "o")
 		operatorListFlag = true;
 	string name = message.getParams()[0];
-	Channel *targetChannel = _server->findChannel(name);
-	if (targetChannel){
+	Channel *targetChannel = this->_server->findChannel(name);
+	if (targetChannel) {
 		map<int, User *> users = targetChannel->getUsers();
 		for(map<int, User *>::iterator it = users.begin(); it != users.end(); it++) {
 			if (operatorListFlag && !targetChannel->isOperator(it->first))
@@ -24,7 +20,7 @@ void	Command::WHO(Message &message, User *user)
 		}
 	}
 	else {
-		map<int, User *> users = _server->getUsers();
+		map<int, User *> users = this->_server->getUsers();
 		for(map<int, User *>::iterator it = users.begin(); it != users.end(); it++) {
 			User *targetUser = it->second;
 			if (targetUser->getNickname() == name || targetUser->getUsername() == name || targetUser->getRealName() == name) {

@@ -1,11 +1,6 @@
 #include "Command.hpp"
-#include "../server/Server.hpp"
-#include "../channel/Channel.hpp"
-#include "../Message.hpp"
-#include "NumericReplies.hpp"
 
-void Command::JOIN(Message &message, User *user)
-{
+void Command::JOIN(Message &message, User *user) {
 	string serverPrefix = this->_server->getServerPrefix();
 	string userPrefix = user->getUserPrefix();
 	string clientName = user->getNickname();
