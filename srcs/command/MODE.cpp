@@ -1,7 +1,4 @@
 #include "Command.hpp"
-#include "../Message.hpp"
-#include "../user/User.hpp"
-#include "../server/Server.hpp"
 
 // channel mode
 // i(invite only), t(topic), k(key, channel password), o(operator), l(user limit) 구현

@@ -1,7 +1,4 @@
 #include "Command.hpp"
-#include "../Message.hpp"
-#include "../user/User.hpp"
-#include "../server/Server.hpp"
 
 // <nickname>!<username>@<host>
 void Command::USER(Message &message, User *user)

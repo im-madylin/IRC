@@ -1,7 +1,4 @@
 #include "Command.hpp"
-#include "../server/Server.hpp"
-#include "../channel/Channel.hpp"
-#include "../Message.hpp"
 
 // :irc.local 401 eunbi go :No such nick
 // :eunbi!root@127.0.0.1 KICK #go test :

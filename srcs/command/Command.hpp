@@ -6,7 +6,10 @@
 # include <map>
 
 # include "../Utils.hpp"
+# include "../server/Server.hpp"
 # include "../channel/Channel.hpp"
+# include "../user/User.hpp"
+# include "../Message.hpp"
 # include "NumericReplies.hpp"
 
 # define NICKNAME_MAX_SIZE 9

@@ -1,7 +1,4 @@
 #include "Command.hpp"
-#include "../server/Server.hpp"
-#include "../channel/Channel.hpp"
-#include "../Message.hpp"
 
 void Command::INVITE(Message &message, User *user)
 {

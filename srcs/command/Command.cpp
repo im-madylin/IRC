@@ -1,7 +1,4 @@
 #include "Command.hpp"
-#include "../user/User.hpp"
-#include "../server/Server.hpp"
-#include "../Message.hpp"
 
 Command::Command(Server *server) : _server(server)
 {

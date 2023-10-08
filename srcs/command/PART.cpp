@@ -1,7 +1,4 @@
 #include "Command.hpp"
-#include "../server/Server.hpp"
-#include "../channel/Channel.hpp"
-#include "../Message.hpp"
 
 void Command::PART(Message &message, User *user)
 {
@@ -18,6 +15,7 @@ void Command::PART(Message &message, User *user)
 		if (channel == NULL) {
 			user->appendMessage(generateReply(serverPrefix, ERR_NOSUCHCHANNEL(user->getNickname(), *it)));
 			continue ;
+		}
 		if (!channel->isExistUser(user->getFd())) {
 			user->appendMessage(generateReply(serverPrefix, ERR_NOTONCHANNEL(user->getNickname(), *it)));
 			continue ;

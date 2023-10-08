@@ -1,8 +1,4 @@
 #include "Command.hpp"
-#include "../Message.hpp"
-#include "../user/User.hpp"
-#include "../server/Server.hpp"
-#include "NumericReplies.hpp"
 
 void Command::PASS(Message &message, User *user)
 {

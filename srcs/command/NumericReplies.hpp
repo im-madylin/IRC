@@ -4,6 +4,8 @@
 # include <string>
 # include <vector>
 
+# include "../user/User.hpp"
+# include "../channel/Channel.hpp"
 # include "../Utils.hpp"
 
 using namespace std;

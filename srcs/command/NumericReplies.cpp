@@ -1,6 +1,4 @@
 #include "NumericReplies.hpp"
-#include "../user/User.hpp"
-#include "../channel/Channel.hpp"
 
 string getSymbol(Channel &channel)
 {

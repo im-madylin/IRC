@@ -1,7 +1,4 @@
 #include "Command.hpp"
-#include "../Message.hpp"
-#include "../user/User.hpp"
-#include "../server/Server.hpp"
 
 void Command::PRIVMSG(Message &message, User *user)
 {

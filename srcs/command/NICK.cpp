@@ -1,8 +1,4 @@
 #include "Command.hpp"
-#include "../Message.hpp"
-#include "../user/User.hpp"
-#include "../server/Server.hpp"
-#include "NumericReplies.hpp"
 
 //알파벳, 숫자, 밑줄, 대시만 사용 가능
 //첫글자는 알파벳이나 밑줄로 시작
