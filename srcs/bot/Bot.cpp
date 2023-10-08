@@ -43,6 +43,9 @@ void Bot::initList() {
 
 string Bot::inputBirthDate(string param) {
 	int intParam;
+	int year;
+	int month;
+	int day;
 
 	if (param.length() != 8)
 		return "ERROR : Format must be YYYYMMDD";
@@ -52,7 +55,11 @@ string Bot::inputBirthDate(string param) {
 			return "ERROR : Format must be YYYYMMDD";
 
 	istringstream(param) >> intParam;
-	if (intParam < 0 || intParam > this->_curDate)
+	year = intParam/10000;
+	month = (intParam % 10000) / 100;
+	day = intParam % 100;
+	if (intParam < 0 || intParam > this->_curDate || \
+		year < 1900 || year > 2100 || month < 1 || month > 12 || day < 1 || day > 31)
 		return "ERROR : Wrong birthdate";
 
 	this->_birthDate = intParam;
