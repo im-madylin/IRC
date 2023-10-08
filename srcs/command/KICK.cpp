@@ -1,9 +1,5 @@
 #include "Command.hpp"
 
-// :irc.local 401 eunbi go :No such nick
-// :eunbi!root@127.0.0.1 KICK #go test :
-// :irc.local 441 peach test #go :They are not on that channel
-// :irc.local 442 test #go :You're not on that channel!
 void Command::KICK(Message &message, User *user) {
 	string serverPrefix = this->_server->getServerPrefix();
 	string userPrefix = user->getUserPrefix();
@@ -28,9 +24,11 @@ void Command::KICK(Message &message, User *user) {
 	if (!channel->isOperator(user))
 		return user->appendMessage(generateReply(serverPrefix, ERR_CHANOPRIVSNEEDED(clientName, channelName)));
 	
+	string broadcastMessage = "KICK " + channelName + " " + targetName + " :";
+	this->broadcast(channel, generateReply(userPrefix, broadcastMessage));
+
 	channel->deleteUser(target->getFd());
 	target->leaveChannel(channelName);
-	
-	string broadcastMessage = " KICK " + channelName + " " + targetName + " :";
-	this->broadcast(channel, generateReply(userPrefix, broadcastMessage));
+	if (channel->isInvited(target->getFd()))
+		channel->deleteInvite(target->getFd());
 }
