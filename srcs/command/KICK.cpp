@@ -31,4 +31,6 @@ void Command::KICK(Message &message, User *user) {
 	target->leaveChannel(channelName);
 	if (channel->isInvited(target->getFd()))
 		channel->deleteInvite(target->getFd());
+	if (channel->getUsers().empty())
+		this->_server->deleteChannel(channel->getChannelName());
 }

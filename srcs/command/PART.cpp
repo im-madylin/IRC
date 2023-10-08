@@ -23,5 +23,7 @@ void Command::PART(Message &message, User *user) {
 		this->broadcast(channel, generateReply(userPrefix, " PART " + *it));
 		channel->deleteUser(user->getFd());
 		user->leaveChannel(*it);
+		if (channel->getUsers().empty())
+			this->_server->deleteChannel(channel->getChannelName());
 	}
 }
