@@ -1,7 +1,6 @@
 #include "Command.hpp"
 
-void Command::PART(Message &message, User *user)
-{
+void Command::PART(Message &message, User *user) {
 	string serverPrefix = this->_server->getServerPrefix();
 	string userPrefix = user->getUserPrefix();
 

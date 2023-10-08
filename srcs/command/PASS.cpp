@@ -1,7 +1,6 @@
 #include "Command.hpp"
 
-void Command::PASS(Message &message, User *user)
-{
+void Command::PASS(Message &message, User *user) {
 	string serverPrefix = this->_server->getServerPrefix();
 
 	//파라미터가 없는 경우

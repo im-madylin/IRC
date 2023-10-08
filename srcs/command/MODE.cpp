@@ -2,16 +2,15 @@
 
 // channel mode
 // i(invite only), t(topic), k(key, channel password), o(operator), l(user limit) 구현
-void Command::MODE(Message &message, User *user)
-{
-	string	serverPrefix = this->_server->getServerPrefix();
-	string	userPrefix = user->getUserPrefix();
-	string	clientName = user->getNickname();
+void Command::MODE(Message &message, User *user) {
+	string serverPrefix = this->_server->getServerPrefix();
+	string userPrefix = user->getUserPrefix();
+	string clientName = user->getNickname();
 
 	if (message.getParamsSize() < 1)
 		return user->appendMessage(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(clientName, "MODE")));
 
-	string	channelName = message.getParams()[0];
+	string channelName = message.getParams()[0];
 	Channel *channel = this->_server->findChannel(channelName);
 	if (!user->isInChannel(channelName))
 		return user->appendMessage(generateReply(serverPrefix, ERR_NOSUCHCHANNEL(clientName, channelName)));
@@ -22,13 +21,12 @@ void Command::MODE(Message &message, User *user)
 	if (!channel->isOperator(user))
 		return user->appendMessage(generateReply(serverPrefix, ERR_CHANOPRIVSNEEDED(clientName, channelName)));
 	
-	string	mode = message.getParams()[1];
+	string mode = message.getParams()[1];
 	bool isPlus = true;
 	size_t paramIndex = 2;
 	string applyMode = "";
 	string middle = " ";
-	for (size_t i = 0; i < mode.size(); i++)
-	{
+	for (size_t i = 0; i < mode.size(); i++) {
 		if (mode[i] == '+')
 			isPlus = true;
 		else if (mode[i] == '-')
@@ -114,14 +112,12 @@ void Command::MODE(Message &message, User *user)
 	broadcast(channel, generateReply(userPrefix, MODE_REPLY(channelName, params)));
 }
 
-void Command::addKeyMode(Channel *channel, string key)
-{
+void Command::addKeyMode(Channel *channel, string key) {
 	channel->addMode(CHANNEL_MODE_K);
 	channel->setKey(key);
 }
 
-bool Command::deleteKeyMode(Channel *channel, string key)
-{
+bool Command::deleteKeyMode(Channel *channel, string key) {
 	channel->deleteMode(CHANNEL_MODE_K);
 	if (channel->getKey() != key)
 		return false;
@@ -129,8 +125,7 @@ bool Command::deleteKeyMode(Channel *channel, string key)
 	return true;
 }
 
-bool Command::addOperatorMode(Channel *channel, User *user, string targetName)
-{
+bool Command::addOperatorMode(Channel *channel, User *user, string targetName) {
 	if (!this->_server->findUser(targetName)) {
 		user->appendMessage(generateReply(this->_server->getServerPrefix(), ERR_NOSUCHNICK(user->getNickname(), targetName)));
 		return false;
@@ -143,8 +138,7 @@ bool Command::addOperatorMode(Channel *channel, User *user, string targetName)
 	return true;
 }
 
-bool Command::deleteOperatorMode(Channel *channel, User *user, string targetName)
-{
+bool Command::deleteOperatorMode(Channel *channel, User *user, string targetName) {
 	User *target = channel->findUser(targetName);
 	if (!this->_server->findUser(targetName)) {
 		user->appendMessage(generateReply(this->_server->getServerPrefix(), ERR_NOSUCHNICK(user->getNickname(), targetName)));
@@ -157,20 +151,17 @@ bool Command::deleteOperatorMode(Channel *channel, User *user, string targetName
 	return true;
 }
 
-void Command::addLimitMode(Channel *channel, int limit)
-{
+void Command::addLimitMode(Channel *channel, int limit) {
 	channel->addMode(CHANNEL_MODE_L);
 	channel->setLimit(limit);
 }
 
-void Command::deleteLimitMode(Channel *channel)
-{
+void Command::deleteLimitMode(Channel *channel) {
 	channel->deleteMode(CHANNEL_MODE_L);
 	channel->setLimit(0);
 }
 
-bool Command::containsOnlyPlusMinus(string mode)
-{
+bool Command::containsOnlyPlusMinus(string mode) {
 	for (size_t i = 0; i < mode.size(); i++)
 		if (mode[i] != '+' && mode[i] != '-')
 			return false;

@@ -1,8 +1,4 @@
-
-#include <iostream>
 #include "./server/Server.hpp"
-
-using namespace std;
 
 int main(int argc, char *argv[]) {
 	if (argc != 3) {
@@ -11,16 +7,15 @@ int main(int argc, char *argv[]) {
 	}
 	
 	for (size_t i = 0; i < std::strlen(argv[1]); ++i) {
-        if (!isdigit(argv[1][i])) {
-            cout << "Error: Invalid port number" << endl;
+		if (!isdigit(argv[1][i])) {
+			cout << "Error: Invalid port number" << endl;
 			return 1;
-        }
-    }
+		}
+	}
 
 	long port = atol(argv[1]);
 
-    if (!(port >= 1024 && port <= 49151))
-	{
+	if (!(port >= 1024 && port <= 49151)) {
 		cout << "Error: Invalid port number range" << endl;
 		return 1; 
 	} 
