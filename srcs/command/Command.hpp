@@ -18,7 +18,6 @@
 # define CHANNEL_MODE_K_STR "k"
 # define CHANNEL_MODE_O_STR "o"
 # define CHANNEL_MODE_L_STR "l"
-# define CHANNEL_MODE_B_STR "b"
 # define CHANNEL_MODE_S_STR "s"
 # define CHANNEL_MODE_N_STR "n"
 
