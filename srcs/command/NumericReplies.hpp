@@ -92,10 +92,6 @@ string	ERR_CHANOPRIVSNEEDED(string client, string channel);
 string	ERR_NOOPERHOST(string client);
 
 // 696
-// "<client> <target chan/user> <mode char> <parameter> :<description>"
-// *.freenode.net 696 eunbi #banana k * :You must specify a parameter for the key mode. Syntax: <key>.
-// *.freenode.net 696 eunbi #banana o * :You must specify a parameter for the op mode. Syntax: <nick>.
-// *.freenode.net 696 bbb #banana l * :You must specify a parameter for the limit mode. Syntax: <limit>.
 string	ERR_INVALIDMODEPARAM(string client, string channel, char mode, string parameter, string description);
 
 // mode reply

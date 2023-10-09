@@ -94,7 +94,6 @@ string ERR_NOTEXTTOSEND(string client) {
 	return "412 " + client + " :No text to send";
 }
 
-// TODO: ERROR(431): 만 나오고 msg가 나오지 않음, 닉네임이 주어지지 않았을때 사용하는 에러문구 특성상, client에 빈칸이 들어가서 안나오는 것으로 추측
 string ERR_NONICKNAMEGIVEN(string client) {
 	return "431 " + client + " :No nickname given";
 }
@@ -124,7 +123,6 @@ string ERR_USERONCHANNEL(string client, string user, string channel) {
 	return "443 " + client + " " + user + " " + channel + " :is already on channel";
 }
 
-// :irc.local 461 test22 JOIN :Not enough parameters.
 string ERR_NEEDMOREPARAMS(string client, string command) {
 	return "461 " + client + " " + command + " :Not enough parameters";
 }
@@ -149,7 +147,6 @@ string ERR_UNKNOWNMODE(string client, char mode, string channel) {
 	return "472 " + client + " " + mode + " :is unknown mode char to me for " + channel;
 }
 
-// :irc.local 473 part #invite :Cannot join channel (invite only)
 string ERR_INVITEONLYCHAN(string client, string channel) {
 	return "473 " + client + " " + channel + " :Cannot join channel (+i)";
 }
@@ -162,7 +159,6 @@ string ERR_BADCHANNELKEY(string client, string channel) {
 	return "475 " + client + " " + channel + " :Cannot join channel (+k)";
 }
 
-// :irc.local 476 test22 babo :Bad Channel Mask
 string ERR_BADCHANMASK(string client, string channel) {
 	return "476 " + client + " " + channel + " :Bad Channel Mask";
 }

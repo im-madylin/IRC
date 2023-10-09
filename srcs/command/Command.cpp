@@ -33,11 +33,6 @@ void Command::handleCommand(Message &message, User *user) {
 		cout << "You must get Auth" << endl;
 }
 
-// 임시로 만든 함수
-void Command::sendToClient(int fd, string message) {
-	send(fd, message.c_str(), message.length(), 0);
-}
-
 void Command::broadcast(int ignoreFd, Channel *channel, string message) {
 	map<int, User *> user = channel->getUsers();
 	for(map<int, User *>::iterator it = user.begin(); it != user.end(); it++) {

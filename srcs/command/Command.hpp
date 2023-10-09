@@ -66,7 +66,6 @@ class Command {
 		Command(Server *server);
 		~Command();
 		void 				handleCommand(Message &message, User *user);
-		void				sendToClient(int fd, string message);
 		void				broadcast(int ignoreFd, Channel *channel, string message);
 		void				broadcast(Channel *channel, string message);
 	
