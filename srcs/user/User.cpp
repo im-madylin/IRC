@@ -55,7 +55,7 @@ bool User::getIsRegistered()
 	return this->_isRegistered;
 }
 
-map<string, Channel *>	User::getJoinedChanels()
+map<string, Channel *>	User::getJoinedChannels()
 {
 	return this->_joinedChannels;
 }

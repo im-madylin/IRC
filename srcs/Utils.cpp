@@ -22,3 +22,8 @@ string toString(size_t num) {
 	ss << num;
 	return ss.str();
 }
+
+void errorExit(string message) {
+	cerr << "Error: " << message << endl;
+	exit(1);
+}

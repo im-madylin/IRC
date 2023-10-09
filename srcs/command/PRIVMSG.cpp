@@ -17,6 +17,10 @@ void Command::PRIVMSG(Message &message, User *user) {
 				user->appendMessage(generateReply(serverPrefix, ERR_NOSUCHNICK(user->getNickname(), *it)));
 				continue;
 			}
+			if (channel->hasMode(CHANNEL_MODE_N) && !channel->isExistUser(user->getFd())) {
+				user->appendMessage(generateReply(serverPrefix, ERR_CANNOTSENDTOCHAN(user->getNickname(), *it)));
+				continue;
+			}
 			if (message.getParams()[1][0] == '!')
 				broadcast(channel, ":" + userPrefix + " PRIVMSG " + channel->getChannelName() + " :" + channel->executeBot(message.getParams()[1].substr(1)) + "\r\n");
 			else
