@@ -18,6 +18,3 @@ void Command::PASS(Message &message, User *user) {
 	else
 		cout << "PASS: password error" << endl;
 }
-
-//파라미터의 수가 부족할 때 ERR_NEEDMOREPARAMS(461)
-//이미 등록되어 있는 상태일 때 ERR_ALREADYREGISTERD(462)

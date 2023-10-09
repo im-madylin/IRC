@@ -52,8 +52,3 @@ void Command::NICK(Message &message, User *user) {
 		user->appendMessage(msg);
 	}
 }
-
-//닉네임이 입력되지 않은 경우, ERR_NONICKNAMEGIVEN(431)
-//닉네임이 9글자를 넘어가는 경우 ERR_ERRONEUSNICKNAME(432)
-//사용중인 닉네임인 경우 ERR_NICKNAMEINUSE(433)
-//닉네임이 충돌했을 경우 ERR_COLLISION(436) 
