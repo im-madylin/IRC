@@ -31,7 +31,7 @@ void Command::PRIVMSG(Message &message, User *user) {
 			if (recipient == NULL)
 				user->appendMessage(generateReply(serverPrefix, ERR_NOSUCHNICK(user->getNickname(), *it)));
 			else
-				recipient->appendMessage(":" + serverPrefix + " PRIVMSG " + *it + " :" + message.getParams()[1]);
+				recipient->appendMessage(":" + serverPrefix + " PRIVMSG " + *it + " :" + message.getParams()[1] + "\r\n");
 		}
 	}
 }

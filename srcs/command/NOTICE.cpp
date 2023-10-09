@@ -22,7 +22,7 @@ void Command::NOTICE(Message &message, User *user) {
 			if (recipient == NULL)
 				continue;
 			else
-				recipient->appendMessage(":" + serverPrefix + " NOTICE " + *it + " :" + message.getParams()[1]);
+				recipient->appendMessage(":" + serverPrefix + " NOTICE " + *it + " :" + message.getParams()[1] + "\r\n");
 		}
 	}
 }
