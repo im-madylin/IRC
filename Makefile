@@ -12,12 +12,14 @@ DIR_CMD = command
 DIR_CHAN = channel
 DIR_USER = user
 DIR_SERV = server
+DIR_BOT = bot
 CMD_SRCS = $(wildcard $(DIR_SRCS)/$(DIR_CMD)/*.cpp)
 CHAN_SRCS = $(wildcard $(DIR_SRCS)/$(DIR_CHAN)/*.cpp)
 USER_SRCS = $(wildcard $(DIR_SRCS)/$(DIR_USER)/*.cpp)
 SERV_SRCS = $(wildcard $(DIR_SRCS)/$(DIR_SERV)/*.cpp)
+BOT_SRCS = $(wildcard $(DIR_SRCS)/$(DIR_BOT)/*.cpp)
 
-SRCS = $(wildcard $(DIR_SRCS)/*.cpp) $(CMD_SRCS) $(CHAN_SRCS) $(USER_SRCS) $(SERV_SRCS)
+SRCS = $(wildcard $(DIR_SRCS)/*.cpp) $(CMD_SRCS) $(CHAN_SRCS) $(USER_SRCS) $(SERV_SRCS) $(BOT_SRCS)
 OBJS = $(SRCS:%.cpp=$(OUTDIR)%.o)
 
 all: $(NAME)

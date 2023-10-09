@@ -1,7 +1,6 @@
 #include "Utils.hpp"
 
-vector<string> split(string str, string delim)
-{
+vector<string> split(string str, string delim) {
 	vector<string> result;
 	
 	size_t startPos = 0;
@@ -16,4 +15,15 @@ vector<string> split(string str, string delim)
 		result.push_back(str.substr(startPos));
 	}
 	return result;
+}
+
+string toString(size_t num) {
+	std::stringstream ss;
+	ss << num;
+	return ss.str();
+}
+
+void errorExit(string message) {
+	cerr << "Error: " << message << endl;
+	exit(1);
 }

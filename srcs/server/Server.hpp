@@ -2,6 +2,7 @@
 # define SERVER_HPP
 
 # include <sys/socket.h>
+# include <sys/types.h>
 # include <netinet/in.h>
 # include <arpa/inet.h>
 # include <sys/event.h>
@@ -17,9 +18,8 @@
 # define SERVER_NAME "irc.easy"
 # define MAX_MESSAGE_SIZE 512
 # define MAX_CHANNEL_SIZE 10
-# define UNDEFINED -1
-# define KQUEUE_SIZE 8
-# define KQUEUE_TIMEOUT 180
+# define KQUEUE_SIZE 10
+# define WAITING_QUEUE_SIZE 10
 
 class User;
 class Channel;
@@ -29,47 +29,51 @@ using namespace std;
 
 class Server {
 	private:
-		int		_kq;
-		int		_port; // client 서버 접속시 필요한 Port 번호
-		int		_serverSocket;
-		string	_password;
-		string	_serverName;
+		int						_kq;
+		int						_port;
+		int						_serverSocket;
+		string					_password;
+		string					_serverName;
 
-		struct kevent _events[KQUEUE_SIZE]; // 이벤트 저장 배열
-		map<int, User *> _users;
-		map<string, Channel *> _channels;
-		struct kevent _change;
-		Command*			_command;
+		struct kevent			_events[KQUEUE_SIZE]; // 이벤트 저장 배열
+		map<int, User *>		_users;
+		map<string, Channel *>	_channels;
+		vector<struct kevent>	_changes;
+		Command*				_command;
 
-		void	initServer();
-		void	initKqueue();
-		void	acceptConnection();
-		void	disconnetClient(int clientFd);
-		void	handleEvent(struct kevent &event);
-	
-		void	recvMessage(int clientSocket);
-		size_t	findCRLF(string message);
-		void	handleCmdMessage(User *user);
+		void					initServer();
+		void					initKqueue();
+		void					updateKevent(uintptr_t ident, int16_t filter, uint16_t flags, uint32_t fflags, intptr_t data, void *udata);
+		void					handleEvent(struct kevent &event);
+		void					acceptConnection();
+		void					deleteAllUser();
+		void					deleteAllChannel();
+		void					recvMessage(int clientSocket);
+		void					sendMessage(int clientSocket);
+		void					handleCmdMessage(User *user);
+		size_t					findCRLF(string message);
 
 	public:
-		Server(string port, string password);
+		Server(int port, string password);
 		~Server();
 
-		int		getPort() const;
-		string	getServerName() const;
-		string	getPassword() const;
-		map<int, User *>	getUsers() const;
-		string 	getServerPrefix() const;
-		map<string, Channel *> getChannels() const;
+		int						getPort() const;
+		string					getServerName() const;
+		string					getPassword() const;
+		map<int, User *>		getUsers() const;
+		string					getServerPrefix() const;
+		map<string, Channel *>	getChannels() const;
 
-		void	setServerName(string serverName);
+		void					setServerName(string serverName);
 
-		void	run();
-		void	sendMessage(int clientSocket);
-		void	addChannel(Channel *channel);
-		Channel *findChannel(string channelName);
-		User	*findUser(string username);
-		void	deleteChannel(string channelName);
+		void					run();
+		void					disconnectClient(int clientFd);
+		void					addChannel(Channel *channel);
+		Channel					*findChannel(string channelName);
+		void					deleteChannel(string channelName);
+		User					*findUser(string username);
+		void					addUser(User *user);
+		void					deleteUser(int clientFd);
 };
 
 #endif

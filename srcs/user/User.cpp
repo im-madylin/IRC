@@ -1,7 +1,7 @@
 #include "User.hpp"
 #include "../channel/Channel.hpp"
 
-User::User(int fd, string host): _fd(fd), _host(host), _isRegistered(false)
+User::User(int fd, string host): _fd(fd), _host(host), _isRegistered(false), _auth(false)
 {
 }
 
@@ -35,6 +35,11 @@ string User::getNickname()
 	return this->_nickname;
 }
 
+string User::getUsername()
+{
+	return this->_username;
+}
+
 string User::getRealName()
 {
 	return this->_realName;
@@ -42,12 +47,23 @@ string User::getRealName()
 
 string User::getUserPrefix()
 {
-	return this->_nickname + "!" + this->_realName + "@" + this->_host;
+	return this->_nickname + "!" + this->_username + "@" + this->_host;
 }
 
 bool User::getIsRegistered()
 {
 	return this->_isRegistered;
+}
+
+map<string, Channel *>	User::getJoinedChannels()
+{
+	return this->_joinedChannels;
+}
+
+bool User::getAuth()
+{
+	return this->_auth;
+
 }
 
 void User::setMessageBuffer(string messageBuffer)
@@ -75,6 +91,11 @@ void User::setNickname(string nick)
 	this->_nickname = nick;
 }
 
+void User::setUsername(string username)
+{
+	this->_username = username;
+}
+
 void User::setRealName(string realName)
 {
 	this->_realName = realName;
@@ -83,6 +104,11 @@ void User::setRealName(string realName)
 void User::setRegistered()
 {
 	this->_isRegistered = true;
+}
+
+void User::setAuth()
+{
+	this->_auth = true;
 }
 
 void User::clearMessageBuffer()
@@ -113,4 +139,11 @@ void User::joinChannel(Channel *channel)
 void User::leaveChannel(string channelName)
 {
 	this->_joinedChannels.erase(channelName);
+}
+
+bool User::isInChannel(string channelName)
+{
+	if (this->_joinedChannels.find(channelName) != this->_joinedChannels.end())
+		return true;
+	return false;
 }
