@@ -36,7 +36,7 @@ void Command::NICK(Message &message, User *user) {
 	string nickname = message.getParams()[0];
 
 	//닉네임이 9글자를 넘어가는 경우, 닉네임이 올바르지 않은 경우
-	if (nickname.size() > NICKNAME_MAX_SIZE || validNick(nickname) == false)
+	if (nickname.size() > NICKNAME_MAX_SIZE || validNick(nickname) == false || nickname.size() == 0)
 		return user->appendMessage(generateReply(serverPrefix, ERR_ERRONEUSNICKNAME(nickname)));
 		
 	//이미 사용중인 닉네임인 경우

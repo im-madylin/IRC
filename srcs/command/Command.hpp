@@ -61,6 +61,8 @@ class Command {
 		bool				deleteOperatorMode(Channel *channel, User *user, string nickname);
 
 		bool				containsOnlyPlusMinus(string mode);
+
+		bool				beforeRegisterCmd(string cmd, User *user); 
 	
 	public:
 		Command(Server *server);

@@ -3,7 +3,10 @@
 // <nickname>!<username>@<host>
 void Command::USER(Message &message, User *user) {
 	string serverPrefix = this->_server->getServerPrefix();
-	
+	if (user->getNickname().length() == 0) {
+		cout << "You must set Nickname" << endl;
+		return ;
+	}
 	if (message.getParams().size() < 4)
 		return user->appendMessage(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "USER")));
 	

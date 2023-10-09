@@ -24,7 +24,7 @@ Command::~Command() {}
 void Command::handleCommand(Message &message, User *user) {
 	string command = message.getCommand();
 
-	if (user->getAuth() == true || command == "PASS") {
+	if (beforeRegisterCmd(command, user)) {
 		if (this->_commands.find(command) != this->_commands.end()) {
 			(this->*_commands[command])(message, user);
 		}
@@ -61,4 +61,14 @@ void Command::welcomMessage(User *user) {
 	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "|_||_|    \\___|\\____/  \\__,_||___/ \\__, |")));
 	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "                                    __/ |")));
 	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "                                   |___/ ")));
+}
+
+bool Command::beforeRegisterCmd(string cmd, User *user) {
+	if (user->getIsRegistered() == true)
+		return true;
+	if (cmd == "PASS" || cmd == "QUIT")
+		return true;
+	if ((cmd == "NICK" || cmd == "USER") && user->getAuth() == true)
+		return true;
+	return false;
 }
