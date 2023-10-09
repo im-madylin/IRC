@@ -9,6 +9,3 @@ void Command::PING(Message &message, User *user) {
 	sendToClient(user->getFd(), msg);
 }
 
-
-//ERR_NOORIGIN (409)
-//ERR_NOSUCHSERVER(402)
