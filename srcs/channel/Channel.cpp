@@ -131,9 +131,9 @@ User* Channel::findUser(string nickname) const {
 	map<int, User *>::const_iterator it;
 
 	for(it = this->_users.begin(); it != this->_users.end(); it++)
-		if (!(it->second->getNickname() == nickname))
+		if (it->second->getNickname() == nickname)
 			return it->second;
-	return it->second;
+	return NULL;
 }
 
 bool Channel::isOperator(int fd) const {

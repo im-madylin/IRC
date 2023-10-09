@@ -5,6 +5,7 @@
 # include <vector>
 # include <sstream>
 # include <iostream>
+# include <cstdio>
 
 using namespace std;
 
