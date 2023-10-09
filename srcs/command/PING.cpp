@@ -6,6 +6,6 @@ void Command::PING(Message &message, User *user) {
 	string serverName = this->_server->getServerName();
 	string msg = "PING " + serverName + "\r\n";
 
-	sendToClient(user->getFd(), msg);
+	user->appendMessage(msg);
 }
 
