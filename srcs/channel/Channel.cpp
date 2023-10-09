@@ -109,6 +109,8 @@ void Channel::deleteUser(int fd) {
 
 	if (isOperator(fd))
 		deleteOper(fd);
+	if (isInvited(fd))
+		deleteInvite(fd);
 	
 	it = this->_users.find(fd);
 	if (it == this->_users.end())
@@ -129,7 +131,7 @@ User* Channel::findUser(string nickname) const {
 	map<int, User *>::const_iterator it;
 
 	for(it = this->_users.begin(); it != this->_users.end(); it++)
-		if (!it->second->getNickname().compare(nickname))
+		if (!(it->second->getNickname() == nickname))
 			return it->second;
 	return it->second;
 }
