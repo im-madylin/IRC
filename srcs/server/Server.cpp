@@ -23,7 +23,7 @@ void Server::initServer() {
 
 	// server 소켓 생성 AF_INET: IPv4, SOCK_STREAM: TCP
 	this->_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-	if (this->_serverSocket == -1) 	{
+	if (this->_serverSocket == -1) {
 		errorExit("socket failed");
 	}
 
@@ -37,7 +37,6 @@ void Server::initServer() {
 	// SO_REUSEADDR: 커널이 소켓을 사용하는 중에도 포트를 사용할 수 있게 해줌
 	int optval = 1;
 	if (setsockopt(this->_serverSocket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) == -1) {
-		close(this->_serverSocket);
 		errorExit("setsockopt failed");
 	}
 
@@ -48,13 +47,11 @@ void Server::initServer() {
 	// 해당 주소와 server로 들어오는 클라이언트의 연결을 수락할 수 있도록 함
 	// 바인딩할 주소 정보
 	if (bind(this->_serverSocket, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == -1) {
-		close(this->_serverSocket);
 		errorExit("bind failed");
 	}
 	
 	// 연결 요청 대기열 생성
 	if (listen(this->_serverSocket, WAITING_QUEUE_SIZE) == -1) {
-		close(this->_serverSocket);
 		errorExit("listen failed");
 	}
 }
@@ -62,7 +59,6 @@ void Server::initServer() {
 void Server::initKqueue() {
 	// kqueue 생성
 	if ((this->_kq = kqueue()) == -1) {
-		close(this->_serverSocket);
 		errorExit("kqueue failed");
 	}
 
