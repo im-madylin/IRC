@@ -1,6 +1,8 @@
 #include "User.hpp"
 #include "../channel/Channel.hpp"
 
+/* ----------------------------------- PUBLIC ---------------------------------- */
+
 User::User(int fd, string host): _fd(fd), _host(host), _isRegistered(false), _auth(false) {}
 
 User::~User() {

@@ -3,7 +3,7 @@
 #include "../command/Command.hpp"
 #include "../channel/Channel.hpp"
 
-/* ---------------------------------- PRIVATE ---------------------------------- */
+/* ----------------------------------- PUBLIC ---------------------------------- */
 
 Server::Server(int port, string password) : _port(port), _password(password) {
 	this->_serverName = SERVER_NAME;
@@ -17,6 +17,141 @@ Server::~Server() {
 	delete this->_command;
 	close(this->_serverSocket);
 }
+
+int Server::getPort() const {
+	return this->_port;
+}
+
+string Server::getServerName() const {
+	return this->_serverName;
+}
+
+string Server::getPassword() const {
+	return this->_password;
+}
+
+map<int, User *> Server::getUsers() const {
+	return this->_users;
+}
+
+string Server::getServerPrefix() const {
+	return this->_serverName;
+}
+
+map<string, Channel *> Server::getChannels() const {
+	return this->_channels;
+}
+
+void Server::setServerName(string serverName) {
+	this->_serverName = serverName;
+}
+
+void Server::run() {
+	initKqueue();
+	while (1) {
+
+		// kqueue에 등록된 이벤트가 발생할 때까지 대기, 이벤트 수만큼 반환
+		// changes : 이벤트를 설정하거나 변경하기 위한 kevent 구조체 배열
+		// events : 발생한 이벤트를 저장할 kevent 구조체 배열
+		int eventCount = kevent(this->_kq, &this->_changes[0], this->_changes.size(), this->_events, KQUEUE_SIZE, NULL);
+		if (eventCount == -1) {
+			deleteAllUser();
+			close(this->_serverSocket);
+			errorExit("kevent failed");
+		}
+
+		// 큐에 담은 이벤트 삭제
+		this->_changes.clear();
+
+		// 발생한 이벤트 처리
+		for (int i = 0; i < eventCount; i++)
+			handleEvent(_events[i]);
+	}
+}
+
+void Server::sendMessage(int clientSocket) {
+	map<int, User *>::iterator it = this->_users.find(clientSocket);
+	User *user = it->second;
+	int sendSize;
+
+	if (it == this->_users.end())
+		return ;
+	if (user->getMessageBuffer().empty())
+		return ;
+
+	// 소켓으로 메세지 전송
+	// fcntl로 소켓을 논블로킹으로 설정했기 때문에 send가 블로킹되지 않음
+	sendSize = send(clientSocket, user->getMessageBuffer().c_str(), user->getMessageBuffer().length(), 0);
+	if (sendSize == -1) {
+		cerr << "Error: send failed" << endl;
+		disconnectClient(clientSocket);
+	}
+	else {
+		user->setMessageBuffer(user->getMessageBuffer().substr(sendSize));
+	}
+}
+
+void Server::disconnectClient(int clientSocket) {
+	map<int, User *>::iterator it = this->_users.find(clientSocket);
+	User *user = it->second;
+
+	if (it == this->_users.end())
+		return ;
+	
+	map<string, Channel *> _joinedChannels = user->getJoinedChannels();
+	for (map<string, Channel *>::iterator it = _joinedChannels.begin(); it != _joinedChannels.end(); it++) {
+		it->second->deleteUser(user->getFd());
+		user->leaveChannel(it->first);
+		if (it->second->getUsers().empty())
+			this->deleteChannel(it->first);
+	}
+	cout << "client disconnected : " << clientSocket << endl;
+
+	delete this->_users[clientSocket];
+	this->_users.erase(it);
+}
+
+void Server::addChannel(Channel *channel) {
+	this->_channels.insert(make_pair(channel->getChannelName(), channel));
+}
+
+Channel *Server::findChannel(string channelName) {
+	for(map<string, Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
+		if (it->second->getChannelName() == channelName)
+			return it->second;
+	return NULL;
+}
+
+void Server::deleteChannel(string channelName) {
+	map<string, Channel *>::iterator it = this->_channels.find(channelName);
+	if (it == this->_channels.end())
+		return ;
+
+	delete it->second;
+	this->_channels.erase(channelName);
+}
+
+User *Server::findUser(string username) {
+	for(map<int, User *>::iterator it = this->_users.begin(); it != this->_users.end(); it++)
+		if (it->second->getNickname() == username)
+			return it->second;
+	return NULL;
+}
+
+void Server::addUser(User *user) {
+	this->_users.insert(make_pair(user->getFd(), user));
+}
+
+void Server::deleteUser(int clientFd) {
+	map<int, User *>::iterator it = this->_users.find(clientFd);
+	if (it == this->_users.end())
+		return ;
+
+	delete it->second;
+	this->_users.erase(clientFd);
+}
+
+/* ---------------------------------- PRIVATE ---------------------------------- */
 
 void Server::initServer() {
 	struct sockaddr_in serverAddr;
@@ -187,137 +322,3 @@ size_t Server::findCRLF(string message) {
 	return min(crPos, lfPos);
 }
 
-/* ----------------------------------- PUBLIC ---------------------------------- */
-
-int Server::getPort() const {
-	return this->_port;
-}
-
-string Server::getServerName() const {
-	return this->_serverName;
-}
-
-string Server::getPassword() const {
-	return this->_password;
-}
-
-map<int, User *> Server::getUsers() const {
-	return this->_users;
-}
-
-string Server::getServerPrefix() const {
-	return this->_serverName;
-}
-
-map<string, Channel *> Server::getChannels() const {
-	return this->_channels;
-}
-
-void Server::setServerName(string serverName) {
-	this->_serverName = serverName;
-}
-
-void Server::run() {
-	initKqueue();
-	while (1) {
-
-		// kqueue에 등록된 이벤트가 발생할 때까지 대기, 이벤트 수만큼 반환
-		// changes : 이벤트를 설정하거나 변경하기 위한 kevent 구조체 배열
-		// events : 발생한 이벤트를 저장할 kevent 구조체 배열
-		int eventCount = kevent(this->_kq, &this->_changes[0], this->_changes.size(), this->_events, KQUEUE_SIZE, NULL);
-		if (eventCount == -1) 		{
-			deleteAllUser();
-			close(this->_serverSocket);
-			errorExit("kevent failed");
-		}
-
-		// 큐에 담은 이벤트 삭제
-		this->_changes.clear();
-
-		// 발생한 이벤트 처리
-		for (int i = 0; i < eventCount; i++)
-			handleEvent(_events[i]);
-	}
-}
-
-void Server::sendMessage(int clientSocket) {
-	map<int, User *>::iterator it = this->_users.find(clientSocket);
-	User *user = it->second;
-	int sendSize;
-
-	if (it == this->_users.end())
-		return ;
-	if (user->getMessageBuffer().empty())
-		return ;
-
-	// 소켓으로 메세지 전송
-	// fcntl로 소켓을 논블로킹으로 설정했기 때문에 send가 블로킹되지 않음
-	sendSize = send(clientSocket, user->getMessageBuffer().c_str(), user->getMessageBuffer().length(), 0);
-	if (sendSize == -1) {
-		cerr << "Error: send failed" << endl;
-		disconnectClient(clientSocket);
-	}
-	else {
-		user->setMessageBuffer(user->getMessageBuffer().substr(sendSize));
-	}
-}
-
-void Server::disconnectClient(int clientSocket) {
-	map<int, User *>::iterator it = this->_users.find(clientSocket);
-	User *user = it->second;
-
-	if (it == this->_users.end())
-		return ;
-	
-	map<string, Channel *> _joinedChannels = user->getJoinedChannels();
-	for (map<string, Channel *>::iterator it = _joinedChannels.begin(); it != _joinedChannels.end(); it++) {
-		it->second->deleteUser(user->getFd());
-		user->leaveChannel(it->first);
-		if (it->second->getUsers().empty())
-			this->deleteChannel(it->first);
-	}
-	cout << "client disconnected : " << clientSocket << endl;
-
-	delete this->_users[clientSocket];
-	this->_users.erase(it);
-}
-
-void Server::addChannel(Channel *channel) {
-	this->_channels.insert(make_pair(channel->getChannelName(), channel));
-}
-
-Channel *Server::findChannel(string channelName) {
-	for(map<string, Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); it++)
-		if (it->second->getChannelName() == channelName)
-			return it->second;
-	return NULL;
-}
-
-void Server::deleteChannel(string channelName) {
-	map<string, Channel *>::iterator it = this->_channels.find(channelName);
-	if (it == this->_channels.end())
-		return ;
-
-	delete it->second;
-	this->_channels.erase(channelName);
-}
-
-User *Server::findUser(string username) {
-	for(map<int, User *>::iterator it = this->_users.begin(); it != this->_users.end(); it++)
-		if (it->second->getNickname() == username)
-			return it->second;
-	return NULL;
-}
-
-void Server::addUser(User *user) {
-	this->_users.insert(make_pair(user->getFd(), user));
-}
-
-void Server::deleteUser(int clientFd) {
-	map<int, User *>::iterator it = this->_users.find(clientFd);
-	if (it == this->_users.end())
-		return ;
-
-	delete it->second;
-	this->_users.erase(clientFd);
-}
