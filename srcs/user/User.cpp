@@ -1,148 +1,118 @@
 #include "User.hpp"
 #include "../channel/Channel.hpp"
 
-User::User(int fd, string host): _fd(fd), _host(host), _isRegistered(false), _auth(false)
-{
-}
+User::User(int fd, string host): _fd(fd), _host(host), _isRegistered(false), _auth(false) {}
 
-User::~User()
-{
+User::~User() {
 	close(_fd);
 }
 
-string User::getMessageBuffer()
-{
+string User::getMessageBuffer() {
 	return this->_messageBuffer;
 }
 
-string User::getCommandBuffer()
-{
+string User::getCommandBuffer() {
 	return this->_commandBuffer;
 }
 
-int User::getFd()
-{
+int User::getFd() {
 	return this->_fd;
 }
 
-string User::getHost()
-{
+string User::getHost() {
 	return this->_host;
 }
 
-string User::getNickname()
-{
+string User::getNickname() {
 	return this->_nickname;
 }
 
-string User::getUsername()
-{
+string User::getUsername() {
 	return this->_username;
 }
 
-string User::getRealName()
-{
+string User::getRealName() {
 	return this->_realName;
 }
 
-string User::getUserPrefix()
-{
+string User::getUserPrefix() {
 	return this->_nickname + "!" + this->_username + "@" + this->_host;
 }
 
-bool User::getIsRegistered()
-{
+bool User::getIsRegistered() {
 	return this->_isRegistered;
 }
 
-map<string, Channel *>	User::getJoinedChannels()
-{
+map<string, Channel *>	User::getJoinedChannels() {
 	return this->_joinedChannels;
 }
 
-bool User::getAuth()
-{
+bool User::getAuth() {
 	return this->_auth;
 
 }
 
-void User::setMessageBuffer(string messageBuffer)
-{
+void User::setMessageBuffer(string messageBuffer) {
 	this->_messageBuffer = messageBuffer;
 }
 
-void User::setCommandBuffer(string commandBuffer)
-{
+void User::setCommandBuffer(string commandBuffer) {
 	this->_commandBuffer = commandBuffer;
 }
 
-void User::setFd(int fd)
-{
+void User::setFd(int fd) {
 	this->_fd = fd;
 }
 
-void User::setHost(string host)
-{
+void User::setHost(string host) {
 	this->_host = host;
 }
 
-void User::setNickname(string nick)
-{
+void User::setNickname(string nick) {
 	this->_nickname = nick;
 }
 
-void User::setUsername(string username)
-{
+void User::setUsername(string username) {
 	this->_username = username;
 }
 
-void User::setRealName(string realName)
-{
+void User::setRealName(string realName) {
 	this->_realName = realName;
 }
 
-void User::setRegistered()
-{
+void User::setRegistered() {
 	this->_isRegistered = true;
 }
 
-void User::setAuth()
-{
+void User::setAuth() {
 	this->_auth = true;
 }
 
-void User::clearMessageBuffer()
-{
+void User::clearMessageBuffer() {
 	this->_messageBuffer.clear();
 }
 
-void User::clearCommandBuffer()
-{
+void User::clearCommandBuffer() {
 	this->_commandBuffer.clear();
 }
 
-void User::appendMessage(const string &message)
-{
+void User::appendMessage(const string &message) {
 	this->_messageBuffer.append(message);
 }
 
-void User::appendCommand(const string &command)
-{
+void User::appendCommand(const string &command) {
 	this->_commandBuffer.append(command);
 }
 
-void User::joinChannel(Channel *channel)
-{ 
+void User::joinChannel(Channel *channel) { 
 	this->_joinedChannels.insert(make_pair(channel->getChannelName(), channel));
 }
 
-void User::leaveChannel(string channelName)
-{
+void User::leaveChannel(string channelName) {
 	this->_joinedChannels.erase(channelName);
 }
 
-bool User::isInChannel(string channelName)
-{
+bool User::isInChannel(string channelName) {
 	if (this->_joinedChannels.find(channelName) != this->_joinedChannels.end())
 		return true;
 	return false;
