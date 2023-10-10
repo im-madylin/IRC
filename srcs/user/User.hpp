@@ -26,17 +26,18 @@ class User {
 		User(int fd, string host);
 		~User();
 
-		string	getMessageBuffer();
-		string 	getCommandBuffer();
-		int		getFd();
-		string	getHost();
-		string	getNickname();
-		string	getUsername();
-		string	getRealName();
-		string	getUserPrefix();
-		bool	getIsRegistered();
-		map<string, Channel *>	getJoinedChannels();
-		bool	getAuth();
+		string	getMessageBuffer() const;
+		string 	getCommandBuffer() const;
+		int		getFd() const;
+		string	getHost() const;
+		string	getNickname() const;
+		string	getUsername() const;
+		string	getRealName() const;
+		string	getUserPrefix() const;
+		bool	getIsRegistered() const;
+		map<string, Channel *>	getJoinedChannels() const;
+		bool	getAuth() const;
+		
 		void 	setMessageBuffer(string messageBuffer);
 		void 	setCommandBuffer(string commandBuffer);
 		void	setFd(int fd);

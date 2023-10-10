@@ -7,47 +7,47 @@ User::~User() {
 	close(_fd);
 }
 
-string User::getMessageBuffer() {
+string User::getMessageBuffer() const {
 	return this->_messageBuffer;
 }
 
-string User::getCommandBuffer() {
+string User::getCommandBuffer() const {
 	return this->_commandBuffer;
 }
 
-int User::getFd() {
+int User::getFd() const {
 	return this->_fd;
 }
 
-string User::getHost() {
+string User::getHost() const {
 	return this->_host;
 }
 
-string User::getNickname() {
+string User::getNickname() const {
 	return this->_nickname;
 }
 
-string User::getUsername() {
+string User::getUsername() const {
 	return this->_username;
 }
 
-string User::getRealName() {
+string User::getRealName() const {
 	return this->_realName;
 }
 
-string User::getUserPrefix() {
+string User::getUserPrefix() const {
 	return this->_nickname + "!" + this->_username + "@" + this->_host;
 }
 
-bool User::getIsRegistered() {
+bool User::getIsRegistered() const {
 	return this->_isRegistered;
 }
 
-map<string, Channel *>	User::getJoinedChannels() {
+map<string, Channel *>	User::getJoinedChannels() const {
 	return this->_joinedChannels;
 }
 
-bool User::getAuth() {
+bool User::getAuth() const {
 	return this->_auth;
 
 }
