@@ -53,7 +53,7 @@ void Command::broadcast(Channel *channel, string message) {
 
 void Command::welcomMessage(User *user) {
 	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "Welcome to the")));
-	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "  _              _____                    ")));
+	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), " _              _____                    ")));
 	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "(_)            |  ___|                   ")));
 	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "  _  _ __   ___ | |__    __ _  ___  _   _ ")));
 	user->appendMessage(generateReply(this->_server->getServerPrefix(), RPL_MOTD(user->getNickname(), "| || '__| / __||  __|  / _` |/ __|| | | |")));
