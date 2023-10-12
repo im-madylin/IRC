@@ -14,8 +14,6 @@ void Command::USER(Message &message, User *user) {
 	string realname = message.getParams()[3];
 	if (user->getIsRegistered())
 		return user->appendMessage(generateReply(serverPrefix, ERR_ALREADYREGISTERED(user->getNickname())));
-	if (message.getParams().size() < 4)
-		return user->appendMessage(generateReply(serverPrefix, ERR_NEEDMOREPARAMS(user->getNickname(), "USER")));
 	
 	user->setUsername(username);
 	user->setRealName(realname);
