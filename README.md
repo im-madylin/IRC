@@ -1,5 +1,5 @@
-# ft_irc : IRC 서버 구현 프로젝트
-<img width="734" alt="image" src="https://github.com/im-madylin/ft_irc/assets/85945788/4b89e614-85fc-4c2a-94c2-dc3f2e92024a">
+# IRC : IRC 서버 구현 프로젝트
+<img width="721" alt="image" src="https://github.com/im-madylin/IRC/assets/85945788/bf47116f-4335-44f5-a336-18972208d905">
 
 
 ### IRC란,
